@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/NFTCard.js", "pages/collection/[collectionId].jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/NFTCard.tsx", "pages/collection/[collectionId].jsx"],
   "exclude": ["node_modules"]
 }

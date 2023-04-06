@@ -11,15 +11,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={activeChainId}>
       <Head>
-        <title>thirdweb Marketplace with Next.JS</title>
+        <title>New Elements</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-          name="description"
-          content="Learn How To Use Thirdweb's Marketplace with Next.JS To List Your NFTs For Sale, Accept Bids, and Buy NFTs"
-        />
+        <meta name="description" content="New Elements NFT Marketplace" />
         <meta
           name="keywords"
-          content="Thirdweb, Marketplace, NFT Marketplace Tutorial, NFT Auction Tutorial, How To Make OpenSea"
+          content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
         />
       </Head>
       <Header />

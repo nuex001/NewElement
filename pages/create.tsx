@@ -88,6 +88,7 @@ const Create: NextPage = () => {
         startTimestamp: new Date(), // When the listing will start
         tokenId: tokenId, // Token ID of the NFT.
       });
+      console.log(transaction);
 
       return transaction;
     } catch (error) {
@@ -110,6 +111,7 @@ const Create: NextPage = () => {
         startTimestamp: new Date(0), // When the listing will start
         tokenId: tokenId, // Token ID of the NFT.
       });
+      console.log(transaction);
 
       return transaction;
     } catch (error) {
@@ -122,9 +124,7 @@ const Create: NextPage = () => {
       <div className={styles.container}>
         {/* Form Section */}
         <div className={styles.collectionContainer}>
-          <h1 className={styles.ourCollection}>
-            Upload your NFT to the marketplace:
-          </h1>
+          <h1 className="font-carbon">Upload your NFT to the marketplace:</h1>
 
           {/* Toggle between direct listing and auction listing */}
           <div className={styles.listingTypeContainer}>
@@ -139,6 +139,7 @@ const Create: NextPage = () => {
             <label htmlFor="directListing" className={styles.listingTypeLabel}>
               Direct Listing
             </label>
+
             <input
               type="radio"
               name="listingType"

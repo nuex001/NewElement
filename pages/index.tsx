@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { client } from "../lib/sanityClient";
 import { useRouter } from "next/router";
 import { marketplaceContractAddress } from "../addresses";
+import NFTCard from "../components/NFTCard";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -64,9 +65,9 @@ const Home: NextPage = () => {
   return (
     <>
       {/* Content */}
-      <div className={styles.container}>
+      <div className="flex w-full mt-24 flex-col items-center content-center">
         {/* Top Section */}
-        <h1 className={styles.h1}>NFT Marketplace</h1>
+        {/* <h1 className="font-ibmPlex">NFT Marketplace</h1>
 
         <hr className={styles.divider} />
 
@@ -78,45 +79,20 @@ const Home: NextPage = () => {
           >
             Create A Listing
           </Link>
-        </div>
+        </div> */}
 
-        <div className="main">
+        <div className="mb-5">
           {
             // If the listings are loading, show a loading message
             loadingListings ? (
               <div>Loading listings...</div>
             ) : (
               // Otherwise, show the listings
-              <div className={styles.listingGrid}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-10 mb-10">
                 {listings?.map((listing) => (
-                  <div
-                    key={listing.id}
-                    className="w-fit rounded-3xl pb-3 border border-gray-500 cursor-pointer"
-                    onClick={() => router.push(`/listing/${listing.id}`)}
-                  >
-                    <MediaRenderer
-                      src={listing.asset.image}
-                      style={{
-                        borderRadius: 16,
-                        // Fit the image to the container
-                        width: "200px",
-                        height: "200px",
-                      }}
-                    />
-                    <h2 className={styles.nameContainer}>
-                      <Link
-                        href={`/listing/${listing.id}`}
-                        className={styles.name}
-                      >
-                        {listing.asset.name}
-                      </Link>
-                    </h2>
-
-                    <p>
-                      <b>{listing.buyoutCurrencyValuePerToken.displayValue}</b>{" "}
-                      {listing.buyoutCurrencyValuePerToken.symbol}
-                    </p>
-                  </div>
+                  <>
+                    <NFTCard listing={listing} />
+                  </>
                 ))}
               </div>
             )

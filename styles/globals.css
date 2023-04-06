@@ -1,7 +1,62 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Carbon";
+  src: url("../public/fonts/CarbonGravity-Carbon.otf");
+}
+@font-face {
+  font-family: "Compressed";
+  src: url("../public/fonts/CarbonGravity-Compressed.otf");
+}
+@font-face {
+  font-family: "Condensed";
+  src: url("../public/fonts/CarbonGravity-Condensed.otf");
+}
+@font-face {
+  font-family: "Expanded";
+  src: url("../public/fonts/CarbonGravity-Expanded.otf");
+}
+@font-face {
+  font-family: "Extended";
+  src: url("../public/fonts/CarbonGravity-Extended.otf");
+}
+@font-face {
+  font-family: "ExtraCondensed";
+  src: url("../public/fonts/CarbonGravity-ExtraCondensed.otf");
+}
+@font-face {
+  font-family: "Normal";
+  src: url("../public/fonts/CarbonGravity-Normal.otf");
+}
+@font-face {
+  font-family: "SemiCondensed";
+  src: url("../public/fonts/CarbonGravity-SemiCondensed.otf");
+}
+@font-face {
+  font-family: "Wide";
+  src: url("../public/fonts/CarbonGravity-Wide.otf");
+}
+@font-face {
+  font-family: "XCompressed";
+  src: url("../public/fonts/CarbonGravity-XCompressed.otf");
+}
+@font-face {
+  font-family: "XXCompressed";
+  src: url("../public/fonts/CarbonGravity-XXCompressed.otf");
+}
+@font-face {
+  font-family: "XXXCompressed";
+  src: url("../public/fonts/CarbonGravity-XXXCompressed.otf");
+}
+@font-face {
+  font-family: "XXXXCompressed";
+  src: url("../public/fonts/CarbonGravity-XXXXCompressed.otf");
+}
 /* Box sizing rules */
 *,
 *::before,
@@ -10,13 +65,13 @@
 }
 
 /* Set core body defaults */
-body {
+/* body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
   --hello: -100%;
   padding-bottom: 250px;
-}
+} */
 
 /* Inherit fonts for inputs and buttons */
 input,
@@ -34,7 +89,7 @@ select {
 }
 
 body {
-  background: var(--black);
+  background: black;
   font-family: "Inter", sans-serif;
   color: var(--white);
   display: flex;
