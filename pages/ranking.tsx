@@ -1,7 +1,8 @@
 import React from "react";
+import RankingComponent from "../components/RankingComponent";
 
-const ranking = () => {
-  return <div>ranking</div>;
+const Ranking = () => {
+  return <RankingComponent />;
 };
 
-export default ranking;
+export default Ranking;

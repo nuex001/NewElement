@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-const ApplyComponents = () => {
+const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
 
   const [formValues, setFormValues] = useState(initialValues);
@@ -150,7 +150,7 @@ const ApplyComponents = () => {
 
   return (
     <div className="flex w-screen h-screen  items-center justify-center bg-center bg-cover bg-[url(/background.svg)]  ">
-      <div className="flex  mt-24 w-[85vw] md:w-[60vw] flex-col items-center uppercase text-left text-green font-ibmPlex">
+      <div className="flex  mt-24 w-[85vw] md:w-[50vw] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  ">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
             <h2 className="text-[2vh] leading-[25px] mb-12 ">
@@ -289,4 +289,4 @@ const ApplyComponents = () => {
   );
 };
 
-export default ApplyComponents;
+export default ApplyComponent;

@@ -1,8 +1,8 @@
 import React from "react";
-import ApplyComponents from "../components/ApplyComponents";
+import ApplyComponent from "../components/ApplyComponent";
 
 const Apply = () => {
-  return <ApplyComponents />;
+  return <ApplyComponent />;
 };
 
 export default Apply;

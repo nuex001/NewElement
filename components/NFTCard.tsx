@@ -1,10 +1,8 @@
 import { useEffect, useState, FunctionComponent } from "react";
-import { BiHeart } from "react-icons/bi";
 import Router from "next/router";
 import Image from "next/image";
 import { Interface } from "ethers/lib/utils";
 import Link from "next/link";
-import { log } from "console";
 import profile from "../assets/PROFILE.png";
 import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";

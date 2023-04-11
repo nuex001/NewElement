@@ -29,7 +29,7 @@ export default function Header() {
           <div className="flex flex-1 items-center justify-center  sm:items-stretch sm:justify-start">
             <div className="flex items-center pl-5">
               <Link href="/">
-                <h1 className="  text-3xl">NEW ELEMENTS</h1>
+                <h1 className="text-3xl pl-5 ">NEW ELEMENTS</h1>
               </Link>
             </div>
             <div className="grow flex"></div>
