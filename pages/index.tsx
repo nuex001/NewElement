@@ -81,11 +81,16 @@ const Home: NextPage = () => {
           </Link>
         </div> */}
 
-        <div className="mb-5">
+        <div className="mb-5 ">
           {
             // If the listings are loading, show a loading message
             loadingListings ? (
-              <div>Loading listings...</div>
+              // <div >Loading listings...</div>
+              <div className="flex justify-center items-center w-[100dvw] mt-32">
+                <div className="relative w-24 h-24 animate-spin rounded-full bg-gradient-to-r from-black via-blue-500 to-green ">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-black rounded-full "></div>
+                </div>
+              </div>
             ) : (
               // Otherwise, show the listings
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-10 mb-10">
