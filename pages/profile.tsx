@@ -1,7 +1,10 @@
 import React from "react";
+import ProfileComponent from "../components/ProfileComponent";
 
 type Props = {};
 
 const profile = (props: Props) => {
-  return <div>profile</div>;
+  return <ProfileComponent />;
 };
+
+export default profile;
