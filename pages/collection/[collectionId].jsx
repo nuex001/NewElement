@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useWeb3 } from "@thirdweb-dev/sdk";
 import { client } from "../../lib/sanityClient";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import Header from "../../components/Header";
+import Header from "../../components/Header/Header";
 import { CgWebsite } from "react-icons/cg";
 import { AiOutlineInstagram, AiOutlineTwitter } from "react-icons/ai";
 import { HiDotsVertical } from "react-icons/hi";
