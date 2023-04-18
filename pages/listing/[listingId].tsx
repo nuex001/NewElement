@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { marketplaceContractAddress } from "../../addresses";
 import styles from "../../styles/Home.module.css";
-import profile from "../../assets/profile.png";
+import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
 
 const ListingPage: NextPage = () => {
