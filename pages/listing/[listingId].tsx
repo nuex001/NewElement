@@ -90,22 +90,22 @@ const ListingPage: NextPage = () => {
     }
   }
 
-  async function buyNft() {
-    try {
-      // Ensure user is on the correct network
-      if (networkMismatch) {
-        switchNetwork && switchNetwork(ChainId.Mumbai);
-        return;
-      }
+  // async function buyNft() {
+  //   try {
+  //     // Ensure user is on the correct network
+  //     if (networkMismatch) {
+  //       switchNetwork && switchNetwork(ChainId.Mumbai);
+  //       return;
+  //     }
 
-      // Simple one-liner for buying the NFT
-      await marketplace?.buyoutListing(listingId, 1);
-      alert("NFT bought successfully!");
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
+  //     // Simple one-liner for buying the NFT
+  //     await marketplace?.buyoutListing(listingId, 1);
+  //     alert("NFT bought successfully!");
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col h-full w-[98dvw]  mt-16  overflow-x-hidden justify-between">
