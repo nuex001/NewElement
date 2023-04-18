@@ -40,9 +40,11 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
               }}
               className=" overflow-hidden h-full flex justify-center items-center mb-3"
             >
-              <img
+              <Image
                 src={listing?.asset.image}
                 alt={listing?.asset.name}
+                width={400}
+                height={400}
                 className="w-full max-h-[65vh] object-cover cursor-pointer"
               />
             </div>
