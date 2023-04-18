@@ -149,9 +149,10 @@ const ProfileComponent = (props: Props) => {
         <div className="flex flex-col w-full mt-4 text-left text-xs">
           <h1 className="text-2xl mb-3 font-bold">JOH KANE</h1>
           <p>
-            Hi all, I'm Ahad aka wiresandtrees, I'm a freelance artist and
-            architect (RIBA Part II) based in the UK. I love visually exploring
-            the state between 'dreams' and 'nightmares'.
+            Hi all, I&apos;m Ahad aka wiresandtrees, I&apos;m a freelance artist
+            and architect (RIBA Part II) based in the UK. I love visually
+            exploring the state between &apos;dreams&apos; and
+            &apos;nightmares&apos;.
           </p>
         </div>
         <div className="flex mt-5 h-full flex-wrap">
