@@ -188,10 +188,11 @@ const ListingPage: NextPage = () => {
             grace. One that it felt the universe helped me make. I had just
             turned 20, my life a blur (I had no money), but the day I posted
             this on Twitter, the painting garnering millions of views and my
-            life changed forever. People ask me a lot, "What inspired the
-            painting?" and I smile and respond, "Life." This was a distillation
-            of everything I had known and learnt in these years. All my pain, my
-            tears, my laughs and my joys. It's a painting I'm very proud of.
+            life changed forever. People ask me a lot, &apos;What inspired the
+            painting?&apos; and I smile and respond, &apos;Life.&apos; This was
+            a distillation of everything I had known and learnt in these years.
+            All my pain, my tears, my laughs and my joys. It&apos;s a painting
+            I&apos;m very proud of.
           </p>
         </div>
         <div className="flex w-[70%] max-w-4xl mt-6 font-ibmPlex text-xs">
