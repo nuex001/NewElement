@@ -1,3 +1,4 @@
+const { fontFamily } = require("tailwindcss/defaultTheme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -20,20 +21,20 @@ module.exports = {
         green: "#97FF73",
       },
       fontFamily: {
-        ibmPlex: ["IBM Plex Mono", "sans-serif"],
-        carbon: ["Carbon", "sans-serif"],
-        compressed: ["Compressed", "sans-serif"],
-        condensed: ["Condensed", "sans-serif"],
-        expanded: ["Expanded", "sans-serif"],
-        extended: ["Extended", "sans-serif"],
-        extraCondensed: ["ExtraCondensed", "sans-serif"],
-        normal: ["Normal", "sans-serif"],
-        semiCondensed: ["SemiCondensed", "sans-serif"],
-        wide: ["Wide", "sans-serif"],
-        xCompressed: ["XCompressed", "sans-serif"],
-        xxCompressed: ["xxCompressed", "sans-serif"],
-        xxxCompressed: ["xxxCompressed", "sans-serif"],
-        xxxxCompressed: ["xxxxCompressed", "sans-serif"],
+        ibmPlex: ["var(--font-ibmPlex)", ...fontFamily.sans],
+        carbon: ["var(--font-carbon)", ...fontFamily.sans],
+        compressed: ["var(--font-compressed)", ...fontFamily.sans],
+        condensed: ["var(--font-condensed)", ...fontFamily.sans],
+        expanded: ["var(--font-expanded)", ...fontFamily.sans],
+        extended: ["var(--font-extended)", ...fontFamily.sans],
+        extraCondensed: ["var(--font-extraCondensed)", ...fontFamily.sans],
+        normal: ["var(--font-normal)", ...fontFamily.sans],
+        semiCondensed: ["var(--font-semiCondensed)", ...fontFamily.sans],
+        wide: ["var(--font-wide)", ...fontFamily.sans],
+        xCompressed: ["var(--font-xCompressed)", ...fontFamily.sans],
+        xxCompressed: ["var(--font-xxCompressed)", ...fontFamily.sans],
+        xxxCompressed: ["var(--font-xxxCompressed)", ...fontFamily.sans],
+        xxxxCompressed: ["var(--font-xxxxCompressed)", ...fontFamily.sans],
       },
       backgroundImage: {
         aboutPattern: "url('/assets/background.svg')",

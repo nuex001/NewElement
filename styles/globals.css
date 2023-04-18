@@ -7,55 +7,55 @@
 
 @font-face {
   font-family: "Carbon";
-  src: url("/public/fonts/CarbonGravity-Carbon.otf");
+  src: url("../public/fonts/CarbonGravity-Carbon.otf");
 }
 @font-face {
   font-family: "Compressed";
-  src: url("/public/fonts/CarbonGravity-Compressed.otf");
+  src: url("../public/fonts/CarbonGravity-Compressed.otf");
 }
 @font-face {
   font-family: "Condensed";
-  src: url("/public/fonts/CarbonGravity-Condensed.otf");
+  src: url("../public/fonts/CarbonGravity-Condensed.otf");
 }
 @font-face {
   font-family: "Expanded";
-  src: url("/public/fonts/CarbonGravity-Expanded.otf");
+  src: url("../public/fonts/CarbonGravity-Expanded.otf");
 }
 @font-face {
   font-family: "Extended";
-  src: url("/public/fonts/CarbonGravity-Extended.otf");
+  src: url("../public/fonts/CarbonGravity-Extended.otf");
 }
 @font-face {
   font-family: "ExtraCondensed";
-  src: url("/public/fonts/CarbonGravity-ExtraCondensed.otf");
+  src: url("../public/fonts/CarbonGravity-ExtraCondensed.otf");
 }
 @font-face {
   font-family: "Normal";
-  src: url("/public/fonts/CarbonGravity-Normal.otf");
+  src: url("../public/fonts/CarbonGravity-Normal.otf");
 }
 @font-face {
   font-family: "SemiCondensed";
-  src: url("/public/fonts/CarbonGravity-SemiCondensed.otf");
+  src: url("../public/fonts/CarbonGravity-SemiCondensed.otf");
 }
 @font-face {
   font-family: "Wide";
-  src: url("/public/fonts/CarbonGravity-Wide.otf");
+  src: url("../public/fonts/CarbonGravity-Wide.otf");
 }
 @font-face {
   font-family: "XCompressed";
-  src: url("/public/fonts/CarbonGravity-XCompressed.otf");
+  src: url("../public/fonts/CarbonGravity-XCompressed.otf");
 }
 @font-face {
   font-family: "XXCompressed";
-  src: url("/public/fonts/CarbonGravity-XXCompressed.otf");
+  src: url("../public/fonts/CarbonGravity-XXCompressed.otf");
 }
 @font-face {
   font-family: "XXXCompressed";
-  src: url("/public/fonts/CarbonGravity-XXXCompressed.otf");
+  src: url("../public/fonts/CarbonGravity-XXXCompressed.otf");
 }
 @font-face {
   font-family: "XXXXCompressed";
-  src: url("/public/fonts/CarbonGravity-XXXXCompressed.otf");
+  src: url("../public/fonts/CarbonGravity-XXXXCompressed.otf");
 }
 /* Box sizing rules */
 *,

@@ -26,10 +26,10 @@ export default function Header() {
     <Popover className="relative  z-10">
       <div className="mx-auto  px-2 sm:px-6 font-compressed uppercase text-green lg:px-8 max-w-[1300px]">
         <div className="absolute flex h-20 w-[90%] items-center justify-between ">
-          <div className="flex flex-1 items-center justify-center  sm:items-stretch sm:justify-start">
+          <div className="flex flex-1 items-center  justify-center  sm:items-stretch sm:justify-start">
             <div className="flex items-center pl-5">
               <Link href="/">
-                <h1 className="text-3xl pl-5 ">NEW ELEMENTS</h1>
+                <h1 className="text-3xl pl-5">NEW ELEMENTS</h1>
               </Link>
             </div>
             <div className="grow flex"></div>
