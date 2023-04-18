@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
+import Link from "next/link";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -13,13 +14,13 @@ export default function ProfileMenu() {
   return (
     <Menu as="div" className="relative inline-block">
       {!address ? (
-        <a
+        <Link
           className="text-center"
           href="#"
           onClick={() => connectWithMetamask()}
         >
           Connect Wallet
-        </a>
+        </Link>
       ) : (
         <>
           <div>
@@ -40,7 +41,7 @@ export default function ProfileMenu() {
               <div className="py-1 font-ibmPlex text-green">
                 <Menu.Item>
                   {({ active }) => (
-                    <a
+                    <Link
                       href="/profile"
                       className={classNames(
                         active ? "bg-gray-400 text-white" : "text-white",
@@ -50,7 +51,7 @@ export default function ProfileMenu() {
                       <div className="h-5 w-5 bg-green rounded-full mr-3"></div>
                       my profile {">"}
                       {">"}
-                    </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <div className="flex items-center">
@@ -64,7 +65,7 @@ export default function ProfileMenu() {
                 </div>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
+                    <Link
                       href="#"
                       className={classNames(
                         active ? "bg-gray-400 text-green" : "text-green",
@@ -74,12 +75,12 @@ export default function ProfileMenu() {
                       {">"}
                       {">"}
                       {">"} Settings
-                    </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
-                    <a
+                    <Link
                       href="#"
                       className={classNames(
                         active ? "bg-gray-400 text-green" : "text-green",
@@ -89,14 +90,14 @@ export default function ProfileMenu() {
                       {">"}
                       {">"}
                       {">"} help
-                    </a>
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
                     <>
                       {!address ? (
-                        <a
+                        <Link
                           href="#"
                           className={classNames(
                             active ? "bg-gray-400 text-green" : "text-green",
@@ -105,10 +106,10 @@ export default function ProfileMenu() {
                           onClick={() => connectWithMetamask()}
                         >
                           Connect Wallet
-                        </a>
+                        </Link>
                       ) : (
                         <>
-                          <a
+                          <Link
                             href="#"
                             className={classNames(
                               active ? "bg-gray-400 text-green" : "text-green",
@@ -119,7 +120,7 @@ export default function ProfileMenu() {
                             {">"}
                             {">"}
                             {">"} Disconnect Wallet
-                          </a>
+                          </Link>
                         </>
                       )}
                     </>
