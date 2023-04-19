@@ -5,7 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
+/* @font-face {
   font-family: "Carbon";
   src: url("../public/fonts/CarbonGravity-Carbon.otf");
 }
@@ -56,7 +56,7 @@
 @font-face {
   font-family: "XXXXCompressed";
   src: url("../public/fonts/CarbonGravity-XXXXCompressed.otf");
-}
+} */
 /* Box sizing rules */
 *,
 *::before,
@@ -93,6 +93,7 @@ body {
   font-family: "Inter", sans-serif;
   color: var(--white);
   display: flex;
+  justify-content: center;
   margin: 0;
   text-align: center;
 }

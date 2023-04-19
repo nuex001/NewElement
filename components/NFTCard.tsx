@@ -45,7 +45,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                 alt={listing?.asset.name}
                 width={400}
                 height={400}
-                className="w-full max-h-[65vh] object-cover cursor-pointer"
+                className="w-full max-h-[65vh] min-h-[370px] object-cover cursor-pointer"
               />
             </div>
 
