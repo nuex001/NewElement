@@ -105,18 +105,19 @@ export default function ProfileMenu() {
                         </Link>
                       ) : (
                         <>
-                          <Link
-                            href="#"
+                          <button
                             className={classNames(
                               active ? "bg-gray-400 text-green" : "text-green",
                               "block px-4 py-2 text-xs  hover:bg-gray-400"
                             )}
                             onClick={() => disconnectWallet()}
                           >
-                            {">"}
-                            {">"}
-                            {">"} Disconnect Wallet
-                          </Link>
+                            <h1>
+                              {">"}
+                              {">"}
+                              {">"} Disconnect Wallet
+                            </h1>
+                          </button>
                         </>
                       )}
                     </>
