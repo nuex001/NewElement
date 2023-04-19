@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import ProfileMenu from "./ProfileMenu";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: "Marketplace", href: "/", current: true },
@@ -16,10 +17,14 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
+  const pathname = usePathname();
+  const bg = pathname === "/apply" ? "bg-transparent" : "bg-black";
   return (
     <Popover className="relative  z-10">
       <div className="mx-auto  px-2 sm:px-6 font-compressed uppercase text-green lg:px-8 max-w-[1300px]">
-        <div className="absolute flex h-20 mx-10 top-0 left-0 right-0 items-center justify-between ">
+        <div
+          className={`fixed flex h-20 mx-10 top-0 left-0 right-0 items-center justify-between ${bg}`}
+        >
           <div className="flex  items-center w-full justify-between mx-5 sm:items-stretch ">
             <div className="flex items-center basis-[40%]">
               <Link href="/">

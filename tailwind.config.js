@@ -39,6 +39,9 @@ module.exports = {
       backgroundImage: {
         aboutPattern: "url('/assets/background.svg')",
       },
+      aspectRatio: {
+        "4/3": "4 / 3",
+      },
     },
   },
   plugins: [],

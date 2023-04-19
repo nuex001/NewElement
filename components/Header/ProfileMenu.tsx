@@ -15,7 +15,7 @@ export default function ProfileMenu() {
     <Menu as="div" className="relative inline-block">
       {!address ? (
         <button
-          className="text-center w-content font-ibmPlex text-xs text-green border border-green mt-1  bg-white bg-opacity-20 hover:bg-opacity-40 p-1"
+          className="text-center w-content font-ibmPlex text-xs text-green border border-green bg-white bg-opacity-20 hover:bg-opacity-40 p-1"
           onClick={() => connectWithMetamask()}
         >
           <h1>Connect Wallet</h1>
@@ -23,7 +23,7 @@ export default function ProfileMenu() {
       ) : (
         <>
           <div>
-            <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-full  shadow-sm ring-1 ring-inset5">
+            <Menu.Button className="inline-flex w-[110px] justify-center gap-x-1.5 rounded-full ">
               <div className="h-6 w-6 bg-green rounded-full hover:opacity-80"></div>
             </Menu.Button>
           </div>

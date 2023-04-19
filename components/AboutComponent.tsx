@@ -113,8 +113,8 @@ const AboutComponent = (props: Props) => {
             <div
               className={
                 errorEmail
-                  ? "text-red-500 font-thin leading-tight text-[1.2vw]"
-                  : "invisible leading-tight text-[1.2vw]"
+                  ? "text-red-500 font-thin leading-tight text-[0.9vw]"
+                  : "invisible leading-tight text-[0.9vw]"
               }
             >
               {errorMessageEmail}
