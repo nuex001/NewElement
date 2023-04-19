@@ -14,13 +14,9 @@ export default function ProfileMenu() {
   return (
     <Menu as="div" className="relative inline-block">
       {!address ? (
-        <Link
-          className="text-center"
-          href="#"
-          onClick={() => connectWithMetamask()}
-        >
-          Connect Wallet
-        </Link>
+        <button className="text-center " onClick={() => connectWithMetamask()}>
+          <h1>Connect Wallet</h1>
+        </button>
       ) : (
         <>
           <div>
