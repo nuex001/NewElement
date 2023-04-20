@@ -101,9 +101,9 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                 </div>
 
                 <div className="flex grow"></div>
-                <div className=" flex text-left">
+                <div className=" flex font-bold text-green">
                   {" "}
-                  <p className="font-bold text-green">ENDS IN 10H 22M 09S</p>
+                  <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
                 </div>
                 <div className="flex grow"></div>
 
