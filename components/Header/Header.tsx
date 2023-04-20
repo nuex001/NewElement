@@ -20,15 +20,15 @@ export default function Header() {
   const pathname = usePathname();
   const bg = pathname === "/apply" ? "bg-transparent" : "bg-black";
   return (
-    <Popover className="relative  z-10">
-      <div className="mx-auto  px-2 sm:px-6 font-compressed uppercase text-green lg:px-8 max-w-[1300px]">
+    <Popover className="relative z-2">
+      <div className="mx-auto  px-2 sm:px-6 font-xxCompressed uppercase text-green lg:px-8 max-w-[1300px]">
         <div
           className={`fixed flex h-20 mx-10 top-0 left-0 right-0 items-center justify-between ${bg}`}
         >
           <div className="flex  items-center w-full justify-between mx-5 sm:items-stretch ">
             <div className="flex items-center basis-[40%]">
               <Link href="/">
-                <h1 className="text-3xl">NEW ELEMENTS</h1>
+                <h1 className="text-5xl tracking-wide">NEW ELEMENTS</h1>
               </Link>
             </div>
             <div className="basis-[55%] flex justify-between">
@@ -40,7 +40,7 @@ export default function Header() {
                       href={item.href}
                       className={classNames(
                         "text-blue  hover:opacity-80",
-                        "px-3 py-2 rounded-md text-xl font-medium"
+                        "px-3 py-2 rounded-md text-3xl font-medium tracking-wide"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >

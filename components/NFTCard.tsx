@@ -13,7 +13,6 @@ type Props = {
 const NFTCard: FunctionComponent<Props> = ({ listing }) => {
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
-  console.log(listing);
 
   // useEffect(() => {
   //   const listing = listings.find(
@@ -35,7 +34,6 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
               onClick={() => {
                 Router.push({
                   pathname: `/listing/${listing.id}`,
-                  query: { isListed: isListed },
                 });
               }}
               className=" overflow-hidden h-full flex justify-center items-center mb-3"
@@ -45,7 +43,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                 alt={listing?.asset.name}
                 width={400}
                 height={400}
-                className="w-full max-h-[65vh] min-h-[370px] object-cover cursor-pointer"
+                className="w-full max-h-[65vh]  object-cover cursor-pointer"
               />
             </div>
 
