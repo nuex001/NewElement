@@ -149,24 +149,24 @@ const ApplyComponent = () => {
   // console.log(formValues);
 
   return (
-    <div className="flex w-screen h-screen  items-center justify-center bg-center bg-cover bg-[url(/background.svg)]  ">
+    <div className="flex w-screen h-screen  items-center justify-center bg-center bg-cover bg-[url(../assets/background1.jpg)]  ">
       <div className="flex  mt-24 w-[85vw] md:w-[50vw] flex-col items-center uppercase text-left text-green font-ibmPlex">
-        <div className=" w-full  ">
+        <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
-            <h2 className="text-[2vh] leading-[25px] mb-12 ">
+            <h2 className="text-xs leading-[25px] mb-12 ">
               WE ARE SELECTING THE BEST FASHION STORY TELLERS AROUND THE GLOBE.{" "}
               <br />
               IF YOU BELEIVE THIS IS YOU, PLEASE APPLY HERE.
             </h2>
-            <div className="flex flex-col ">
+            <div className="flex flex-col font-semibold">
               <div className="form-group ">
-                <label htmlFor="email1">Email</label>
+                <label htmlFor="email1">Email Address *</label>
                 <input
                   type="text"
                   className={
                     errorEmail
-                      ? "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-red-500 outline-0 transition-all duration-500"
-                      : "text-base bg-transparent py-3.5 px-4 w-full h-10 border  outline-0 transition-all duration-500"
+                      ? "text-base bg-transparent py-3.5 mt-1 px-4 w-full h-10 border border-red-500 outline-0 transition-all duration-500"
+                      : "text-base bg-transparent py-3.5 mt-1 px-4 w-full h-10 border  outline-0 transition-all duration-500"
                   }
                   id="email1"
                   name="email"
@@ -194,8 +194,8 @@ const ApplyComponent = () => {
                   type="text"
                   className={
                     errorWebsite
-                      ? "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-red-500 outline-0 transition-all"
-                      : "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-blue outline-0 transition-all"
+                      ? "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-red-500 outline-0 transition-all"
+                      : "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-blue outline-0 transition-all"
                   }
                   id="name1"
                   name="website"
@@ -222,8 +222,8 @@ const ApplyComponent = () => {
                   type="text"
                   className={
                     errorTwitter
-                      ? "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-red-500 outline-0 transition-all"
-                      : "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-blue outline-0 transition-all"
+                      ? "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-red-500 outline-0 transition-all"
+                      : "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-blue outline-0 transition-all"
                   }
                   id="school1"
                   name="twitter"
@@ -245,13 +245,13 @@ const ApplyComponent = () => {
             </div>
             <div className="flex flex-col ">
               <div className="form-group ">
-                <label htmlFor="name">Instagram</label>
+                <label htmlFor="name">Instagram *</label>
                 <input
                   type="text"
                   className={
                     errorInstagram
-                      ? "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-red-500 outline-0 transition-all"
-                      : "text-base bg-transparent py-3.5 px-4 w-full h-10 border border-blue outline-0 transition-all"
+                      ? "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-red-500 outline-0 transition-all"
+                      : "text-base bg-transparent py-3.5 px-4 mt-1 w-full h-10 border border-blue outline-0 transition-all"
                   }
                   id="school1"
                   name="instagram"
@@ -274,7 +274,7 @@ const ApplyComponent = () => {
 
             <button
               type="submit"
-              className="bg-blue text-green font-compressed border border-green w-full uppercase tracking-[12px]  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
+              className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px]  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
             >
               {loading ? (
                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-white h-6 w-6"></div>

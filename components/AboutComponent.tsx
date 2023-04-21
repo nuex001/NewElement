@@ -122,7 +122,7 @@ const AboutComponent = (props: Props) => {
           </div>
           <button
             type="submit"
-            className="bg-blue text-green font-compressed  border border-green w-3/6 uppercase tracking-[12px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
+            className="bg-blue text-green font-xCompressed  border border-green w-3/6 uppercase tracking-[12px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
           >
             {loading ? (
               <div className="loader ease-linear rounded-full border-4 border-t-4 border-white h-6 w-6"></div>

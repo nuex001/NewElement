@@ -214,7 +214,7 @@ const ProfileComponent = (props: Props) => {
           </div>
         </div>
         <div className="flex overflow-hidden">
-          <button className=" text-green font-compressed  border border-green tracking-[12px] w-[40%] my-10 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] text-xl  ">
+          <button className=" text-green font-xCompressed font-bold border border-green tracking-[12px] w-[40%] my-10 bg-white bg-opacity-20 hover:bg-opacity-40  py-[1.2vh] text-2xl  ">
             LIST NEW
           </button>
         </div>{" "}

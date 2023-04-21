@@ -189,7 +189,7 @@ const ListingPage: NextPage = () => {
             </div>
             <div className="font-ibmPlex w-[30vw] min-w-[400px] flex items-center justify-between">
               <button
-                className=" text-green font-compressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                 onClick={isModalOpen}
               >
                 PLACE BID
