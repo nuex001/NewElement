@@ -12,7 +12,7 @@ import { client } from "../lib/sanityClient";
 import { useRouter } from "next/router";
 import { marketplaceContractAddress } from "../addresses";
 import NFTCard from "../components/NFTCard";
-import MarketplaceSkeleton from "../components/LoadingSkeletons/MarketplaceSkeleton";
+import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -76,18 +76,18 @@ const Home: NextPage = () => {
               //     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-black rounded-full "></div>
               //   </div>
               // </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-10 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mx-10 mb-10">
                 <>
-                  <MarketplaceSkeleton />
+                  <NFTCardSkeleton />
 
-                  <MarketplaceSkeleton />
+                  <NFTCardSkeleton />
 
-                  <MarketplaceSkeleton />
+                  <NFTCardSkeleton />
                 </>
               </div>
             ) : (
               // Otherwise, show the listings
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-10 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mx-10 mb-10">
                 {listings?.map((listing) => (
                   <>
                     <NFTCard listing={listing} />

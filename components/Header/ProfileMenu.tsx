@@ -23,7 +23,7 @@ export default function ProfileMenu() {
       ) : (
         <>
           <div>
-            <Menu.Button className="inline-flex w-[110px] justify-center gap-x-1.5 rounded-full ">
+            <Menu.Button className="inline-flex w-[110px] justify-end gap-x-1.5 rounded-full ">
               <div className="h-6 w-6 bg-green rounded-full hover:opacity-80"></div>
             </Menu.Button>
           </div>

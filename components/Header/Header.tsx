@@ -21,93 +21,102 @@ export default function Header() {
   const bg = pathname === "/apply" ? "bg-transparent" : "bg-black";
   return (
     <Popover className="relative z-2">
-      <div className="mx-auto  px-2 sm:px-6 font-xxCompressed uppercase text-green lg:px-8 max-w-[1300px]">
-        <div
-          className={`fixed flex h-20 mx-10 top-0 left-0 right-0 items-center justify-between ${bg}`}
-        >
-          <div className="flex  items-center w-full justify-between mx-5 sm:items-stretch ">
-            <div className="flex items-center basis-[40%]">
-              <Link href="/">
-                <h1 className="text-5xl tracking-wide">NEW ELEMENTS</h1>
-              </Link>
-            </div>
-            <div className="basis-[55%] flex justify-between">
-              <div className="hidden lg:flex w-full items-center">
-                <div className="flex w-full items-center justify-between">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        "text-blue  hover:opacity-80",
-                        "px-3 py-2 rounded-md text-3xl font-medium tracking-wide"
-                      )}
-                      aria-current={item.current ? "page" : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}{" "}
-                  <div className=" hidden lg:flex items-center justify-center">
-                    <ProfileMenu />
+      {({ open }) => (
+        <>
+          <div className="mx-auto  px-2 sm:px-6 font-xCompressed lg:font-xxCompressed uppercase text-green lg:px-8 max-w-[1300px]">
+            <div
+              className={`fixed flex h-20 lg:mx-10 top-0 left-0 right-0 items-center justify-between ${bg}`}
+            >
+              <div className="flex  items-center w-full justify-between mx-5 sm:items-stretch ">
+                <div className="flex items-center lg:hidden">
+                  <Popover.Button className="inline-flex items-center justify-center  text-gray-400 hover:bg-gray-100 hover:text-gray-500 ">
+                    <span className="sr-only">Open menu</span>
+                    <Bars3Icon className="h-7 w-7 mr-2" aria-hidden="true" />
+                  </Popover.Button>
+                </div>
+                <div className="flex items-center basis-[40%]">
+                  <Link href="/">
+                    <h1 className="text-3xl lg:text-5xl tracking-wide">
+                      NEW ELEMENTS
+                    </h1>
+                  </Link>
+                </div>
+
+                <div className="basis-[55%] flex justify-between">
+                  <div className=" w-full items-center">
+                    <div className="flex w-full items-center justify-end lg:justify-between">
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={classNames(
+                            "text-blue  hover:opacity-80",
+                            "px-3 py-2 rounded-md text-3xl font-medium tracking-wide hidden lg:flex"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}{" "}
+                      <div className="flex items-center justify-center">
+                        <ProfileMenu />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="-my-2 mt-2 lg:hidden">
-              <Popover.Button className="inline-flex items-center justify-center rounded-full bg-green p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                <span className="sr-only">Open menu</span>
-                <Bars3Icon className="h-7 w-7" aria-hidden="true" />
-              </Popover.Button>
-            </div>
           </div>
-        </div>
-      </div>
-      {/* Mobile */}
-      <Transition
-        as={Fragment}
-        enter="duration-200 ease-out"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="duration-100 ease-in"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <Popover.Panel
-          focus
-          className="absolute z-10 inset-x-0 top-0 origin-top-right transform p-2 transition lg:hidden"
-        >
-          <div className="divide-y-2 z-10 divide-gray-50 font-compressed uppercase text-green lg:px-8 rounded-lg bg-black shadow-lg ring-1 ring-black ring-opacity-5">
-            <div className="px-5 pt-5 pb-6">
-              <div className="flex items-center justify-between">
-                <Link href="/">
-                  <h1 className="text-3xl pl-5">NEW ELEMENTS</h1>
-                </Link>
-                <div className="-mr-2 ">
-                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="sr-only">Close menu</span>
-                    <XMarkIcon className="h-7 w-7" aria-hidden="true" />
-                  </Popover.Button>
+          {/* Mobile */}
+          {open && (
+            <Transition
+              as={Fragment}
+              enter="duration-200 ease-out"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="duration-100 ease-in"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Popover.Panel
+                focus
+                className="absolute z-10 inset-x-0 top-0 origin-top-right transform transition lg:hidden"
+              >
+                <div className="divide-y-2 z-10 font-compressed uppercase text-green pt-2 lg:px-8 bg-black ">
+                  <div className="px-5 pt-5 pb-6">
+                    <div className="flex pb-4">
+                      <Popover.Button className="inline-flex items-center justify-center rounded-md pr-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </Popover.Button>
+
+                      <Link href="/">
+                        <h1 className="text-xl text-white">NEW ELEMENTS</h1>
+                      </Link>
+                    </div>
+                    <div className="mt-6">
+                      <nav className="grid gap-y-8 font-xxCompressed ">
+                        {navigation.map((item) => (
+                          <Popover.Button
+                            as={Link}
+                            key={item.name}
+                            href={item.href}
+                            className="-m-3  flex items-center p-3 hover:bg-gray-700"
+                          >
+                            <span className=" text-5xl text-green ">
+                              {item.name}
+                            </span>
+                          </Popover.Button>
+                        ))}
+                      </nav>{" "}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-6">
-                <nav className="grid gap-y-8">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="-m-3 flex font-courier border-b items-center rounded-md p-3 hover:bg-gray-50"
-                    >
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        {item.name}
-                      </span>
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </div>
-          </div>
-        </Popover.Panel>
-      </Transition>
+              </Popover.Panel>
+            </Transition>
+          )}
+        </>
+      )}
     </Popover>
   );
 }
