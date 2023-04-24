@@ -82,8 +82,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
         />
       </Head>
-      <main
-        className={`${ibmPlexMono.variable} font-sans,
+      <div className="w-full  items-center justify-center">
+        <main
+          className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
           ${compressed.variable} font-sans,
           ${condensed.variable} font-sans,
@@ -97,11 +98,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           ${xxCompressed.variable} font-sans,
           ${xxxCompressed.variable} font-sans,
           ${xxxxCompressed.variable} font-sans`}
-      >
-        <Header />
-      </main>
-      <main
-        className={`${ibmPlexMono.variable} font-sans,
+        >
+          <Header />
+        </main>
+        <main
+          className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
           ${compressed.variable} font-sans,
           ${condensed.variable} font-sans,
@@ -115,9 +116,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           ${xxCompressed.variable} font-sans,
           ${xxxCompressed.variable} font-sans,
           ${xxxxCompressed.variable} font-sans`}
-      >
-        <Component {...pageProps} />
-      </main>
+        >
+          <Component {...pageProps} />
+        </main>
+      </div>
     </ThirdwebProvider>
   );
 }

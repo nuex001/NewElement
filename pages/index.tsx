@@ -66,7 +66,7 @@ const Home: NextPage = () => {
   return (
     <>
       {/* Content */}
-      <div className="flex w-full mt-24 flex-col items-center content-center">
+      <div className="flex w-full mt-24 max-w-[1600px] container flex-col items-center content-center">
         <div className="mb-5 ">
           {
             // If the listings are loading, show a loading message

@@ -72,12 +72,12 @@ const ProfileComponent = (props: Props) => {
     });
   };
   return (
-    <div className="flex flex-col w-[98dvw]  mt-24  bg-black overflow-hidden">
-      <div className="flex flex-col w-full h-full  md:px-16 font-ibmPlex">
+    <div className="flex flex-col w-[98dvw] max-w-[1600px] mt-24  bg-black overflow-hidden">
+      <div className="flex flex-col w-full h-full  md:px-[3.74rem] font-ibmPlex">
         <Image
           className="self-center"
           src={banner}
-          width={1200}
+          width={1600}
           height={200}
           alt="banner"
         />

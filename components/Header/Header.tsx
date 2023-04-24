@@ -23,18 +23,18 @@ export default function Header() {
     <Popover className="relative z-2">
       {({ open }) => (
         <>
-          <div className="mx-auto  px-2 sm:px-6 font-xCompressed lg:font-xxCompressed uppercase text-green lg:px-8 max-w-[1300px]">
+          <div className="px-2 sm:px-6 font-xCompressed lg:font-xxCompressed uppercase text-green ">
             <div
-              className={`fixed flex h-20 lg:mx-10 top-0 left-0 right-0 items-center justify-between ${bg}`}
+              className={`fixed flex h-20  xl:max-w-[1480px] left-[50%] right-[50%] translate-x-2/4 translate-y-2/4  top-[40px] w-[90.5%] items-center justify-center ${bg}`}
             >
-              <div className="flex  items-center w-full justify-between mx-5 sm:items-stretch ">
+              <div className="flex  items-center w-full justify-center sm:items-stretch ">
                 <div className="flex items-center lg:hidden">
                   <Popover.Button className="inline-flex items-center justify-center  text-gray-400 hover:bg-gray-100 hover:text-gray-500 ">
                     <span className="sr-only">Open menu</span>
                     <Bars3Icon className="h-7 w-7 mr-2" aria-hidden="true" />
                   </Popover.Button>
                 </div>
-                <div className="flex items-center basis-[40%]">
+                <div className="flex items-center basis-[45%]">
                   <Link href="/">
                     <h1 className="text-3xl lg:text-5xl tracking-wide">
                       NEW ELEMENTS

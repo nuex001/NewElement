@@ -149,11 +149,11 @@ const ApplyComponent = () => {
   // console.log(formValues);
 
   return (
-    <div className="flex w-screen h-screen  items-center justify-center bg-center bg-cover bg-[url(../assets/background1.jpg)]  ">
-      <div className="flex  mt-24 w-[85vw] md:w-[50vw] flex-col items-center uppercase text-left text-green font-ibmPlex">
+    <div className="flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-[url(../assets/background1.jpg)]  ">
+      <div className="flex  md:mt-24 w-[85vw] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
-            <h2 className="text-xs leading-[25px] mb-12 ">
+            <h2 className="text-xs md:leading-[25px] w-5/6 md:w-full mb-12 ">
               WE ARE SELECTING THE BEST FASHION STORY TELLERS AROUND THE GLOBE.{" "}
               <br />
               IF YOU BELEIVE THIS IS YOU, PLEASE APPLY HERE.
@@ -180,8 +180,8 @@ const ApplyComponent = () => {
               <div
                 className={
                   errorEmail
-                    ? "text-red-500 font-thin leading-tight text-[1.2vw]"
-                    : "invisible leading-tight text-[1.2vw]"
+                    ? "text-red-500 font-thin leading-tight text-xs mb-2"
+                    : "invisible leading-tight text-xs mb-2"
                 }
               >
                 {errorMessageEmail}
@@ -208,8 +208,8 @@ const ApplyComponent = () => {
               <div
                 className={
                   errorWebsite
-                    ? "text-red-500 font-thin leading-tight text-[1.2vw]"
-                    : "invisible leading-tight text-[1.2vw]"
+                    ? "text-red-500 font-thin leading-tight text-xs mb-2"
+                    : "invisible leading-tight text-xs mb-2"
                 }
               >
                 {errorMessageWebsite}
@@ -236,8 +236,8 @@ const ApplyComponent = () => {
               <div
                 className={
                   errorTwitter
-                    ? "text-red-500 font-thin leading-tight text-[1.2vw]"
-                    : "invisible leading-tight text-[1.2vw]"
+                    ? "text-red-500 font-thin leading-tight text-xs mb-2"
+                    : "invisible leading-tight text-xs mb-2"
                 }
               >
                 {errorMessageTwitter}
@@ -264,8 +264,8 @@ const ApplyComponent = () => {
               <div
                 className={
                   errorInstagram
-                    ? "text-red-500 font-thin leading-tight text-[1.2vw]"
-                    : "invisible leading-tight text-[1.2vw]"
+                    ? "text-red-500 font-thin leading-tight text-xs mb-4"
+                    : "invisible leading-tight text-xs mb-4"
                 }
               >
                 {errorMessageInstagram}
@@ -274,7 +274,7 @@ const ApplyComponent = () => {
 
             <button
               type="submit"
-              className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px]  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
+              className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px]  bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[7vh] z-2 text-2xl  "
             >
               {loading ? (
                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-white h-6 w-6"></div>

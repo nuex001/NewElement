@@ -57,8 +57,11 @@ const AboutComponent = (props: Props) => {
     setFormValues({ ...formValues, [name]: value });
   };
   return (
-    <div className="flex w-full  mt-24 justify-center bg-black overflow-hidden">
-      <div className="basis-1/2 p-2 font-ibmPlex bold text-left m-4 pl-16 text-sm ">
+    <div className="flex w-full md:w-full xl:max-w-[1600px] flex-col md:flex-row-reverse items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
+      <div className="md:basis-1/2 p-2 flex  md:items-start justify-around w-[90%] md:w-full">
+        <Image src={nft} height={420} width={400} alt={""} />
+      </div>
+      <div className="md:basis-1/2 p-2 font-ibmPlex bold text-left m-4 md:pl-11 text-sm ">
         <p className="mb-4 "> Welcome to NEW ELEMENTS.</p>{" "}
         <p className="mb-4 ">
           The Web3 destination dedicated to fashion and beauty storytellers.
@@ -98,8 +101,8 @@ const AboutComponent = (props: Props) => {
                 type="text"
                 className={
                   errorEmail
-                    ? "text-base bg-transparent py-3.5 px-4 w-4/6 h-10 border border-red-500 outline-0 transition-all duration-500"
-                    : "text-base bg-transparent  py-3.5 px-4 w-4/6 h-10 border border-green  outline-0 transition-all duration-500"
+                    ? "text-base bg-transparent py-3.5 px-4 w-full md:w-4/6 h-10 border border-red-500 outline-0 transition-all duration-500"
+                    : "text-base bg-transparent  py-3.5 px-4 w-full md:w-4/6 h-10 border border-green  outline-0 transition-all duration-500"
                 }
                 id="email1"
                 name="email"
@@ -113,8 +116,8 @@ const AboutComponent = (props: Props) => {
             <div
               className={
                 errorEmail
-                  ? "text-red-500 font-thin leading-tight text-[0.9vw]"
-                  : "invisible leading-tight text-[0.9vw]"
+                  ? "text-red-500 font-thin leading-tight text-xs"
+                  : "invisible leading-tight text-xs"
               }
             >
               {errorMessageEmail}
@@ -122,7 +125,7 @@ const AboutComponent = (props: Props) => {
           </div>
           <button
             type="submit"
-            className="bg-blue text-green font-xCompressed  border border-green w-3/6 uppercase tracking-[12px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold  py-[1.2vh] px-[7vh] z-2 text-xl  "
+            className="bg-blue text-green font-xCompressed  border border-green w-full md:w-3/6 uppercase tracking-[12px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
           >
             {loading ? (
               <div className="loader ease-linear rounded-full border-4 border-t-4 border-white h-6 w-6"></div>
@@ -133,9 +136,9 @@ const AboutComponent = (props: Props) => {
         </form>
       </div>
 
-      <div className="basis-1/2 p-2 flex items-start justify-around ">
+      {/* <div className="basis-1/2 p-2 flex items-start justify-around ">
         <Image src={nft} height={420} width={400} alt={""} />
-      </div>
+      </div> */}
     </div>
   );
 };
