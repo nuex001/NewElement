@@ -36,14 +36,14 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                   pathname: `/listing/${listing.id}`,
                 });
               }}
-              className=" overflow-hidden h-full flex max-h-[580px] justify-center items-center mb-3"
+              className=" overflow-hidden h-full flex min-h-[370px] max-h-[430px] xl:max-h-[580px] justify-center items-center mb-3"
             >
               <Image
                 src={listing?.asset.image}
                 alt={listing?.asset.name}
                 width={400}
                 height={400}
-                className="w-full max-h-[65vh]  object-cover cursor-pointer"
+                className="w-full  object-cover cursor-pointer"
               />
             </div>
 

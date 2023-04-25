@@ -7,7 +7,7 @@ type Props = {};
 
 const RankingComponent = (props: Props) => {
   return (
-    <div className="flex w-screen max-w-[1600px] mt-36 justify-center bg-black ">
+    <div className="flex w-screen max-w-[1600px] mt-36 mb-10 justify-center bg-black ">
       <div className="grid w-[80%] xl:w-[70%] text-left base:grid-cols-1  md:grid-cols-3 gap-10 font-xxCompressed text-3xl tracking-wider">
         <div className="">
           <h1>TOP 50 COLLECTORS</h1>

@@ -27,7 +27,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       zIndex: "10",
       top: "50%",
       left: "50%",
-      minWidth: "50vw",
+      minWidth: "40vw",
       right: "auto",
       bottom: "auto",
       display: "flex",
@@ -51,7 +51,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       >
         <>
           {listing ? (
-            <div className="flex flex-col text-ibmPlex h-full w-[70%] mx-5 overflow-hidden justify-between">
+            <div className="flex flex-col text-ibmPlex h-full w-full md:w-[70%]  mx-5 overflow-hidden justify-between">
               <div className="flex flex-col h-full">
                 {/* <div className="flex grow"></div> */}
                 {listing ? (
@@ -61,7 +61,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                       alt={listing?.asset.name}
                       width={200}
                       height={300}
-                      className="w-full max-h-[35vh] min-h-[250px] object-contain cursor-pointer"
+                      className="w-full max-h-[35vh] min-h-[250px] object-contain"
                     />
                   </div>
                 ) : (
@@ -73,7 +73,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                 )}
 
                 <div className="flex flex-col w-full font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <h1 className="fontCompress font-compressed text-3xl mb-8">
+                  <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
                     place bid
                   </h1>
                   <div className=" flex w-full fontIbm">

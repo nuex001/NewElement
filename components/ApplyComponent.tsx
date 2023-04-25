@@ -150,7 +150,7 @@ const ApplyComponent = () => {
 
   return (
     <div className="flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-[url(../assets/background1.jpg)]  ">
-      <div className="flex  md:mt-24 w-[85vw] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
+      <div className="flex  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
             <h2 className="text-xs md:leading-[25px] w-5/6 md:w-full mb-12 ">
