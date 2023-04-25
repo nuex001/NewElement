@@ -151,7 +151,7 @@ const ApplyComponent = () => {
 
   return (
     <div
-      className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-applyPattern`}
+      className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-[/background1.jpg]`}
     >
       <div className="flex  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">

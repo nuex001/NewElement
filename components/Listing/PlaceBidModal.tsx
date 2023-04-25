@@ -106,7 +106,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                           Offer <br /> Amount
                         </p>
                         <input
-                          type="number"
+                          type="tel"
                           name="bidAmount"
                           pattern="[0-9]+"
                           placeholder="0.00  ETH"
