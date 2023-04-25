@@ -108,6 +108,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         <input
                           type="number"
                           name="bidAmount"
+                          pattern="[0-9]+"
                           placeholder="0.00  ETH"
                           onChange={(e) => setBidAmount(e.target.value)}
                           className="border bg-transparent w-2/5 pl-2 focus:outline-green"
