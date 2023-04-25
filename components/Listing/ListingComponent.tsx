@@ -121,7 +121,7 @@ const ListingComponent: NextPage = () => {
 
   return (
     <>
-      <div className="flex flex-col realtive z-2 h-full items-center w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
+      <div className="flex flex-col realtive h-full items-center w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
         <div className="flex justify-center realtive w-3/4">
           <div className="absolute translate-x-[70%] lg:translate-x-0 lg:right-1/2 z-0 left-0 hidden md:block">
             <Link

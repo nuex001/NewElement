@@ -24,7 +24,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
 
   const customStyles = {
     content: {
-      zIndex: "10",
+      zIndex: "20",
       top: "50%",
       left: "50%",
       minWidth: "40vw",
