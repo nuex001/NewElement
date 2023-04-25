@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
+
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import ProfileMenu from "./ProfileMenu";
@@ -31,7 +32,7 @@ export default function Header() {
                 <div className="flex items-center lg:hidden">
                   <Popover.Button className="inline-flex items-center justify-center  text-gray-400  hover:text-gray-500 ">
                     <span className="sr-only">Open menu</span>
-                    <Bars3Icon className="h-7 w-7 mr-2" aria-hidden="true" />
+                    <Bars2Icon className="h-7 w-7 mr-2" aria-hidden="true" />
                   </Popover.Button>
                 </div>
                 <div className="flex items-center basis-[45%]">
@@ -80,9 +81,9 @@ export default function Header() {
             >
               <Popover.Panel
                 focus
-                className="absolute z-10 inset-x-0 top-0 origin-top-right transform transition lg:hidden"
+                className="absolute z-10 inset-x-0  top-0 origin-top-right transform transition lg:hidden"
               >
-                <div className="divide-y-2 z-10 font-compressed uppercase text-green pt-2 lg:px-8 bg-black ">
+                <div className="divide-y-2 z-10 font-compressed  uppercase text-green pt-2 lg:px-8 bg-black ">
                   <div className="px-5 pt-5 pb-6">
                     <div className="flex pb-4">
                       <Popover.Button className="inline-flex items-center justify-center rounded-md pr-2 text-gray-400  hover:text-gray-500 focus:outline-none">
