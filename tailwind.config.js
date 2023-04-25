@@ -37,7 +37,7 @@ module.exports = {
         xxxxCompressed: ["var(--font-xxxxCompressed)", ...fontFamily.sans],
       },
       backgroundImage: {
-        aboutPattern: "url('/assets/background.svg')",
+        applyPattern: "url('/background1.jpg')",
       },
       aspectRatio: {
         "4/3": "4 / 3",

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { useState } from "react";
+import bg from "../assets/background1.jpg";
 
 const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
@@ -149,7 +150,9 @@ const ApplyComponent = () => {
   // console.log(formValues);
 
   return (
-    <div className="flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-[url(../assets/background1.jpg)]  ">
+    <div
+      className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-applyPattern`}
+    >
       <div className="flex  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
