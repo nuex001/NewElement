@@ -72,14 +72,14 @@ const ProfileComponent = (props: Props) => {
     });
   };
   return (
-    <div className="flex flex-col w-[98dvw] max-w-[1600px] mt-24  bg-black overflow-hidden">
-      <div className="flex flex-col w-full h-full  md:px-[3.74rem] font-ibmPlex">
+    <div className="flex flex-col w-[98dvw] max-w-[1600px] mt-20 md:mt-24  bg-black overflow-hidden">
+      <div className="flex flex-col w-full  md:px-[3.74rem] font-ibmPlex px-3">
         <Image
-          className="self-center"
           src={banner}
           width={1600}
           height={200}
           alt="banner"
+          className="h-[12vh] md:h-full object-cover "
         />
         <div className="flex w-full -mt-4">
           <button onClick={handleOpneCropper}>
@@ -92,13 +92,15 @@ const ProfileComponent = (props: Props) => {
             />
           </button>
           <Image
-            className="ml-4 h-5 self-center"
+            className="ml-4 mb-1 h-5 self-center"
             src={star}
             width={20}
             height={10}
             alt="star"
           />
-          <p className="text-xs self-center">ARTIST</p>
+          <p className="text-xs pl-1 font-bold tracking-wider self-center">
+            ARTIST
+          </p>
         </div>
         <div className="w-fit border border-green flex flex-col align-center">
           {picture.cropperOpen && (
@@ -155,84 +157,89 @@ const ProfileComponent = (props: Props) => {
             &apos;nightmares&apos;.
           </p>
         </div>
-        <div className="flex mt-5 h-full flex-wrap">
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              5
-            </h1>
-            <p className="text-xs">
-              TOTAL
-              <br /> LISTED
-            </p>
-          </div>
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              2
-            </h1>
-            <p className="text-xs">
-              TOTAL
-              <br /> SOLD
-            </p>
-          </div>
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              0.1
-            </h1>
-            <p className="text-xs">
-              PROFIT
-              <br /> IN ETH
-            </p>
-          </div>
-          <div className="basis-full h-0"></div>
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              4
-            </h1>
+        <div className="flex  flex-col-reverse md:flex-col">
+          <div className="flex md:mt-5 h-full flex-wrap">
+            <div className="flex flex-col mr-10 w-16">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
+                5
+              </h1>
+              <p className="text-xs">
+                TOTAL
+                <br /> LISTED
+              </p>
+            </div>
+            <div className="flex flex-col mr-10 w-16">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                2
+              </h1>
+              <p className="text-xs">
+                TOTAL
+                <br /> SOLD
+              </p>
+            </div>
+            <div className="flex grow md:hidden"></div>
 
-            <p className="text-xs">
-              TOTAL
-              <br /> COLLECTED
-            </p>
+            <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                0.1
+              </h1>
+              <p className="text-xs">
+                PROFIT
+                <br /> IN ETH
+              </p>
+            </div>
+            <div className="basis-full h-0"></div>
+            <div className="flex flex-col mr-10 w-16">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                4
+              </h1>
+
+              <p className="text-xs">
+                TOTAL
+                <br /> COLLECTED
+              </p>
+            </div>
+            <div className="flex flex-col mr-10 w-16">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                4
+              </h1>
+              <p className="text-xs">
+                TOTAL
+                <br /> FLIPPED
+              </p>
+            </div>
+            <div className="flex grow md:hidden"></div>
+            <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
+              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                1.1
+              </h1>
+              <p className="text-xs">
+                P/L
+                <br /> IN ETH
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              4
-            </h1>
-            <p className="text-xs">
-              TOTAL
-              <br /> FLIPPED
-            </p>
-          </div>
-          <div className="flex flex-col mr-10 w-16">
-            <h1 className="text-green font-xxCompressed -mb-2 text-9xl text-center">
-              1.1
-            </h1>
-            <p className="text-xs">
-              P/L
-              <br /> IN ETH
-            </p>
-          </div>
+          <div className="flex overflow-hidden md:w-[60%]">
+            <button className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  ">
+              LIST NEW
+            </button>
+          </div>{" "}
         </div>
-        <div className="flex overflow-hidden">
-          <button className=" text-green font-xCompressed font-bold border border-green tracking-[12px] w-[40%] my-10 bg-white bg-opacity-20 hover:bg-opacity-40  py-[1.2vh] text-2xl  ">
-            LIST NEW
-          </button>
-        </div>{" "}
-        <div className="flex flex-col font-ibmPlex text-left">
+        <div className="flex flex-col font-ibmPlex mt-10 md:mt-0 text-left">
           <h3 className="font-bold">LISTED</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  items-stretch gap-4 mb-10 mt-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
             {/* NFT 1  */}
-            <div className="flex w-[24vw] flex-col h-full items-start ">
+            <div className="flex md: flex-col h-full items-start w-max ">
               <div className="">
                 <Image
                   src={nft7}
                   alt="nft7"
                   width={150}
                   height={200}
-                  className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                 />{" "}
               </div>
-              <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                 <div className=" flex ">
                   <div className=" flex w-full">
                     {" "}
@@ -247,17 +254,17 @@ const ProfileComponent = (props: Props) => {
             </div>
             {/* NFT 2  */}
 
-            <div className="flex w-[24vw] flex-col h-full items-start ">
+            <div className="flex  flex-col h-full items-start w-max ">
               <div className="">
                 <Image
                   src={nft6}
                   alt="nft7"
                   width={150}
                   height={200}
-                  className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                 />{" "}
               </div>
-              <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                 <div className=" flex ">
                   <div className=" flex w-full">
                     {" "}
@@ -295,17 +302,17 @@ const ProfileComponent = (props: Props) => {
             </div>
 
             {/* NFT 3  */}
-            <div className="flex w-[24vw] flex-col h-full items-start ">
+            <div className="flex  flex-col h-full items-start w-max">
               <div className="">
                 <Image
                   src={nft4}
                   alt="nft7"
                   width={150}
                   height={200}
-                  className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                 />{" "}
               </div>
-              <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                 <div className=" flex ">
                   <div className=" flex w-full">
                     {" "}
@@ -343,17 +350,17 @@ const ProfileComponent = (props: Props) => {
             </div>
 
             {/* NFT 4  */}
-            <div className="flex w-[24vw] flex-col h-full items-start ">
+            <div className="flex  flex-col h-full items-start w-max ">
               <div className="">
                 <Image
                   src={nft10}
                   alt="nft7"
                   width={150}
                   height={200}
-                  className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                 />{" "}
               </div>
-              <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                 <div className=" flex ">
                   <div className=" flex w-full">
                     {" "}
@@ -370,19 +377,19 @@ const ProfileComponent = (props: Props) => {
           <div className="flex flex-col">
             <h3 className="font-bold">SOLD</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
               {/* nft 1 */}
-              <div className="flex w-[24vw] flex-col h-full items-start ">
+              <div className="flex  flex-col h-full items-start w-max ">
                 <div className="">
                   <Image
                     src={nft1}
                     alt="nft7"
                     width={150}
                     height={200}
-                    className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                   />{" "}
                 </div>
-                <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
                       {" "}
@@ -407,17 +414,17 @@ const ProfileComponent = (props: Props) => {
                 </div>
               </div>
               {/* nft 2 */}
-              <div className="flex w-[24vw] flex-col h-full items-start ">
+              <div className="flex  flex-col h-full items-start w-max ">
                 <div className="">
                   <Image
                     src={nft7}
                     alt="nft7"
                     width={150}
                     height={200}
-                    className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                   />{" "}
                 </div>
-                <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
                       {" "}
@@ -446,18 +453,18 @@ const ProfileComponent = (props: Props) => {
           <div className="flex flex-col">
             <h3 className="font-bold">COLLECTION</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              <div className="flex w-[24vw] flex-col h-full items-start justify-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+              <div className="flex  flex-col h-full items-start w-max justify-center">
                 <div className="">
                   <Image
                     src={nft2}
                     alt="nft7"
                     width={150}
                     height={200}
-                    className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                   />{" "}
                 </div>
-                <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
                       {" "}
@@ -477,18 +484,18 @@ const ProfileComponent = (props: Props) => {
           <div className="flex flex-col">
             <h3 className="font-bold">SAVED</h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              <div className="flex w-[24vw] flex-col h-full items-start justify-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+              <div className="flex  flex-col h-full items-start w-max justify-center">
                 <div className="">
                   <Image
                     src={nft5}
                     alt="nft7"
                     width={150}
                     height={200}
-                    className="max-h-[43vh] min-w-[230px] mb-2 object-cover"
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                   />{" "}
                 </div>
-                <div className="flex flex-col  min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                <div className="flex flex-col  w-max md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
                       {" "}
