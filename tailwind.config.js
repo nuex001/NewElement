@@ -61,6 +61,9 @@ module.exports = {
       backgroundImage: {
         applyPattern: "url('/background1.jpg')",
       },
+      fontSize: {
+        dynamic: "clamp(0.75rem, 2.5vw, 2rem)",
+      },
       aspectRatio: {
         "4/3": "4 / 3",
       },

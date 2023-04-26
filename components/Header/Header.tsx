@@ -52,7 +52,7 @@ export default function Header() {
                           href={item.href}
                           className={classNames(
                             "text-blue  hover:opacity-80",
-                            "px-3 py-2 rounded-md text-3xl font-medium tracking-wide hidden lg:flex"
+                            "px-3 py-2 rounded-md lg:text-dynamic font-medium tracking-wide hidden lg:flex"
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
