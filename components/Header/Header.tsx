@@ -26,7 +26,7 @@ export default function Header() {
         <>
           <div className="px-2 sm:px-6 font-xCompressed lg:font-xxCompressed uppercase text-green">
             <div
-              className={`fixed flex h-20  xl:max-w-[1600px] left-[50%] z-2 translate-x-[-50%]  top-0 w-full px-4 sm:px-4 lg:px-0 items-center justify-center ${bg}`}
+              className={`absolute lg:fixed flex h-20  xl:max-w-[1600px] left-[50%] z-2 translate-x-[-50%]  top-0 w-full px-4 sm:px-4 lg:px-0 items-center justify-center ${bg}`}
             >
               <div className="flex  items-center w-full justify-center lg:px-10 sm:items-stretch ">
                 <div className="flex items-center lg:hidden">
