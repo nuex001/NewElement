@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import {
   MediaRenderer,
@@ -87,7 +86,7 @@ const Home: NextPage = () => {
               </div>
             ) : (
               // Otherwise, show the listings
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mx-10 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-10 mb-10">
                 {listings?.map((listing) => (
                   <>
                     <NFTCard listing={listing} />

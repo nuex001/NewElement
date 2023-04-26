@@ -17,6 +17,28 @@ module.exports = {
       xl: "1440px",
     },
     extend: {
+      keyframes: {
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        "fade-out": {
+          "100%": {
+            opacity: "1",
+          },
+          "0%": {
+            opacity: "0",
+          },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 1s ease-in",
+        "fade-out": "fade-out 3s ease-out",
+      },
       colors: {
         green: "#97FF73",
       },

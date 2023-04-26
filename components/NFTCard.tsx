@@ -27,7 +27,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
   return (
     <>
       {listing ? (
-        <div className="flex flex-col h-full  mx-5 overflow-hidden justify-between">
+        <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between">
           <div className="flex flex-col h-full">
             {/* <div className="flex grow"></div> */}
             <div

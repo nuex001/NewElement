@@ -8,6 +8,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProfileMenu() {
+  // var data = await sdk.wallet.GetBalance();
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
@@ -36,8 +37,8 @@ export default function ProfileMenu() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 text-left z-10 mt-2 w-56 origin-top-right rounded-md bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="py-1 font-ibmPlex text-green">
+            <Menu.Items className="absolute right-0 text-left z-10 mt-2 w-[15rem] border border-white origin-top-right rounded-md bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className=" font-ibmPlex text-green">
                 <Menu.Item>
                   {({ active }) => (
                     <Link
@@ -95,34 +96,20 @@ export default function ProfileMenu() {
                 <Menu.Item>
                   {({ active }) => (
                     <>
-                      {!address ? (
-                        <Link
-                          href="#"
-                          className={classNames(
-                            active ? "bg-gray-400 text-green" : "text-green",
-                            "block px-4 py-2 text-xs hover:bg-gray-400"
-                          )}
-                          onClick={() => connectWithMetamask()}
-                        >
-                          Connect Wallet
-                        </Link>
-                      ) : (
-                        <>
-                          <button
-                            className={classNames(
-                              active ? "bg-gray-400 text-green" : "text-green",
-                              "block px-4 py-2 text-xs  hover:bg-gray-400"
-                            )}
-                            onClick={() => disconnectWallet()}
-                          >
-                            <h1>
-                              {">"}
-                              {">"}
-                              {">"} Disconnect Wallet
-                            </h1>
-                          </button>
-                        </>
-                      )}
+                      <Link
+                        href="#"
+                        className={classNames(
+                          active ? "bg-gray-400 text-green" : "text-green",
+                          "block px-4 py-2 text-xs  hover:bg-gray-400"
+                        )}
+                        onClick={() => disconnectWallet()}
+                      >
+                        <h1>
+                          {">"}
+                          {">"}
+                          {">"} Disconnect
+                        </h1>
+                      </Link>
                     </>
                   )}
                 </Menu.Item>

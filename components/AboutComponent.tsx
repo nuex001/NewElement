@@ -57,11 +57,11 @@ const AboutComponent = (props: Props) => {
     setFormValues({ ...formValues, [name]: value });
   };
   return (
-    <div className="flex w-full md:w-full xl:max-w-[1600px] flex-col md:flex-row-reverse items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
-      <div className="md:basis-1/2 p-2 flex  md:items-start justify-around w-[90%] md:w-full">
+    <div className="flex w-full md:w-full xl:max-w-[1600px] px-4 flex-col md:flex-row-reverse items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
+      <div className="md:basis-1/2 p-2 flex justify-center  md:items-start md:justify-end md:m-4 w-full">
         <Image src={nft} height={420} width={400} alt={""} />
       </div>
-      <div className="md:basis-1/2 p-2 font-ibmPlex bold text-left m-4 md:pl-11 text-sm ">
+      <div className="md:basis-1/2 p-2 font-ibmPlex bold text-left m-4  text-sm ">
         <p className="mb-4 "> Welcome to NEW ELEMENTS.</p>{" "}
         <p className="mb-4 ">
           The Web3 destination dedicated to fashion and beauty storytellers.
