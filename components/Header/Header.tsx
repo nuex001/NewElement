@@ -84,7 +84,7 @@ export default function Header() {
                 className="absolute z-10 inset-x-0  top-0 origin-top-right transform transition lg:hidden"
               >
                 <div className="divide-y-2 z-10 font-compressed  uppercase text-green pt-2 lg:px-8 bg-black ">
-                  <div className="px-5 mx-4 pt-5 pb-6">
+                  <div className="mx-4 pt-5 pb-6">
                     <div className="flex pb-4">
                       <Popover.Button className="inline-flex items-center justify-center rounded-md pr-2 text-gray-400  hover:text-gray-500 focus:outline-none">
                         <span className="sr-only">Close menu</span>
