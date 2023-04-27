@@ -6,7 +6,7 @@ const MarketplaceSkeleton = (props: Props) => {
   return (
     <div
       role="status"
-      className="max-w-sm p-4  flex flex-col h-full mt-4 mx-8 overflow-hidden justify-between border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
+      className="max-w-sm p-4  flex flex-col h-full mt-4 mx-8  overflow-hidden justify-between border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"
     >
       <div className="flex items-center justify-center h-64 mb-4 bg-gray-300 rounded dark:bg-gray-700">
         <svg

@@ -47,8 +47,8 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
       <AnimatePresence>
         {openMenu && (
           <motion.div
-            className="absolute pl-4 pt-8 inset-y-0 font-xxCompressed tracking-widest
-              w-screen h-screen bg-mobileBg text-white z-10 overflow-hidden"
+            className="absolute pl-4 pt-6 inset-y-0 font-xxCompressed tracking-widest
+            flex flex-col  w-screen h-screen bg-mobileBg text-white z-10 overflow-hidden"
             variants={item}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "100vh", opacity: 1 }}
@@ -72,7 +72,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             </div>
             {navigation.map((item, index) => (
               <motion.a
-                className="text-5xl text-green  flex items-center pb-8 p-3 hover:bg-gray-700 uppercase"
+                className="text-6xl text-green  flex items-center mt-4 p-3 mb-6 hover:bg-gray-700 uppercase"
                 href={item.href}
                 key={index}
                 initial={{ y: 80, opacity: 0 }}
@@ -90,8 +90,9 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 {item.name}
               </motion.a>
             ))}
+            <div className="grow"></div>
             <motion.div
-              className="flex pl-3 mt-6"
+              className="flex pl-3 mb-8"
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1 }}
