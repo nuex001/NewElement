@@ -74,6 +74,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
               <motion.a
                 className="text-5xl text-green  flex items-center pb-8 p-3 hover:bg-gray-700 uppercase"
                 href={item.href}
+                key={index}
                 initial={{ y: 80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.5 }}
