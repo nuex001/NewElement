@@ -47,7 +47,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
       <AnimatePresence>
         {openMenu && (
           <motion.div
-            className="absolute pl-4 pt-6 inset-y-0 font-xxCompressed tracking-widest
+            className="absolute px-4 pt-6 inset-y-0 font-xxCompressed tracking-widest
             flex flex-col  w-screen h-screen bg-mobileBg text-white z-10 overflow-hidden"
             variants={item}
             initial={{ height: 0, opacity: 0 }}
@@ -72,7 +72,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             </div>
             {navigation.map((item, index) => (
               <motion.a
-                className="text-6xl text-green  flex items-center mt-4 p-3 mb-6 hover:bg-gray-700 uppercase"
+                className="text-6xl text-green  flex items-center mt-4 p-3 mb-4 hover:bg-gray-700 uppercase"
                 href={item.href}
                 key={index}
                 initial={{ y: 80, opacity: 0 }}
