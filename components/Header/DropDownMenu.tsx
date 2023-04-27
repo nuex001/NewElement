@@ -52,7 +52,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             variants={item}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "100vh", opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.2 }}
             exit="exit"
           >
             <div className="flex pb-10">
@@ -77,7 +77,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 key={index}
                 initial={{ y: 80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.1 + 0.5 }}
+                transition={{ delay: index * 0.1 + 0.3 }}
                 exit={{
                   opacity: 0,
                   y: 90,
@@ -95,7 +95,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
               className="flex pl-3 mb-8"
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 1 }}
+              transition={{ delay: 0.8 }}
               exit={{
                 opacity: 0,
                 y: 90,

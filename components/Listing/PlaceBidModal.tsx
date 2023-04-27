@@ -51,7 +51,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       >
         <>
           {listing ? (
-            <div className="flex flex-col text-ibmPlex h-full w-full md:w-[70%]  mx-5 overflow-hidden justify-between">
+            <div className="flex flex-col z-12 text-ibmPlex h-full w-full md:w-[70%]  mx-5 overflow-hidden justify-between">
               <div className="flex flex-col h-full">
                 {/* <div className="flex grow"></div> */}
                 {listing ? (

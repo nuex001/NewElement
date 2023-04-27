@@ -123,10 +123,10 @@ const ListingComponent: NextPage = () => {
     <>
       <div className="flex flex-col realtive h-full items-center w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
         <div className="flex justify-center realtive w-3/4">
-          <div className="absolute translate-x-[70%] lg:translate-x-0 lg:right-1/2 z-0 left-0 hidden md:block">
+          <div className="absolute translate-x-[100%] lg:translate-x-1 lg:right-[70%] xl:translate-x-0 xl:right-1/2  left-0 hidden md:block">
             <Link
               href="/"
-              className="font-ibmPlex z-0 cursor-pointer uppercase font-bold text-green text-xs"
+              className="font-ibmPlex cursor-pointer uppercase font-bold text-green text-xs"
             >
               {"<<<"} Back
             </Link>
