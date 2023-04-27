@@ -16,7 +16,7 @@ export default function ProfileMenu() {
     <Menu as="div" className="relative inline-block">
       {!address ? (
         <button
-          className="text-center w-content font-ibmPlex text-xs text-green border border-green bg-white bg-opacity-20 hover:bg-opacity-40 p-1"
+          className="text-center w-content z-0 font-ibmPlex text-xs text-green border border-green bg-white bg-opacity-20 hover:bg-opacity-40 p-1"
           onClick={() => connectWithMetamask()}
         >
           <h1>Connect Wallet</h1>

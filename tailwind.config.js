@@ -60,6 +60,7 @@ module.exports = {
       },
       backgroundImage: {
         applyPattern: "url('/background1.jpg')",
+        mobileBg: "url('/mobileBg.png')",
       },
       fontSize: {
         dynamic: "clamp(0.75rem, 2.5vw, 2rem)",

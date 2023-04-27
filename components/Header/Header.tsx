@@ -1,11 +1,12 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import ProfileMenu from "./ProfileMenu";
 import { usePathname } from "next/navigation";
+import DropDownMenu from "./DropDownMenu";
 
 const navigation = [
   { name: "Marketplace", href: "/", current: true },
@@ -18,6 +19,15 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
+  const [openMenu, setOpen] = useState<boolean>(false);
+
+  const isOpen = () => {
+    setOpen(true);
+  };
+
+  const closeMenu = () => {
+    setOpen(false);
+  };
   const pathname = usePathname();
   const bg = pathname === "/apply" ? "bg-transparent" : "bg-black";
   return (
@@ -29,12 +39,21 @@ export default function Header() {
               className={`absolute lg:fixed flex h-20  xl:max-w-[1600px] left-[50%] z-2 translate-x-[-50%]  top-0 w-full px-4 sm:px-4 lg:px-0 items-center justify-center ${bg}`}
             >
               <div className="flex  items-center w-full justify-center lg:px-10 sm:items-stretch ">
-                <div className="flex items-center lg:hidden">
-                  <Popover.Button className="inline-flex items-center justify-center  text-gray-400  hover:text-gray-500 ">
+                {/* <div className="flex items-center lg:hidden"> */}
+                {/* <Popover.Button className="inline-flex items-center justify-center  text-gray-400  hover:text-gray-500 ">
                     <span className="sr-only">Open menu</span>
                     <Bars2Icon className="h-7 w-7 mr-2" aria-hidden="true" />
-                  </Popover.Button>
-                </div>
+                  </Popover.Button> */}
+                <header className="flex items-center lg:hidden">
+                  <button
+                    className="inline-flex items-center justify-center  text-gray-400 "
+                    onClick={isOpen}
+                  >
+                    <Bars2Icon className="h-7 w-7 mr-2" aria-hidden="true" />
+                    <span className="sr-only">Open menu</span>
+                  </button>
+                </header>
+                {/* </div> */}
                 <div className="flex  items-center basis-[48%]">
                   <Link href="/">
                     <h1 className="text-3xl lg:text-4xl font-compressed">
@@ -69,7 +88,8 @@ export default function Header() {
             </div>
           </div>
           {/* Mobile */}
-          {open && (
+          <DropDownMenu openMenu={openMenu} closeMenu={closeMenu} />
+          {/* {open && (
             <Transition
               as={Fragment}
               enter="duration-200 ease-out"
@@ -115,7 +135,7 @@ export default function Header() {
                 </div>
               </Popover.Panel>
             </Transition>
-          )}
+          )} */}
         </>
       )}
     </Popover>
