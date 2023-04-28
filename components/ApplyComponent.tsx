@@ -103,7 +103,7 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.getValue();
+    const token = captchaRef?.current?.execute();
 
     const data = {
       website: formValues.website,
@@ -151,7 +151,7 @@ const ApplyComponent = () => {
     <div
       className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-applyPattern`}
     >
-      <div className="flex  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
+      <div className="flex mb-5  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
             <h2 className="text-xs md:leading-[25px] w-5/6 md:w-full mb-12 ">
@@ -272,13 +272,17 @@ const ApplyComponent = () => {
                 {errorMessageInstagram}
               </div>
             </div>
-            <ReCAPTCHA
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-              ref={captchaRef}
-            />
+            <div className="w-min">
+              <ReCAPTCHA
+                data-theme="dark"
+                size="invisible"
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                ref={captchaRef}
+              />
+            </div>
             <button
               type="submit"
-              className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px]  bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[7vh] z-2 text-2xl  "
+              className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[7vh] z-2 text-2xl  "
             >
               {loading ? (
                 <div className="loader ease-linear rounded-full border-4 border-t-4 border-white h-6 w-6"></div>
