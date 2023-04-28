@@ -103,7 +103,7 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.execute();
+    const token = captchaRef?.current?.executeAsync();
 
     const data = {
       website: formValues.website,
