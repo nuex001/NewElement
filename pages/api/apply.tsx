@@ -69,18 +69,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(400);
       res.json({ errors: ["Please, you're not fooling us, bot."] });
       return;
-    } else {
-      try {
-        await transporter.sendMail({
-          ...mailOptions,
-          ...generateEmailContent(data),
-          subject: `Application by ${data.instagram}`,
-        });
-        res.status(201).json({ success: true });
-      } catch (error) {
-        console.log(error);
-        res.status(400).json({ success: false, message: error });
-      }
+    }
+    try {
+      await transporter.sendMail({
+        ...mailOptions,
+        ...generateEmailContent(data),
+        subject: `Application by ${data.instagram}`,
+      });
+      res.status(201).json({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ success: false, message: error });
     }
   }
 };
