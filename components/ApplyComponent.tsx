@@ -103,7 +103,7 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.executeAsync();
+    const token = captchaRef?.current?.getValue();
 
     const data = {
       website: formValues.website,
@@ -273,7 +273,6 @@ const ApplyComponent = () => {
               </div>
             </div>
             <ReCAPTCHA
-              size="invisible"
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
               ref={captchaRef}
             />
