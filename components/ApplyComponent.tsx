@@ -1,6 +1,9 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import bg from "../assets/background1.jpg";
+import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
+import { log } from "console";
 
 const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
@@ -24,6 +27,8 @@ const ApplyComponent = () => {
   const [errorInstagram, setErrorInstagram] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
 
+  const captchaRef = useRef(null as any);
+
   const isValidEmail = (email: string) => {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -32,7 +37,7 @@ const ApplyComponent = () => {
 
   const isValidWebsite = (name: string) => {
     const re =
-      /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+      /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
     return re.test(String(name));
   };
 
@@ -53,6 +58,7 @@ const ApplyComponent = () => {
       setErrorWebsite(false);
       setFormWebsite(formValues.website);
     }
+    console.log(formIsValid);
 
     if (formValues.email === "") {
       setErrorMessageEmail("Email is required");
@@ -83,6 +89,7 @@ const ApplyComponent = () => {
   const closeModal = () => {
     setIsOpenModal(false);
   };
+
   const customStyles = {
     content: {
       top: "50%",
@@ -97,49 +104,39 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    const token = captchaRef?.current.getValue();
 
-    //  const data = {
-    //    date: date,
-    //    name: formValues.name,
-    //    school: formValues.school,
-    //    phone: phone,
-    //    email: formValues.email,
-    //  };
+    const data = {
+      website: formValues.website,
+      twitter: formValues.twitter,
+      instagram: formValues.instagram,
+      email: formValues.email,
+      token,
+    };
+
     if (validateInputs()) {
       console.log("Verification passed!");
-      setFormValues(initialValues);
+      setLoading(true);
+      axios
+        .post(`/api/apply`, data)
+        .then((response) => {
+          setLoading(false);
+          console.log(response);
+          if (response.status === 201) {
+            console.log("Message Sent.");
+            setFormValues(initialValues);
+            captchaRef.current.reset();
 
-      alert(
-        "Thank you for your interest in New Elements! We will be in touch soon."
-      );
-      //   setLoading(true);
-      //    axios
-      //      .post(`/api/contact`, {
-      //        website: formValues.website,
-      //        school: formValues.school,
-      //        phone: phone,
-      //        email: formValues.email,
-      //        message: formValues.message,
-      //      })
-      //      .then((response) => {
-      //        setLoading(false);
-      //        console.log(response);
-      //        if (response.status === 201) {
-      //          console.log("Message Sent.");
-      //          openModal();
-      //          setFormValues(initialValues);
-      //          setPhone("");
-      //          setFormEmail("");
-      //        } else if (response.status === 202) {
-      //          alert(
-      //            "You have already submitted a message with us and we will get back to you soon!"
-      //          );
-      //          setFormValues(initialValues);
-      //          setPhone("");
-      //          setFormEmail("");
-      //        }
-      //      })
-      //      .catch((err) => console.log(err));
+            alert(
+              "Thank you for your interest in New Elements! We will be in touch soon."
+            );
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setLoading(false);
+
+      console.log("Verification failed.");
     }
   };
 
@@ -147,7 +144,6 @@ const ApplyComponent = () => {
     const { value, name } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
-  // console.log(formValues);
 
   return (
     <div
@@ -274,7 +270,10 @@ const ApplyComponent = () => {
                 {errorMessageInstagram}
               </div>
             </div>
-
+            <ReCAPTCHA
+              sitekey="6LfK4cUlAAAAABgADXEg-0mRPmhm7SQdRM2tm6jL"
+              ref={captchaRef}
+            />
             <button
               type="submit"
               className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px]  bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[7vh] z-2 text-2xl  "
