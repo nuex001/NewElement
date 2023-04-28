@@ -103,7 +103,8 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.getValue();
+    const token = captchaRef?.current?.executeAsync();
+    captchaRef.current?.reset();
 
     const data = {
       website: formValues.website,
@@ -127,7 +128,6 @@ const ApplyComponent = () => {
           if (response.status === 201) {
             console.log("Message Sent.");
             setFormValues(initialValues);
-            captchaRef.current?.reset();
 
             alert(
               "Thank you for your interest in New Elements! We will be in touch soon."
@@ -272,9 +272,10 @@ const ApplyComponent = () => {
                 {errorMessageInstagram}
               </div>
             </div>
-            <div className="w-min">
+            <div className="">
               <ReCAPTCHA
-                theme="dark"
+                size="invisible"
+                theme="light"
                 sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
                 ref={captchaRef}
               />
