@@ -274,7 +274,7 @@ const ApplyComponent = () => {
             </div>
             <ReCAPTCHA
               size="invisible"
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+              sitekey="6LcVIMclAAAAAG_cur5OZQGizpsorCYluKmFqN9R"
               ref={captchaRef}
             />
             <button

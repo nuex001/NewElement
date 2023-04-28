@@ -49,7 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const validateHuman = async (token: string): Promise<boolean> => {
-      const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY;
+      const secret = "6LcVIMclAAAAAAqS8lzRiYjyaHDL0I6buG4CR606";
       const response = await fetch(
         `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`,
         {
