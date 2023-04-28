@@ -37,11 +37,11 @@ const generateEmailContent = (data: any) => {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const data: {
-      website: any;
-      email: any;
-      twitter: any;
-      instagram: any;
-      token: any;
+      website: string;
+      email: string;
+      twitter: string;
+      instagram: string;
+      token: string;
     } = req.body;
 
     if (!data || !data.email || !data.instagram) {
@@ -49,7 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const validateHuman = async (token: string): Promise<boolean> => {
-      const secret = "6LfK4cUlAAAAABgADXEg-0mRPmhm7SQdRM2tm6jL";
+      const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY;
       const response = await fetch(
         `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`,
         {
@@ -57,11 +57,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       );
       const data = await response.json();
+      console.log(data);
 
       return data.success;
     };
 
     const human = await validateHuman(data.token);
+    console.log(human);
+
     if (!human) {
       res.status(400);
       res.json({ errors: ["Please, you're not fooling us, bot."] });

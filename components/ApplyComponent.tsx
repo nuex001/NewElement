@@ -58,7 +58,6 @@ const ApplyComponent = () => {
       setErrorWebsite(false);
       setFormWebsite(formValues.website);
     }
-    console.log(formIsValid);
 
     if (formValues.email === "") {
       setErrorMessageEmail("Email is required");
@@ -104,7 +103,7 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current.getValue();
+    const token = captchaRef?.current?.executeAsync();
 
     const data = {
       website: formValues.website,
@@ -117,15 +116,18 @@ const ApplyComponent = () => {
     if (validateInputs()) {
       console.log("Verification passed!");
       setLoading(true);
+      console.log(data);
+
       axios
         .post(`/api/apply`, data)
         .then((response) => {
           setLoading(false);
           console.log(response);
+
           if (response.status === 201) {
             console.log("Message Sent.");
             setFormValues(initialValues);
-            captchaRef.current.reset();
+            captchaRef.current?.reset();
 
             alert(
               "Thank you for your interest in New Elements! We will be in touch soon."
@@ -271,7 +273,8 @@ const ApplyComponent = () => {
               </div>
             </div>
             <ReCAPTCHA
-              sitekey="6LfK4cUlAAAAABgADXEg-0mRPmhm7SQdRM2tm6jL"
+              size="invisible"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
               ref={captchaRef}
             />
             <button
