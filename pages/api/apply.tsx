@@ -44,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       token: string;
     } = req.body;
 
-    if (!data || !data.email || !data.instagram) {
+    if (!data || !data.email || !data.instagram || !data.token) {
       return res.status(400).send({ message: "Bad request" });
     }
 

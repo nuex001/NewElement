@@ -103,7 +103,7 @@ const ApplyComponent = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.executeAsync();
+    const token = captchaRef?.current?.getValue();
     captchaRef.current?.reset();
 
     const data = {
@@ -151,7 +151,7 @@ const ApplyComponent = () => {
     <div
       className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-applyPattern`}
     >
-      <div className="flex mb-5  md:mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
+      <div className="flex mb-5 mt-24 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
         <div className=" w-full  text-xs">
           <form id="contact-form" onSubmit={handleSubmit} method="POST">
             <h2 className="text-xs md:leading-[25px] w-5/6 md:w-full mb-12 ">
@@ -274,8 +274,6 @@ const ApplyComponent = () => {
             </div>
             <div className="">
               <ReCAPTCHA
-                size="invisible"
-                theme="light"
                 sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
                 ref={captchaRef}
               />
