@@ -48,39 +48,73 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ message: "Bad request" });
     }
 
-    const validateHuman = async (token: string): Promise<boolean> => {
-      const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SICRET_KEY;
-      const response = await fetch(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`,
-        {
-          method: "POST",
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-
-      return data.success;
-    };
-
-    const human = await validateHuman(data.token);
-    console.log(human);
-
-    if (!human) {
-      res.status(400);
-      res.json({ errors: ["Please, you're not fooling us, bot."] });
-      return;
-    }
     try {
-      await transporter.sendMail({
-        ...mailOptions,
-        ...generateEmailContent(data),
-        subject: `Application by ${data.instagram}`,
+      fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${process.env.NEXT_PUBLIC_RECAPTCHAV3_SECRET_KEY}&response=${data.token}`,
+      })
+        .then((reCaptchaRes) => reCaptchaRes.json())
+        .then((reCaptchaRes) => {
+          console.log(
+            reCaptchaRes.score,
+            "Response from Google reCatpcha verification API"
+          );
+          if (reCaptchaRes?.score > 0.5) {
+            // Save data to the database from here
+            res.status(200).json({
+              status: "success",
+              message: "Enquiry submitted successfully",
+            });
+          } else {
+            res.status(200).json({
+              status: "failure",
+              message: "Google ReCaptcha Failure",
+            });
+          }
+        });
+    } catch (err) {
+      res.status(405).json({
+        status: "failure",
+        message: "Error submitting the enquiry form",
       });
-      res.status(201).json({ success: true });
-    } catch (error) {
-      console.log(error);
-      res.status(400).json({ success: false, message: error });
     }
+
+    // const validateHuman = async (token: string): Promise<boolean> => {
+    //   const secret = process.env.NEXT_PUBLIC_RECAPTCHAV3_SECRET_KEY;
+    //   const response = await fetch(
+    //     `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`,
+    //     {
+    //       method: "POST",
+    //     }
+    //   );
+    //   const data = await response.json();
+    //   console.log(data);
+
+    //   return data;
+    // };
+
+    // const human = await validateHuman(data.token);
+    // console.log(human);
+
+    // if (!human) {
+    //   res.status(400);
+    //   res.json({ errors: ["Please, you're not fooling us, bot."] });
+    //   return;
+    // }
+    // try {
+    //   await transporter.sendMail({
+    //     ...mailOptions,
+    //     ...generateEmailContent(data),
+    //     subject: `Application by ${data.instagram}`,
+    //   });
+    //   res.status(201).json({ success: true });
+    // } catch (error) {
+    //   console.log(error);
+    //   res.status(400).json({ success: false, message: error });
+    // }
   }
 };
 export default handler;

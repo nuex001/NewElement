@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import "../styles/globals.css";
 import Head from "next/head";
 import localFont from "next/font/local";
@@ -73,17 +74,29 @@ const activeChainId = ChainId.Mumbai;
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={activeChainId}>
-      <Head>
-        <title>New Elements</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="New Elements NFT Marketplace" />
-        <meta
-          name="keywords"
-          content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
-        />
-      </Head>
-      <main
-        className={`${ibmPlexMono.variable} font-sans,
+      <GoogleReCaptchaProvider
+        reCaptchaKey="6LdRQsklAAAAAMODTeLAWfDsQXcrpPoUMZg8kAAt"
+        scriptProps={{
+          async: false,
+          defer: false,
+          appendTo: "head",
+          nonce: undefined,
+        }}
+      >
+        <Head>
+          <title>New Elements</title>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <meta name="description" content="New Elements NFT Marketplace" />
+          <meta
+            name="keywords"
+            content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
+          />
+        </Head>
+        <main
+          className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
           ${compressed.variable} font-sans,
           ${condensed.variable} font-sans,
@@ -97,11 +110,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           ${xxCompressed.variable} font-sans,
           ${xxxCompressed.variable} font-sans,
           ${xxxxCompressed.variable} font-sans`}
-      >
-        <Header />
-      </main>
-      <main
-        className={`${ibmPlexMono.variable} font-sans,
+        >
+          <Header />
+        </main>
+        <main
+          className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
           ${compressed.variable} font-sans,
           ${condensed.variable} font-sans,
@@ -115,9 +128,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           ${xxCompressed.variable} font-sans,
           ${xxxCompressed.variable} font-sans,
           ${xxxxCompressed.variable} font-sans`}
-      >
-        <Component {...pageProps} />
-      </main>
+        >
+          <Component {...pageProps} />
+        </main>
+      </GoogleReCaptchaProvider>
     </ThirdwebProvider>
   );
 }

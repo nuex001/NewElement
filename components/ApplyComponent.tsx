@@ -1,9 +1,10 @@
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import bg from "../assets/background1.jpg";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
 import { log } from "console";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
@@ -26,6 +27,8 @@ const ApplyComponent = () => {
   const [errorTwitter, setErrorTwitter] = useState(false);
   const [errorInstagram, setErrorInstagram] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
+
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const captchaRef = useRef(null as any);
 
@@ -101,11 +104,36 @@ const ApplyComponent = () => {
     },
   };
 
+  // const handleSumitForm = useCallback(
+  //   (e: any) => {
+  //     e.preventDefault();
+  //     if (!executeRecaptcha) {
+  //       console.log("Execute recaptcha not yet available");
+  //       return;
+  //     }
+  //     executeRecaptcha("enquiryFormSubmit").then((gReCaptchaToken) => {
+  //       console.log(gReCaptchaToken, "response Google reCaptcha server");
+  //       handleSubmit(e, gReCaptchaToken);
+  //     });
+  //   },
+  //   [executeRecaptcha]
+  // );
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const token = captchaRef?.current?.getValue();
-    captchaRef.current?.reset();
 
+    // const token = captchaRef?.current?.getValue();
+    // captchaRef.current?.reset();
+    if (!executeRecaptcha) {
+      console.log("Execute recaptcha not yet available");
+      return;
+    }
+    let token = executeRecaptcha("enquiryFormSubmit").then(
+      (gReCaptchaToken) => {
+        // console.log(gReCaptchaToken, "response Google reCaptcha server");
+        return gReCaptchaToken;
+      }
+    );
     const data = {
       website: formValues.website,
       twitter: formValues.twitter,
@@ -132,6 +160,8 @@ const ApplyComponent = () => {
             alert(
               "Thank you for your interest in New Elements! We will be in touch soon."
             );
+          } else {
+            console.log(response);
           }
         })
         .catch((err) => console.log(err));
@@ -272,12 +302,12 @@ const ApplyComponent = () => {
                 {errorMessageInstagram}
               </div>
             </div>
-            <div className="">
+            {/* <div className="">
               <ReCAPTCHA
                 sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
                 ref={captchaRef}
               />
-            </div>
+            </div> */}
             <button
               type="submit"
               className="bg-blue text-green font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[7vh] z-2 text-2xl  "
