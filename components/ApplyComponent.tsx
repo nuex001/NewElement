@@ -119,7 +119,7 @@ const ApplyComponent = () => {
   //   [executeRecaptcha]
   // );
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     // const token = captchaRef?.current?.getValue();
@@ -128,7 +128,7 @@ const ApplyComponent = () => {
       console.log("Execute recaptcha not yet available");
       return;
     }
-    let token = executeRecaptcha("enquiryFormSubmit").then(
+    let token = await executeRecaptcha("enquiryFormSubmit").then(
       (gReCaptchaToken) => {
         // console.log(gReCaptchaToken, "response Google reCaptcha server");
         return gReCaptchaToken;
