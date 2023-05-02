@@ -92,7 +92,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             ))}
             <div className="grow"></div>
             <motion.div
-              className="flex pl-3 mb-8"
+              className="flex pl-3 mb-8 "
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8 }}
@@ -115,6 +115,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 <Image src={twitter} width={30} height={30} alt="twitter" />
               </Link>
             </motion.div>
+            <div className="grow"></div>
           </motion.div>
         )}
       </AnimatePresence>

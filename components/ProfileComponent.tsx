@@ -374,6 +374,8 @@ const ProfileComponent = (props: Props) => {
               </div>
             </div>
           </div>
+
+          {/* SOLD */}
           <div className="flex flex-col">
             <h3 className="font-bold">SOLD</h3>
 
@@ -450,20 +452,20 @@ const ProfileComponent = (props: Props) => {
               </div>
             </div>
           </div>
+
+          {/* COLLECTION */}
           <div className="flex flex-col">
             <h3 className="font-bold">COLLECTION</h3>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
               <div className="flex  flex-col h-full items-start w-max justify-center">
-                <div className="">
-                  <Image
-                    src={nft2}
-                    alt="nft7"
-                    width={150}
-                    height={200}
-                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                  />{" "}
-                </div>
+                <Image
+                  src={nft2}
+                  alt="nft7"
+                  width={150}
+                  height={200}
+                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                />{" "}
                 <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
@@ -481,6 +483,8 @@ const ProfileComponent = (props: Props) => {
               </div>
             </div>
           </div>
+
+          {/* SAVED */}
           <div className="flex flex-col">
             <h3 className="font-bold">SAVED</h3>
 
@@ -495,7 +499,7 @@ const ProfileComponent = (props: Props) => {
                     className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
                   />{" "}
                 </div>
-                <div className="flex flex-col  w-max md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                <div className="flex flex-col  w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
                     <div className=" flex w-full">
                       {" "}
