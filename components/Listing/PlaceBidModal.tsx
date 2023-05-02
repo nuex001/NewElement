@@ -23,6 +23,9 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   // const [isLoading, setIsLoading] = useState(false);
 
   const customStyles = {
+    overlay: {
+      backgroundColor: "rgb(62, 62, 62, 0.7)",
+    },
     content: {
       zIndex: "20",
       top: "50%",
