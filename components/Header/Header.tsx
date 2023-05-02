@@ -34,7 +34,7 @@ export default function Header() {
     <Popover className="relative z-9">
       {({ open }) => (
         <>
-          <div className="px-2 sm:px-6 font-xCompressed lg:font-xxCompressed uppercase text-green">
+          <div className="px-2 sm:px-6 uppercase text-green">
             <div
               className={`absolute lg:fixed flex h-20  xl:max-w-[1600px] left-[50%] translate-x-[-50%]  top-0 w-screen px-4 sm:px-4 lg:px-0 items-center justify-center ${bg}`}
             >
@@ -56,7 +56,7 @@ export default function Header() {
                 {/* </div> */}
                 <div className="flex  items-center basis-[48%]">
                   <Link href="/">
-                    <h1 className="text-3xl whitespace-nowrap lg:text-4xl font-compressed">
+                    <h1 className="text-3xl whitespace-nowrap lg:text-dynamicXl font-compressed">
                       NEW ELEMENTS
                     </h1>
                   </Link>
@@ -64,7 +64,7 @@ export default function Header() {
 
                 <div className="basis-[52%] flex justify-between">
                   <div className=" w-full items-center">
-                    <div className="flex w-full items-center justify-end lg:justify-between">
+                    <div className="flex w-full items-center font-xxCompressed justify-end lg:justify-between">
                       {navigation.map((item) => (
                         <Link
                           key={item.name}

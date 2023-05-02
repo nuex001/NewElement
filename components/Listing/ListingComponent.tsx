@@ -131,9 +131,9 @@ const ListingComponent: NextPage = () => {
               {"<<<"} Back
             </Link>
           </div>
-          <div className="flex flex-col h-full  items-center justify-center">
-            <div className="w-min">
-              <div className="w-max min-w-[350px] max-w-[50vw]">
+          <div className="flex flex-col h-full items-center justify-center">
+            <div className="w-max">
+              <div className="w-max min-w-[350px] lg:max-w-[50vw]">
                 <Image
                   src={listing?.asset.image as string}
                   alt={listing?.asset.name as string}

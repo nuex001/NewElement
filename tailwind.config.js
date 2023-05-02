@@ -64,7 +64,8 @@ module.exports = {
         mobileBg: "url('/mobileBg.png')",
       },
       fontSize: {
-        dynamic: "clamp(0.75rem, 2.5vw, 2rem)",
+        dynamic: "clamp(0.75rem, 2.5vw, 1.75rem)",
+        dynamicXl: "clamp(1.25rem, 2.5vw, 2.25rem)",
       },
       aspectRatio: {
         "4/3": "4 / 3",
