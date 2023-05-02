@@ -52,11 +52,11 @@ const wide = localFont({
   variable: "--font-wide",
 });
 const xCompressed = localFont({
-  src: "../public/CarbonGravity-XCompressed.otf",
+  src: "../public/carbongravity-xcompressed-webfont.woff2",
   variable: "--font-xCompressed",
 });
 const xxCompressed = localFont({
-  src: "../public/CarbonGravity-XXCompressed.otf",
+  src: "../public/carbongravity-xxcompressed-webfont.woff2",
   variable: "--font-xxCompressed",
 });
 const xxxCompressed = localFont({
@@ -74,29 +74,35 @@ const activeChainId = ChainId.Mumbai;
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={activeChainId}>
-      <GoogleReCaptchaProvider
-        reCaptchaKey="6LdRQsklAAAAAMODTeLAWfDsQXcrpPoUMZg8kAAt"
-        scriptProps={{
-          async: false,
-          defer: false,
-          appendTo: "head",
-          nonce: undefined,
-        }}
+      <Head>
+        <title>New Elements</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="New Elements NFT Marketplace" />
+        <meta
+          name="keywords"
+          content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
+        />
+      </Head>
+      <main
+        className={`${ibmPlexMono.variable} font-sans,
+          ${carbon.variable} font-sans,
+          ${compressed.variable} font-sans,
+          ${condensed.variable} font-sans,
+          ${expanded.variable} font-sans,
+          ${extended.variable} font-sans,
+          ${extraCondensed.variable} font-sans,
+          ${normal.variable} font-sans,
+          ${semiCondensed.variable} font-sans,
+          ${wide.variable} font-sans,
+          ${xCompressed.variable} font-sans,
+          ${xxCompressed.variable} font-sans,
+          ${xxxCompressed.variable} font-sans,
+          ${xxxxCompressed.variable} font-sans`}
       >
-        <Head>
-          <title>New Elements</title>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
-          <meta name="description" content="New Elements NFT Marketplace" />
-          <meta
-            name="keywords"
-            content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
-          />
-        </Head>
-        <main
-          className={`${ibmPlexMono.variable} font-sans,
+        <Header />
+      </main>
+      <main
+        className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
           ${compressed.variable} font-sans,
           ${condensed.variable} font-sans,
@@ -110,28 +116,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           ${xxCompressed.variable} font-sans,
           ${xxxCompressed.variable} font-sans,
           ${xxxxCompressed.variable} font-sans`}
-        >
-          <Header />
-        </main>
-        <main
-          className={`${ibmPlexMono.variable} font-sans,
-          ${carbon.variable} font-sans,
-          ${compressed.variable} font-sans,
-          ${condensed.variable} font-sans,
-          ${expanded.variable} font-sans,
-          ${extended.variable} font-sans,
-          ${extraCondensed.variable} font-sans,
-          ${normal.variable} font-sans,
-          ${semiCondensed.variable} font-sans,
-          ${wide.variable} font-sans,
-          ${xCompressed.variable} font-sans,
-          ${xxCompressed.variable} font-sans,
-          ${xxxCompressed.variable} font-sans,
-          ${xxxxCompressed.variable} font-sans`}
-        >
-          <Component {...pageProps} />
-        </main>
-      </GoogleReCaptchaProvider>
+      >
+        <Component {...pageProps} />
+      </main>
     </ThirdwebProvider>
   );
 }

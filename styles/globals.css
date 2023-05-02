@@ -12,15 +12,6 @@
   box-sizing: border-box;
 }
 
-/* Set core body defaults */
-/* body {
-  min-height: 100vh;
-  text-rendering: optimizeSpeed;
-  line-height: 1.5;
-  --hello: -100%;
-  padding-bottom: 250px;
-} */
-
 /* Inherit fonts for inputs and buttons */
 input,
 button,
@@ -38,7 +29,6 @@ select {
 
 body {
   background: black;
-  font-family: "Inter", sans-serif;
   color: var(--white);
   display: flex;
   justify-content: center;

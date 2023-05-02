@@ -16,6 +16,22 @@ module.exports = {
       lg: "976px",
       xl: "1440px",
     },
+    fontFamily: {
+      ibmPlex: ["var(--font-ibmPlex)", ...fontFamily.sans],
+      carbon: ["var(--font-carbon)", ...fontFamily.sans],
+      compressed: ["var(--font-compressed)", ...fontFamily.sans],
+      condensed: ["var(--font-condensed)", ...fontFamily.sans],
+      expanded: ["var(--font-expanded)", ...fontFamily.sans],
+      extended: ["var(--font-extended)", ...fontFamily.sans],
+      extraCondensed: ["var(--font-extraCondensed)", ...fontFamily.sans],
+      normal: ["var(--font-normal)", ...fontFamily.sans],
+      semiCondensed: ["var(--font-semiCondensed)", ...fontFamily.sans],
+      wide: ["var(--font-wide)", ...fontFamily.sans],
+      xCompressed: ["var(--font-xCompressed)", ...fontFamily.sans],
+      xxCompressed: ["var(--font-xxCompressed)", ...fontFamily.sans],
+      xxxCompressed: ["var(--font-xxxCompressed)", ...fontFamily.sans],
+      xxxxCompressed: ["var(--font-xxxxCompressed)", ...fontFamily.sans],
+    },
     extend: {
       keyframes: {
         "fade-in": {
@@ -42,22 +58,7 @@ module.exports = {
       colors: {
         green: "#97FF73",
       },
-      fontFamily: {
-        ibmPlex: ["var(--font-ibmPlex)", ...fontFamily.sans],
-        carbon: ["var(--font-carbon)", ...fontFamily.sans],
-        compressed: ["var(--font-compressed)", ...fontFamily.sans],
-        condensed: ["var(--font-condensed)", ...fontFamily.sans],
-        expanded: ["var(--font-expanded)", ...fontFamily.sans],
-        extended: ["var(--font-extended)", ...fontFamily.sans],
-        extraCondensed: ["var(--font-extraCondensed)", ...fontFamily.sans],
-        normal: ["var(--font-normal)", ...fontFamily.sans],
-        semiCondensed: ["var(--font-semiCondensed)", ...fontFamily.sans],
-        wide: ["var(--font-wide)", ...fontFamily.sans],
-        xCompressed: ["var(--font-xCompressed)", ...fontFamily.sans],
-        xxCompressed: ["var(--font-xxCompressed)", ...fontFamily.sans],
-        xxxCompressed: ["var(--font-xxxCompressed)", ...fontFamily.sans],
-        xxxxCompressed: ["var(--font-xxxxCompressed)", ...fontFamily.sans],
-      },
+
       backgroundImage: {
         applyPattern: "url('/background1.jpg')",
         mobileBg: "url('/mobileBg.png')",

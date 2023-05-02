@@ -19,8 +19,8 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   bidAmount,
   setBidAmount,
 }) => {
-  const [isOpenModal, setIsOpenModal] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isOpenModal, setIsOpenModal] = useState(true);
+  // const [isLoading, setIsLoading] = useState(false);
 
   const customStyles = {
     content: {
@@ -38,7 +38,6 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       transform: "translate(-50%, -50%)",
     },
   };
-  console.log(listing);
 
   return (
     <div>
