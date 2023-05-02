@@ -121,7 +121,7 @@ const ListingComponent: NextPage = () => {
 
   return (
     <>
-      <div className="flex flex-col realtive h-full items-center w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
+      <div className="flex flex-col realtive h-full items-center w-full lg:w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
         <div className="flex justify-center realtive w-3/4">
           <div className="absolute translate-x-[100%] lg:translate-x-1 lg:right-[70%] xl:translate-x-0 xl:right-1/2  left-0 hidden md:block">
             <Link
@@ -131,9 +131,9 @@ const ListingComponent: NextPage = () => {
               {"<<<"} Back
             </Link>
           </div>
-          <div className="flex flex-col h-full items-center justify-center">
-            <div className="w-max">
-              <div className="w-max min-w-[350px] lg:max-w-[50vw]">
+          <div className="flex flex-col h-full items-center px-4 md:px-0 justify-center">
+            <div className="w-max ">
+              <div className=" min-w-[350px]  lg:max-w-[50vw]">
                 <Image
                   src={listing?.asset.image as string}
                   alt={listing?.asset.name as string}
