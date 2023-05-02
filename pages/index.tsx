@@ -65,8 +65,8 @@ const Home: NextPage = () => {
   return (
     <>
       {/* Content */}
-      <div className="flex w-full mt-24 max-w-[1600px] container flex-col items-center content-center">
-        <div className="mb-5 w-full">
+      <div className="flex w-full mt-24 max-w-[1584px] flex-col items-center content-center">
+        <div className="mb-5 w-full px-1 lg:px-0">
           {
             // If the listings are loading, show a loading skeleton
             loadingListings ? (
@@ -79,13 +79,26 @@ const Home: NextPage = () => {
               </div>
             ) : (
               // Otherwise, show the listings
-              <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-10 mb-10">
-                {listings?.map((listing) => (
-                  <>
-                    <NFTCard listing={listing} />
-                  </>
-                ))}
-              </div>
+              <>
+                <div className="flex font-ibmPlex text-sm mx-4 lg:mx-8 mb-5">
+                  <button className="mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                    ALL
+                  </button>
+                  <button className="mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                    AUCTIONS{" "}
+                  </button>
+                  <button className=" hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                    DROPS
+                  </button>
+                </div>
+                <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-8 mb-10">
+                  {listings?.map((listing) => (
+                    <>
+                      <NFTCard listing={listing} />
+                    </>
+                  ))}
+                </div>
+              </>
             )
           }
         </div>

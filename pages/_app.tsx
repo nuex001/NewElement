@@ -83,6 +83,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
         />
       </Head>
+      {/* <div className="mx-10 "> */}
       <main
         className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
@@ -119,6 +120,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <Component {...pageProps} />
       </main>
+      {/* </div> */}
     </ThirdwebProvider>
   );
 }
