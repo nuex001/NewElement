@@ -473,21 +473,12 @@ const ProfileComponent = (props: Props) => {
                     <div className=" flex w-full">
                       {" "}
                       <p className="pr-6 ">
-                        Sale <br /> Price
+                        Bought <br /> For
                       </p>
                       <div className="flex grow"></div>
-                      <p className="font-bold ">
+                      <p className="font-bold text-green">
                         1.1 <br /> ETH
                       </p>
-                    </div>
-                  </div>
-
-                  <div className=" flex mt-3  ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6  ">Owner</p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold text-green">@Rodri</p>
                     </div>
                   </div>
                 </div>
@@ -550,7 +541,7 @@ const ProfileComponent = (props: Props) => {
                     <div className=" flex w-full">
                       {" "}
                       <p className="pr-6 ">
-                        Sale <br /> Price
+                        Reserve <br /> Price
                       </p>
                       <div className="flex grow"></div>
                       <p className="font-bold ">
@@ -562,10 +553,22 @@ const ProfileComponent = (props: Props) => {
                   <div className=" flex mt-3  ">
                     <div className=" flex w-full">
                       {" "}
-                      <p className="pr-6  ">Owner</p>
+                      <p className="pr-6  ">
+                        Current <br /> Bid
+                      </p>
                       <div className="flex grow"></div>
-                      <p className="font-bold text-green">@Rodri</p>
+                      <p className="font-bold text-green">
+                        2.5 <br /> ETH
+                      </p>
                     </div>
+                  </div>
+                  <div className=" flex mt-3">
+                    <div className="flex grow"></div>
+                    <div className=" flex font-bold text-green">
+                      {" "}
+                      <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                    </div>
+                    <div className="flex grow"></div>
                   </div>
                 </div>
               </div>
