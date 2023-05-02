@@ -66,27 +66,20 @@ const Home: NextPage = () => {
     <>
       {/* Content */}
       <div className="flex w-full mt-24 max-w-[1600px] container flex-col items-center content-center">
-        <div className="mb-5 ">
+        <div className="mb-5 w-full">
           {
-            // If the listings are loading, show a loading message
+            // If the listings are loading, show a loading skeleton
             loadingListings ? (
-              // <div className="flex justify-center items-center w-[100dvw] mt-32">
-              //   <div className="relative w-24 h-24 animate-spin rounded-full bg-gradient-to-r from-black via-blue-500 to-green ">
-              //     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-black rounded-full "></div>
-              //   </div>
-              // </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:mx-10 mb-10">
-                <>
-                  <NFTCardSkeleton />
+                <NFTCardSkeleton />
 
-                  <NFTCardSkeleton />
+                <NFTCardSkeleton />
 
-                  <NFTCardSkeleton />
-                </>
+                <NFTCardSkeleton />
               </div>
             ) : (
               // Otherwise, show the listings
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-10 mb-10">
+              <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-10 mb-10">
                 {listings?.map((listing) => (
                   <>
                     <NFTCard listing={listing} />
