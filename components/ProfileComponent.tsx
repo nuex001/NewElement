@@ -452,9 +452,163 @@ const ProfileComponent = (props: Props) => {
               </div>
             </div>
           </div>
-
           {/* COLLECTION */}
           <div className="flex flex-col">
+            <h3 className="font-bold">COLLECTION</h3>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+              {/* nft 1 */}
+              <div className="flex  flex-col h-full items-start w-max ">
+                <div className="">
+                  <Image
+                    src={nft2}
+                    alt="nft7"
+                    width={150}
+                    height={200}
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                  />{" "}
+                </div>
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                  <div className=" flex ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6 ">
+                        Sale <br /> Price
+                      </p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold ">
+                        1.1 <br /> ETH
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className=" flex mt-3  ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6  ">Owner</p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold text-green">@Rodri</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* nft 2 */}
+              {/* <div className="flex  flex-col h-full items-start w-max ">
+                <div className="">
+                  <Image
+                    src={nft7}
+                    alt="nft7"
+                    width={150}
+                    height={200}
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                  />{" "}
+                </div>
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                  <div className=" flex ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6 ">
+                        Sale <br /> Price
+                      </p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold ">
+                        1.1 <br /> ETH
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className=" flex mt-3  ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6  ">Owner</p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold text-green">@Rodri</p>
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+            </div>
+          </div>
+          {/* SAVED */}
+          <div className="flex flex-col">
+            <h3 className="font-bold">SAVED</h3>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+              {/* nft 1 */}
+              <div className="flex  flex-col h-full items-start w-max ">
+                <div className="">
+                  <Image
+                    src={nft5}
+                    alt="nft7"
+                    width={150}
+                    height={200}
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                  />{" "}
+                </div>
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                  <div className=" flex ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6 ">
+                        Sale <br /> Price
+                      </p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold ">
+                        1.1 <br /> ETH
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className=" flex mt-3  ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6  ">Owner</p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold text-green">@Rodri</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* nft 2 */}
+              {/* <div className="flex  flex-col h-full items-start w-max ">
+                <div className="">
+                  <Image
+                    src={nft7}
+                    alt="nft7"
+                    width={150}
+                    height={200}
+                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                  />{" "}
+                </div>
+                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                  <div className=" flex ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6 ">
+                        Sale <br /> Price
+                      </p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold ">
+                        1.1 <br /> ETH
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className=" flex mt-3  ">
+                    <div className=" flex w-full">
+                      {" "}
+                      <p className="pr-6  ">Owner</p>
+                      <div className="flex grow"></div>
+                      <p className="font-bold text-green">@Rodri</p>
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+            </div>
+          </div>
+
+          {/* COLLECTION */}
+          {/* <div className="flex flex-col">
             <h3 className="font-bold">COLLECTION</h3>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
@@ -482,10 +636,10 @@ const ProfileComponent = (props: Props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* SAVED */}
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <h3 className="font-bold">SAVED</h3>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
@@ -536,7 +690,7 @@ const ProfileComponent = (props: Props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
