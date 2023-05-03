@@ -1,8 +1,6 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import Modal from "react-modal";
-import Router from "next/router";
 import Image from "next/image";
-import { log } from "console";
 
 type Props = {
   modalOpen: boolean;

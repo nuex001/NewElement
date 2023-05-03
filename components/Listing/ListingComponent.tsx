@@ -21,9 +21,12 @@ import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
 import Link from "next/link";
 import PlaceBidModal from "./PlaceBidModal";
+import EnlargeNFTModal from "./EnlargeNFTModal";
 
 const ListingComponent: NextPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
+    useState<boolean>(false);
 
   // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
   const router = useRouter();
@@ -111,12 +114,20 @@ const ListingComponent: NextPage = () => {
   //   }
   // }
 
-  // Modal
+  // Modal Place Bid
   const isModalOpen = () => {
     setModalOpen(true);
   };
   const isModalClosed = () => {
     setModalOpen(false);
+  };
+
+  // Modal Enlarge NFT
+  const isModalOpenEnlargeNFT = () => {
+    setModalOpenEnlargeNFT(true);
+  };
+  const isModalClosedEnlargeNFT = () => {
+    setModalOpenEnlargeNFT(false);
   };
 
   return (
@@ -133,13 +144,14 @@ const ListingComponent: NextPage = () => {
           </div>
           <div className="flex flex-col h-full items-center justify-center">
             <div className="w-full lg:w-max">
-              <div className=" min-w-[350px]  lg:max-w-[50vw]">
+              <div className=" min-w-[350px]  lg:max-w-[50vw] cursor-pointer">
                 <Image
                   src={listing?.asset.image as string}
                   alt={listing?.asset.name as string}
                   width={400}
                   height={600}
-                  className="w-full mb-2 object-contain"
+                  className="w-full mb-2 object-contain cursor-pointer"
+                  onClick={isModalOpenEnlargeNFT}
                 />{" "}
                 <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <div className=" flex ">
@@ -253,6 +265,11 @@ const ListingComponent: NextPage = () => {
         listing={listing}
         isModalClosed={isModalClosed}
         modalOpen={modalOpen}
+      />
+      <EnlargeNFTModal
+        isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}
+        modalOpenEnlargeNFT={modalOpenEnlargeNFT}
+        listing={listing}
       />
     </>
   );
