@@ -5,13 +5,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: "Compressed";
+    src: url("../public/CarbonGravity-Compressed.otf");
+  }
+}
+
 /* Box sizing rules */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 /* Inherit fonts for inputs and buttons */
 input,
 button,

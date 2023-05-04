@@ -1,6 +1,5 @@
 import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import "../styles/globals.css";
 import Head from "next/head";
 import localFont from "next/font/local";
@@ -83,7 +82,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="New Elements, Marketplace, NFT Marketplace , NFT Auction , OpenSea"
         />
       </Head>
-      {/* <div className="mx-10 "> */}
       <main
         className={`${ibmPlexMono.variable} font-sans,
           ${carbon.variable} font-sans,
@@ -120,7 +118,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <Component {...pageProps} />
       </main>
-      {/* </div> */}
     </ThirdwebProvider>
   );
 }
