@@ -43,7 +43,7 @@ const EnlargeNFTModal: FunctionComponent<Props> = ({
       >
         <>
           {listing ? (
-            <div className="relative flex flex-col z-12 text-ibmPlex h-full w-full   mx-5 overflow-hidden justify-between">
+            <div className="relative flex max-h-[95vh] pt-4 flex-col z-12 text-ibmPlex h-full w-full   mx-5 overflow-hidden justify-between">
               <button
                 onClick={isModalClosedEnlargeNFT}
                 className="fixed right-4 top-2 p-3 font-ibmPlex"
