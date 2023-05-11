@@ -28,6 +28,11 @@ const ProfileComponent = (props: Props) => {
     img: null,
     croppedImg: profile,
   });
+  const [bannerPicture, setBannerPicture] = useState<Props>({
+    cropperOpen: false,
+    img: null,
+    croppedImg: banner,
+  });
 
   const onScaleChange = (e: any) => {
     const scaleValue = parseFloat(e.target.value);
@@ -57,32 +62,145 @@ const ProfileComponent = (props: Props) => {
   };
 
   const handleFileChange = (e: any) => {
-    let url = URL.createObjectURL(e.target.files[0]);
-    console.log(url);
-    setPicture({
-      ...picture,
-      img: url,
-    });
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      console.log(url);
+      setPicture({
+        ...picture,
+        img: url,
+      });
+    }
   };
-  const handleOpneCropper = () => {
+  const handleOpenCropper = () => {
     setPicture({
       ...picture,
 
       cropperOpen: true,
     });
   };
+
+  // Banner image upload
+
+  const handleCancelBanner = () => {
+    setBannerPicture({
+      ...bannerPicture,
+      cropperOpen: false,
+    });
+  };
+  const setEditorRefBanner = (editor: any) => setEditor(editor);
+
+  const handleSaveBanner = (e: any) => {
+    if (editor) {
+      const canvasScaled = editor.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+
+      setBannerPicture({
+        ...bannerPicture,
+        img: null,
+        cropperOpen: false,
+        croppedImg: croppedImg,
+      });
+    }
+  };
+
+  const handleFileChangeBanner = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      console.log(url);
+      setBannerPicture({
+        ...bannerPicture,
+        img: url,
+      });
+    }
+  };
+  const handleOpenCropperBanner = () => {
+    setBannerPicture({
+      ...bannerPicture,
+      cropperOpen: true,
+    });
+  };
   return (
-    <div className="flex flex-col w-full max-w-[1600px] mt-20 md:mt-24  bg-black overflow-hidden">
-      <div className="flex flex-col w-full  lg:px-[2.25rem] font-ibmPlex px-4">
-        <Image
-          src={banner}
-          width={1600}
-          height={200}
-          alt="banner"
-          className="h-[12vh] md:h-full object-cover "
-        />
+    <div className="flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden">
+      <div className="flex flex-col w-full font-ibmPlex ">
+        <label
+          className="cursor-pointer"
+          htmlFor="input-banner"
+          onClick={handleOpenCropperBanner}
+        >
+          <Image
+            src={bannerPicture.croppedImg}
+            width={1600}
+            height={200}
+            alt="banner"
+            className="h-[12vh] md:h-[14vh] object-cover "
+          />
+          <input
+            id="input-banner"
+            className="text-xs hidden"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChangeBanner}
+          />
+        </label>
+        <div className="w-fit border border-green flex flex-col align-center">
+          {bannerPicture.cropperOpen && (
+            <div className="flex flex-col items-center">
+              {/* <input
+                className="text-xs"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              /> */}
+              {bannerPicture.img && (
+                <>
+                  <AvatarEditor
+                    className="w-screen"
+                    ref={setEditorRefBanner}
+                    image={bannerPicture.img}
+                    width={300}
+                    height={50}
+                    border={50}
+                    color={[1, 1, 1, 0.5]} // RGBA
+                    rotate={0}
+                    scale={scaleValue}
+                  />
+                  <input
+                    className="w-full h-2 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                    type="range"
+                    value={scaleValue}
+                    name="points"
+                    step={0.25}
+                    min="1"
+                    max="10"
+                    onChange={onScaleChange}
+                  />
+                  <div className="flex w-full justify-around">
+                    <button
+                      className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
+                      onClick={handleSaveBanner}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className=" text-green font-xxCompressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
+                      onClick={handleCancelBanner}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
         <div className="flex w-full -mt-4">
-          <button onClick={handleOpneCropper}>
+          <label
+            className="cursor-pointer"
+            htmlFor="input-profile"
+            onClick={handleOpenCropper}
+          >
             <Image
               className="border border-green rounded-full"
               src={picture.croppedImg}
@@ -90,7 +208,7 @@ const ProfileComponent = (props: Props) => {
               height={70}
               alt="profile"
             />
-          </button>
+          </label>
           <Image
             className="ml-4 mb-1 h-5 self-center"
             src={star}
@@ -105,7 +223,13 @@ const ProfileComponent = (props: Props) => {
         <div className="w-fit border border-green flex flex-col align-center">
           {picture.cropperOpen && (
             <div className="flex flex-col items-center">
-              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <input
+                id="input-profile"
+                className="text-xs hidden"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
               {picture.img && (
                 <>
                   <AvatarEditor
@@ -113,9 +237,9 @@ const ProfileComponent = (props: Props) => {
                     image={picture.img}
                     width={200}
                     height={200}
-                    // border={50}
+                    border={50}
                     borderRadius={100}
-                    color={[255, 255, 255, 0.2]} // RGBA
+                    color={[1, 1, 1, 0.5]} // RGBA
                     rotate={0}
                     scale={scaleValue}
                   />
