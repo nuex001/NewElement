@@ -72,7 +72,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             </div>
             {navigation.map((item, index) => (
               <motion.a
-                className="text-6xl text-green  flex items-center mt-4 p-3 mb-4 hover:bg-gray-700 uppercase"
+                className="text-6xl text-green  flex items-center mt-4 p-3 mb-4 hover:opacity-80 uppercase"
                 href={item.href}
                 key={index}
                 initial={{ y: 80, opacity: 0 }}
