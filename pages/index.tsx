@@ -8,14 +8,13 @@ import {
 } from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
 import { client } from "../lib/sanityClient";
-import { useRouter } from "next/router";
 import { marketplaceContractAddress } from "../addresses";
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  const [collection, setCollection] = useState({});
+  const [filter, setFilter] = useState("all");
+
   const { contract: marketplace } = useContract(
     marketplaceContractAddress,
     "marketplace"
@@ -38,34 +37,14 @@ const Home: NextPage = () => {
     })();
   }, [address]);
 
-  //gzLJ4ph6nLxUjfN95Q4b8bzRIynSGnKy
-  //https://polygon-mumbai.g.alchemy.com/v2/gzLJ4ph6nLxUjfN95Q4b8bzRIynSGnKy
-
-  // const fetchCollectionData = async (sanityClient = client) => {
-  //   const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
-  //   "imageUrl": profileImage.asset->url,
-  //   "bannerImageUrl": bannerImage.asset->url,
-  //   volumeTraded,
-  //   createdBy,
-  //   contractAddress,
-  //   "creator": createdBy->userName,
-  //   title, floorPrice,
-  //   "allOwners": owners[]->,
-  //   description
-  // }`;
-
-  //   const collectionData = await sanityClient.fetch(query);
-
-  //   console.log(collectionData, "🔥");
-
-  //   // the query returns 1 object inside of an array
-  //   await setCollection(collectionData[0]);
-  // };
+  const changeFilter = (filter: string) => {
+    setFilter(filter);
+  };
 
   return (
     <>
       {/* Content */}
-      <div className="flex w-screen overflow-hidden mt-24 max-w-[1584px] flex-col items-center content-center">
+      <div className="flex w-screen overflow-hidden mt-24 max-w-[1600px] flex-col items-center content-center">
         <div className="mb-5 w-full px-1 lg:px-0">
           {
             // If the listings are loading, show a loading skeleton
@@ -80,18 +59,33 @@ const Home: NextPage = () => {
             ) : (
               // Otherwise, show the listings
               <>
-                <div className="flex font-ibmPlex text-sm mx-4 lg:mx-8 mb-5">
-                  <button className="mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                <div className="flex font-ibmPlex text-xs mx-4 lg:mx-8 mb-5">
+                  <button
+                    onClick={() => changeFilter("all")}
+                    className={`${
+                      filter == "all" ? "border-b-white" : ""
+                    }  mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
+                  >
                     ALL
                   </button>
-                  <button className="mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                  <button
+                    onClick={() => changeFilter("auctions")}
+                    className={`${
+                      filter === "auctions" ? "border-b-white" : ""
+                    } mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
+                  >
                     AUCTIONS{" "}
                   </button>
-                  <button className=" hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200">
+                  <button
+                    onClick={() => changeFilter("drops")}
+                    className={`${
+                      filter === "drops" ? "border-b-white" : ""
+                    } hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
+                  >
                     DROPS
                   </button>
                 </div>
-                <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-10 lg:mx-8 mb-10">
+                <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
                   {listings?.map((listing) => (
                     <>
                       <NFTCard listing={listing} />

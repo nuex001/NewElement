@@ -48,14 +48,14 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
         {openMenu && (
           <motion.div
             className="absolute px-4 pt-6 inset-y-0 font-xxCompressed tracking-widest
-            flex flex-col  w-screen h-screen bg-mobileBg text-white z-10 overflow-hidden"
+            flex flex-col  w-screen h-screen bg-mobileBg bg-no-repeat bg-cover text-white z-10 overflow-hidden"
             variants={item}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "100vh", opacity: 1 }}
             transition={{ duration: 0 }}
             exit="exit"
           >
-            <div className="flex pb-10">
+            <div className="flex pl-1 pb-10">
               <button
                 onClick={closeMenu}
                 className="inline-flex items-center justify-center rounded-md pr-2 text-gray-400  hover:text-gray-500 focus:outline-none"
@@ -65,7 +65,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
               </button>
 
               <Link href="/">
-                <h1 className="text-xl font-compressed text-white">
+                <h1 className="text-3xl font-compressed text-white">
                   NEW ELEMENTS
                 </h1>
               </Link>
@@ -119,12 +119,6 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* <div
-        className="w-full h-screen-16 flex items-center justify-center flex-col;
-"
-      >
-        <p>Animated Navigation</p>
-      </div> */}
     </div>
   );
 }

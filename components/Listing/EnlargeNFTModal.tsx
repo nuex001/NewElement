@@ -15,7 +15,7 @@ const EnlargeNFTModal: FunctionComponent<Props> = ({
 }) => {
   const customStyles = {
     overlay: {
-      backgroundColor: "rgb(62, 62, 62, 0.7)",
+      backgroundColor: "rgb(25, 25, 25, 0.85)",
     },
     content: {
       zIndex: "20",

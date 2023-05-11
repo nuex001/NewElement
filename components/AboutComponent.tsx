@@ -57,7 +57,7 @@ const AboutComponent = (props: Props) => {
     setFormValues({ ...formValues, [name]: value });
   };
   return (
-    <div className="flex w-full md:w-full xl:max-w-[1600px] px-4 flex-col md:flex-row-reverse items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
+    <div className="flex w-full  xl:max-w-[1600px] px-2 flex-col md:flex-row-reverse items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
       <div className="md:basis-1/2 p-2 flex justify-center  md:items-start md:justify-end md:m-4 w-full">
         <Image src={nft} height={420} width={400} alt={""} />
       </div>

@@ -7,7 +7,6 @@ const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
 
   const [formValues, setFormValues] = useState(initialValues);
-  // const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
@@ -81,25 +80,6 @@ const ApplyComponent = () => {
     }
     return formIsValid;
   };
-  // const openModal = () => {
-  //   setIsOpenModal(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIsOpenModal(false);
-  // };
-
-  // const customStyles = {
-  //   content: {
-  //     top: "50%",
-  //     left: "50%",
-  //     right: "auto",
-  //     bottom: "auto",
-  //     marginRight: "-50%",
-  //     borderRadius: "25px",
-  //     transform: "translate(-50%, -50%)",
-  //   },
-  // };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -164,7 +144,7 @@ const ApplyComponent = () => {
       <div
         className={`flex w-screen  h-screen  items-center justify-center bg-center bg-no-repeat bg-cover bg-applyPattern`}
       >
-        <div className="flex mb-5 w-[90%] md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
+        <div className="flex mb-5 w-full px-5 md:px-0 md:w-[60vw] xl:w-[40vw] max-w-[1600px] flex-col items-center uppercase text-left text-green font-ibmPlex">
           <div className=" w-full  text-xs">
             <form id="contact-form" onSubmit={handleSubmit} method="POST">
               <h2 className="text-xs md:leading-[25px] w-5/6 md:w-full mb-12 ">
