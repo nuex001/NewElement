@@ -74,7 +74,7 @@ export default function Header() {
                           {item.name}
                         </Link>
                       ))}{" "}
-                      <div className="flex md:mt-1 items-start justify-center">
+                      <div className="flex mb-1 md:mb-0 md:mt-1  justify-center">
                         <ProfileMenu />
                       </div>
                     </div>
