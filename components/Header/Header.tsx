@@ -58,23 +58,23 @@ export default function Header() {
                   </Link>
                 </div>
 
-                <div className="basis-[56%] flex justify-between">
+                <div className="basis-[56%] flex  justify-between">
                   <div className=" w-full items-center">
-                    <div className="flex w-full items-center font-xxCompressed justify-end md:justify-between">
+                    <div className="flex w-full items-start font-xxCompressed justify-end md:justify-between">
                       {navigation.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
                           className={classNames(
                             "text-blue  hover:opacity-80",
-                            "px-3 py-2 rounded-md md:text-dynamic font-medium tracking-wide hidden md:flex"
+                            "px-3 rounded-md md:text-dynamic font-medium tracking-wide hidden md:flex"
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
                         </Link>
                       ))}{" "}
-                      <div className="flex items-center justify-center">
+                      <div className="flex mt-1 items-start justify-center">
                         <ProfileMenu />
                       </div>
                     </div>

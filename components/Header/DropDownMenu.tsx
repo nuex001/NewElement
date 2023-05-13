@@ -55,7 +55,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
             transition={{ duration: 0 }}
             exit="exit"
           >
-            <div className="flex pl-1 pb-10">
+            <div className="flex pl-2 pb-4">
               <button
                 onClick={closeMenu}
                 className="inline-flex items-center justify-center rounded-md pr-2 text-gray-400  hover:text-gray-500 focus:outline-none"
@@ -64,11 +64,11 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
 
-              <Link href="/">
+              {/* <Link href="/">
                 <h1 className="text-3xl font-compressed text-white">
                   NEW ELEMENTS
                 </h1>
-              </Link>
+              </Link> */}
             </div>
             {navigation.map((item, index) => (
               <motion.a
@@ -90,9 +90,9 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 {item.name}
               </motion.a>
             ))}
-            <div className="grow"></div>
+            {/* <div className="grow"></div> */}
             <motion.div
-              className="flex pl-3 mb-8 "
+              className="flex pl-3 mb-8 mt-8"
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.8 }}
