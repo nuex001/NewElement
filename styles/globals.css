@@ -68,7 +68,6 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
-/* .recap > * {
-  border: 1px solid rgb(62, 62, 62);
-  background: transparent !important;
-} */
+input[type="radio"] {
+  accent-color: #32ff91;
+}
