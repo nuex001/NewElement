@@ -1,17 +1,30 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 import Link from "next/link";
+import axios from "axios";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ProfileMenu() {
-  // var data = await sdk.wallet.GetBalance();
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
+
+  useEffect(() => {
+    if (!address) return;
+    (async () => {
+      const userData = {
+        address,
+      };
+      axios.post("/api/signIn", userData).then((res) => {
+        console.log(res);
+      });
+    })();
+  }, [address]);
+
   return (
     <Menu as="div" className="relative inline-block">
       {!address ? (

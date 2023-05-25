@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useStorageUpload } from "@thirdweb-dev/react";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 
 type Props = {};
 
 const MintComponent = (props: Props) => {
+  const [file, setFile] = useState(null);
+  const [image, setImage] = useState<string>("");
+  const { mutateAsync: upload } = useStorageUpload();
+
   const initialMintValues = {
-    img: null,
     title: "",
     description: "",
     reservePrice: "",
@@ -18,8 +22,35 @@ const MintComponent = (props: Props) => {
   }
   const handleChange = (e: any) => {
     const { value, name } = e.target;
+    console.log(value, name);
+
     setFormValues({ ...formValues, [name]: value });
   };
+
+  const handleImageChange = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+
+      setImage(url);
+      setFile(file);
+    }
+  };
+  // Upload to IPFS function
+  // It triggers an alert with all the data when MINT Button is clicked
+  const uploadToIpfs = async () => {
+    setLoading(true);
+    const uploadUrl = await upload({
+      data: [file],
+      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+    });
+    setLoading(false);
+    alert(
+      `IPFS Link: ${uploadUrl}, Title: ${formValues.title}, Description: ${formValues.description}, Reserve Price: ${formValues.reservePrice}`
+    );
+  };
+  console.log(formValues);
+
   return (
     <div className="flex w-screen  xl:max-w-[1600px] px-5 md:px-2 flex-col md:flex-row items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">
       <div className="md:basis-1/2 mt-5 md:mt-0 md:p-2 w-full font-ibmPlex bold text-left md:m-4  text-sm ">
@@ -45,6 +76,7 @@ const MintComponent = (props: Props) => {
         </p>
         <div className="hidden md:block">
           <button
+            onClick={uploadToIpfs}
             type="submit"
             className="bg-blue text-green font-compressed mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
           >
@@ -63,41 +95,59 @@ const MintComponent = (props: Props) => {
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-full h-80 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out "
           >
-            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <svg
-                aria-hidden="true"
-                className="w-10 h-10 mb-3 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                ></path>
-              </svg>
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
-              </p>
-            </div>
-            <input id="dropzone-file" type="file" className="hidden" />
+            {image ? (
+              <img src={image} alt="" />
+            ) : (
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg
+                  aria-hidden="true"
+                  className="w-10 h-10 mb-3 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
+                </svg>
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+              </div>
+            )}{" "}
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              onChange={handleImageChange}
+            />{" "}
           </label>
 
+          <div>
+            {/* <input
+              type="file"
+              onChange={(e: any) => setFile(e.target.files[0])}
+            />
+            <button onClick={uploadToIpfs}>Upload</button> */}
+          </div>
           <input
-            id="title"
+            id="title1"
             placeholder="Title"
             type="text"
+            name="title"
             value={formValues.title}
             onChange={handleChange}
             className="w-full h-16 mt-3 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
           />
 
           <input
-            id="Description"
+            id="description1"
+            name="description"
             placeholder="Description"
             type="text"
             value={formValues.description}

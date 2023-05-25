@@ -17,7 +17,7 @@ module.exports = {
       xl: "1440px",
     },
     fontFamily: {
-      ibmPlex: ["var(--font-ibmPlex)", ...fontFamily.sans],
+      ibmPlex: ["IBM Plex Mono", ...fontFamily.sans],
       carbon: ["var(--font-carbon)", ...fontFamily.sans],
       compressed: ["var(--font-compressed)", ...fontFamily.sans],
       condensed: ["var(--font-condensed)", ...fontFamily.sans],
