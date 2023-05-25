@@ -6,15 +6,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectDB();
   console.log("Connected to Mongo");
 
-  //Sign In
+  //Upload profile pic
   if (req.method === "POST") {
     const data = req.body;
     if (!data) {
       return res.status(400).send({ message: "Bad request" });
     }
     const { imgUrl } = req.body;
-    console.log(imgUrl);
-
     const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
 
     await Users.findOneAndUpdate(
@@ -34,25 +32,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(400).send({ message: "Saving failed" });
         console.log("Saving failed.", err);
       });
-
-    // if (!user) {
-    //   const newUser = new Users({
-    //     address,
-    //   });
-
-    //   newUser
-    //     .save()
-    //     .then(() => {
-    //       console.log("Saved successfully." + newUser);
-    //       res.status(200).json({ message: "Registration successful" });
-    //     })
-    //     .catch((err: any) => {
-    //       res.status(400).send({ message: "Saving failed" });
-    //       console.log("Saving failed.", err);
-    //     });
-    // } else {
-    //   res.status(200).json({ message: "User already exists" });
-    // }
   } else {
     console.log("Wrong method");
   }

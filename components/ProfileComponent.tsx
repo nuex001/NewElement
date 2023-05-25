@@ -18,37 +18,41 @@ import Link from "next/link";
 import axios from "axios";
 import Users from "../model/users";
 import connectDB from "../lib/connectDB";
-
+import { getData } from "../pages/api/user";
 type Props = {
   cropperOpen: boolean;
   img: any;
   croppedImg: string | StaticImageData;
 };
 
-type User = {
-  address: string;
-  profilePicture: string;
-};
+// type User = {
+//   address: string;
+//   profilePicture: string;
+// };
 
-export const getServerSideProps: GetServerSideProps<{
-  user: any;
-}> = async () => {
-  await connectDB();
-  console.log("Connected to Mongo");
-  const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
-  const user = await Users.findOne({ address }).lean();
+// export const getServerSideProps: GetServerSideProps<{
+//   data: any;
+// }> = async () => {
+//   await connectDB();
 
-  console.log(user);
+//   const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
+//   const data = await Users.findOne({ address });
+//   console.log(data);
 
-  return { props: { user } };
-};
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// };
 
-const ProfileComponent = ({
-  user,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const ProfileComponent = (/*
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>*/) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
   const [scaleValue, setScaleValue] = React.useState<number>(1);
+  // console.log(data);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
