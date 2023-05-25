@@ -1,5 +1,7 @@
 import Image, { StaticImageData } from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useStorageUpload } from "@thirdweb-dev/react";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import banner from "../assets/banner.png";
 import profile from "../assets/profile-2.png";
 import star from "../assets/Star-PNG-Images.png";
@@ -12,6 +14,10 @@ import nft5 from "../assets/nft-5.jpeg";
 import nft6 from "../assets/nft-6.jpeg";
 import nft7 from "../assets/nft-7.png";
 import nft10 from "../assets/nft-10.png";
+import Link from "next/link";
+import axios from "axios";
+import Users from "../model/users";
+import connectDB from "../lib/connectDB";
 
 type Props = {
   cropperOpen: boolean;
@@ -19,10 +25,31 @@ type Props = {
   croppedImg: string | StaticImageData;
 };
 
-const ProfileComponent = (props: Props) => {
+type User = {
+  address: string;
+  profilePicture: string;
+};
+
+export const getServerSideProps: GetServerSideProps<{
+  user: any;
+}> = async () => {
+  await connectDB();
+  console.log("Connected to Mongo");
+  const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
+  const user = await Users.findOne({ address }).lean();
+
+  console.log(user);
+
+  return { props: { user } };
+};
+
+const ProfileComponent = ({
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
   const [scaleValue, setScaleValue] = React.useState<number>(1);
+
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
     img: null,
@@ -33,6 +60,9 @@ const ProfileComponent = (props: Props) => {
     img: null,
     croppedImg: banner,
   });
+  const [file, setFile] = useState(null);
+
+  const { mutateAsync: upload } = useStorageUpload();
 
   const onScaleChange = (e: any) => {
     const scaleValue = parseFloat(e.target.value);
@@ -47,17 +77,35 @@ const ProfileComponent = (props: Props) => {
   };
   const setEditorRef = (editor: any) => setEditor(editor);
 
+  const uploadToIpfs = async () => {
+    setLoading(true);
+    const uploadUrl = await upload({
+      data: [file],
+      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+    });
+
+    setLoading(false);
+    if (uploadUrl) {
+      let imgUrl;
+      axios
+        .post("/api/updateProfile", { imgUrl: uploadUrl[0] })
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+    }
+  };
+
   const handleSave = (e: any) => {
     if (editor) {
       const canvasScaled = editor.getImageScaledToCanvas();
       const croppedImg = canvasScaled.toDataURL();
-
       setPicture({
         ...picture,
         img: null,
         cropperOpen: false,
         croppedImg: croppedImg,
       });
+
+      uploadToIpfs();
     }
   };
 
@@ -70,6 +118,7 @@ const ProfileComponent = (props: Props) => {
         ...picture,
         img: url,
       });
+      setFile(file);
     }
   };
   const handleOpenCropper = () => {
@@ -121,6 +170,7 @@ const ProfileComponent = (props: Props) => {
       cropperOpen: true,
     });
   };
+  // console.log(user);
   return (
     <div className="flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden">
       <div className="flex flex-col w-full font-ibmPlex ">
@@ -345,7 +395,7 @@ const ProfileComponent = (props: Props) => {
           </div>
           <div className="flex overflow-hidden md:w-[60%]">
             <button className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  ">
-              LIST NEW
+              <Link href="/profile/mint"> LIST NEW </Link>
             </button>
           </div>{" "}
         </div>

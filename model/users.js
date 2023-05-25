@@ -8,6 +8,9 @@ const UsersSchema = new mongoose.Schema({
     trim: true,
     minLength: 3,
   },
+  profilePicture: {
+    type: String,
+  },
   //   email: {
   //     type: String,
   //     required: [true, "must provide an email"],
@@ -22,6 +25,6 @@ const UsersSchema = new mongoose.Schema({
   //   },
 });
 
-const Users = mongoose.models.Users || mongoose.model("Users", UsersSchema);
+const Users = mongoose.models?.Users || mongoose.model("Users", UsersSchema);
 
 export default Users;
