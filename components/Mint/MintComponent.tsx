@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useStorageUpload } from "@thirdweb-dev/react";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
+import { ThirdwebStorage } from "@thirdweb-dev/storage";
 
 type Props = {};
 
 const MintComponent = (props: Props) => {
   const [file, setFile] = useState(null);
   const [image, setImage] = useState<string>("");
-  const { mutateAsync: upload } = useStorageUpload();
-
+  const storage = new ThirdwebStorage();
   const initialMintValues = {
     title: "",
     description: "",
@@ -40,14 +39,14 @@ const MintComponent = (props: Props) => {
   // It triggers an alert with all the data when MINT Button is clicked
   const uploadToIpfs = async () => {
     setLoading(true);
-    const uploadUrl = await upload({
-      data: [file],
-      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+    const uploadUrl = await storage.upload({
+      title: formValues.title,
+      description: formValues.description,
+      image: file,
     });
+
     setLoading(false);
-    alert(
-      `IPFS Link: ${uploadUrl}, Title: ${formValues.title}, Description: ${formValues.description}, Reserve Price: ${formValues.reservePrice}`
-    );
+    alert(`IPFS Link: ${uploadUrl}`);
   };
   console.log(formValues);
 
