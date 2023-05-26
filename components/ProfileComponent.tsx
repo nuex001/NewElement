@@ -18,7 +18,7 @@ import Link from "next/link";
 import axios from "axios";
 import Users from "../model/users";
 import connectDB from "../lib/connectDB";
-import { getData } from "../pages/api/user";
+
 type Props = {
   cropperOpen: boolean;
   img: any;
@@ -53,6 +53,10 @@ const ProfileComponent = (/*
   const [editor, setEditor] = React.useState<any>(null);
   const [scaleValue, setScaleValue] = React.useState<number>(1);
   // console.log(data);
+
+  useEffect(() => {
+    axios.post("/api/user").then((response) => console.log(response));
+  }, []);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
