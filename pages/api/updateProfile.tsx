@@ -12,8 +12,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!data) {
       return res.status(400).send({ message: "Bad request" });
     }
-    const { imgUrl } = req.body;
-    const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
+    const { imgUrl, address } = req.body;
+    // const {address} = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
 
     await Users.findOneAndUpdate(
       { address },
@@ -24,9 +24,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     )
       .then((response) => {
-        console.log(response);
+        // console.log(response);
 
-        res.status(200).send({ message: "Profile Updated" });
+        res.status(200).send(response);
       })
       .catch((err: any) => {
         res.status(400).send({ message: "Saving failed" });

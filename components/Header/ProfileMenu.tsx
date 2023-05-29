@@ -3,12 +3,15 @@ import { Menu, Transition } from "@headlessui/react";
 import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 import Link from "next/link";
 import axios from "axios";
+import { useAuthedProfile } from "../../context/UserContext";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ProfileMenu() {
+  const { authedProfile, setAuthedProfile } = useAuthedProfile();
+
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
@@ -20,7 +23,8 @@ export default function ProfileMenu() {
         address,
       };
       axios.post("/api/signIn", userData).then((res) => {
-        console.log(res);
+        // console.log(res);
+        setAuthedProfile(res.data.user);
       });
     })();
   }, [address]);

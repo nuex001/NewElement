@@ -6,6 +6,8 @@ import banner from "../assets/banner.png";
 import profile from "../assets/profile-2.png";
 import star from "../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
+import { useAuthedProfile } from "../context/UserContext";
+import { Avatar } from "@material-tailwind/react";
 import nft1 from "../assets/nft-1.jpeg";
 import nft2 from "../assets/nft-2.jpeg";
 import nft3 from "../assets/nft-3.webp";
@@ -52,11 +54,12 @@ const ProfileComponent = (/*
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
   const [scaleValue, setScaleValue] = React.useState<number>(1);
-  // console.log(data);
+  const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  // console.log(authedProfile);
 
-  useEffect(() => {
-    axios.post("/api/user").then((response) => console.log(response));
-  }, []);
+  // useEffect(() => {
+  //   axios.post("/api/user").then((response) => console.log(response));
+  // }, []);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -87,25 +90,37 @@ const ProfileComponent = (/*
 
   const uploadToIpfs = async () => {
     setLoading(true);
+
     const uploadUrl = await upload({
       data: [file],
       options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
     });
 
-    setLoading(false);
     if (uploadUrl) {
       let imgUrl;
       axios
-        .post("/api/updateProfile", { imgUrl: uploadUrl[0] })
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
+        .post("/api/updateProfile", {
+          address: authedProfile.address,
+          imgUrl: uploadUrl[0],
+        })
+        .then((response) => {
+          setAuthedProfile(response.data);
+          console.log(response);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        })
+        .finally(() => setLoading(false));
     }
   };
 
   const handleSave = (e: any) => {
     if (editor) {
+      // console.log(editor);
+
       const canvasScaled = editor.getImageScaledToCanvas();
       const croppedImg = canvasScaled.toDataURL();
+
       setPicture({
         ...picture,
         img: null,
@@ -119,9 +134,11 @@ const ProfileComponent = (/*
 
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
+    // console.log(URL.createObjectURL(file));
+
     if (file) {
       const url = URL.createObjectURL(file);
-      console.log(url);
+
       setPicture({
         ...picture,
         img: url,
@@ -178,9 +195,13 @@ const ProfileComponent = (/*
       cropperOpen: true,
     });
   };
-  // console.log(user);
+  // console.log(file);
   return (
-    <div className="flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden">
+    <div
+      className={`flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${
+        loading && `cursor-progress`
+      }`}
+    >
       <div className="flex flex-col w-full font-ibmPlex ">
         <label
           className="cursor-pointer"
@@ -260,8 +281,8 @@ const ProfileComponent = (/*
             onClick={handleOpenCropper}
           >
             <Image
-              className="border border-green rounded-full"
-              src={picture.croppedImg}
+              className="border border-green rounded-full bg-black object-center object-cover aspect-square"
+              src={authedProfile?.profilePicture}
               width={70}
               height={70}
               alt="profile"
@@ -301,7 +322,7 @@ const ProfileComponent = (/*
                     rotate={0}
                     scale={scaleValue}
                   />
-                  <input
+                  {/* <input
                     className="w-full h-2 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                     type="range"
                     value={scaleValue}
@@ -310,7 +331,7 @@ const ProfileComponent = (/*
                     min="1"
                     max="10"
                     onChange={onScaleChange}
-                  />
+                  /> */}
                   <div className="flex w-full justify-around">
                     <button
                       className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "

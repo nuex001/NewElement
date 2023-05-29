@@ -24,15 +24,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       newUser
         .save()
         .then(() => {
-          console.log("Saved successfully." + newUser);
+          // console.log("Saved successfully." + newUser);
           res.status(200).json({ message: "Registration successful" });
         })
         .catch((err: any) => {
           res.status(400).send({ message: "Saving failed" });
-          console.log("Saving failed.", err);
+          // console.log("Saving failed.", err);
         });
     } else {
-      res.status(200).json({ message: "User already exists" });
+      res.status(200).json({ message: "User already exists", user });
     }
   }
 };

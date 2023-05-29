@@ -7,6 +7,7 @@ import { Popover, Transition } from "@headlessui/react";
 import ProfileMenu from "./ProfileMenu";
 import { usePathname } from "next/navigation";
 import DropDownMenu from "./DropDownMenu";
+import { useAuthedProfile } from "../../context/UserContext";
 
 const navigation = [
   { name: "Marketplace", href: "/", current: true },
