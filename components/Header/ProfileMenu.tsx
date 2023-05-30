@@ -22,10 +22,15 @@ export default function ProfileMenu() {
       const userData = {
         address,
       };
-      axios.post("/api/signIn", userData).then((res) => {
-        // console.log(res);
-        setAuthedProfile(res.data.user);
-      });
+      axios
+        .post("/api/signIn", userData)
+        .then((res) => {
+          // console.log(res);
+          setAuthedProfile(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })();
   }, [address]);
 
