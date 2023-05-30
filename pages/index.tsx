@@ -7,7 +7,6 @@ import {
   useAddress,
 } from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
-import { client } from "../lib/sanityClient";
 import { marketplaceContractAddress } from "../addresses";
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
@@ -22,20 +21,6 @@ const Home: NextPage = () => {
   const address = useAddress();
   const { data: listings, isLoading: loadingListings } =
     useActiveListings(marketplace);
-
-  useEffect(() => {
-    if (!address) return;
-    (async () => {
-      const userDoc = {
-        _type: "users",
-        _id: address,
-        userName: address,
-        walletAddress: address,
-      };
-
-      const result = await client.createIfNotExists(userDoc);
-    })();
-  }, [address]);
 
   const changeFilter = (filter: string) => {
     setFilter(filter);
@@ -86,9 +71,9 @@ const Home: NextPage = () => {
                   </button>
                 </div>
                 <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-                  {listings?.map((listing) => (
+                  {listings?.map((listing, index) => (
                     <>
-                      <NFTCard listing={listing} />
+                      <NFTCard key={index} listing={listing} />
                     </>
                   ))}
                 </div>

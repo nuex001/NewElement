@@ -16,6 +16,7 @@ const MintComponent = (props: Props) => {
     title: "",
     description: "",
     reservePrice: "",
+    collection: "",
   };
   const initialCollectionValues = {
     title: "",
