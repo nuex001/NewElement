@@ -7,7 +7,6 @@ import profile from "../assets/profile-2.png";
 import star from "../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
 import { useAuthedProfile } from "../context/UserContext";
-import { Avatar } from "@material-tailwind/react";
 import nft1 from "../assets/nft-1.jpeg";
 import nft2 from "../assets/nft-2.jpeg";
 import nft3 from "../assets/nft-3.webp";
@@ -27,27 +26,6 @@ type Props = {
   croppedImg: string | StaticImageData;
 };
 
-// type User = {
-//   address: string;
-//   profilePicture: string;
-// };
-
-// export const getServerSideProps: GetServerSideProps<{
-//   data: any;
-// }> = async () => {
-//   await connectDB();
-
-//   const address = "0x2E1b9630fB5b099625d45d8f7f4B382e49393394";
-//   const data = await Users.findOne({ address });
-//   console.log(data);
-
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// };
-
 const ProfileComponent = (/*
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>*/) => {
@@ -56,10 +34,6 @@ const ProfileComponent = (/*
   const [scaleValue, setScaleValue] = React.useState<number>(1);
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
   // console.log(authedProfile);
-
-  // useEffect(() => {
-  //   axios.post("/api/user").then((response) => console.log(response));
-  // }, []);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -282,7 +256,7 @@ const ProfileComponent = (/*
           >
             <Image
               className="border border-green rounded-full bg-black object-center object-cover aspect-square"
-              src={authedProfile?.profilePicture}
+              src={authedProfile ? authedProfile?.profilePicture : profile}
               width={70}
               height={70}
               alt="profile"
@@ -423,9 +397,12 @@ const ProfileComponent = (/*
             </div>
           </div>
           <div className="flex overflow-hidden md:w-[60%]">
-            <button className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  ">
-              <Link href="/profile/mint"> LIST NEW </Link>
-            </button>
+            <Link
+              href="/profile/mint"
+              className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
+            >
+              LIST NEW
+            </Link>
           </div>{" "}
         </div>
         <div className="flex flex-col font-ibmPlex mt-10 md:mt-0 text-left">

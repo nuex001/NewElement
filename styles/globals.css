@@ -71,3 +71,6 @@ input[type="number"] {
 input[type="radio"] {
   accent-color: #32ff91;
 }
+.inherit {
+  height: inherit;
+}
