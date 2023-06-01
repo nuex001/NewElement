@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 import { ThirdwebStorage } from "@thirdweb-dev/storage";
+import { useStorageUpload } from "@thirdweb-dev/react";
 import SingleNFT from "./SingleNFT";
 import Collection from "./Collection";
 
@@ -21,6 +22,7 @@ const MintComponent = (props: Props) => {
   const initialCollectionValues = {
     title: "",
     description: "",
+    token: "",
   };
 
   const [formValues, setFormValues] = useState(initialMintValues);
@@ -29,6 +31,7 @@ const MintComponent = (props: Props) => {
   );
 
   const storage = new ThirdwebStorage();
+  const { mutateAsync: upload } = useStorageUpload();
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
@@ -71,18 +74,25 @@ const MintComponent = (props: Props) => {
   const uploadToIpfs = async () => {
     setLoading(true);
     let uploadUrl;
+    let url;
+    let singleNFTData = {
+      name: formValues.title,
+      description: formValues.description,
+      image: file,
+      collection: formValues.collection,
+    };
+    let collectionData = {
+      title: formValuesCollection.title,
+      description: formValuesCollection.description,
+      token: formValuesCollection.token,
+      image: file,
+    };
     {
       mintType === "SingleNFT"
-        ? (uploadUrl = await storage.upload({
-            title: formValues.title,
-            description: formValues.description,
-            image: file,
-          }))
-        : (uploadUrl = await storage.upload({
-            colletionTitle: formValuesCollection.title,
-            collectionDescription: formValuesCollection.description,
-            image: file,
-          }));
+        ? ((uploadUrl = await storage.upload(singleNFTData)),
+          (url = await storage.resolveScheme(uploadUrl)))
+        : ((uploadUrl = await storage.upload(collectionData)),
+          (url = await storage.resolveScheme(uploadUrl)));
     }
 
     setLoading(false);
@@ -91,7 +101,7 @@ const MintComponent = (props: Props) => {
     setImage("");
     setImageCollection("");
     setFile(null);
-    alert(uploadUrl);
+    alert(url);
   };
 
   return (

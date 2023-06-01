@@ -77,6 +77,18 @@ const Collection = ({
           onChange={handleImageChangeCollection}
         />
       </label>
+      <p className="text-left w-full pl-5 mt-3 text-neutral-400 font-ibmPlex">
+        Token Symbol
+      </p>
+      <input
+        id="title1"
+        placeholder="EMNT"
+        type="text"
+        name="token"
+        value={formValuesCollection.token}
+        onChange={handleChangeCollection}
+        className="w-full h-16 mt-1 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+      />
     </div>
   );
 };
