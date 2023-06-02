@@ -16,6 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const newUser = new Users({
         address,
         profilePicture: "",
+        bannerPicture: "",
+        bio: "",
+        username: "",
+        isArtist: true,
       });
 
       newUser

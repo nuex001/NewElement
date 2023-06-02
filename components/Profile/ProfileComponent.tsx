@@ -2,23 +2,23 @@ import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
 import { useStorageUpload } from "@thirdweb-dev/react";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import banner from "../assets/banner.png";
-import profile from "../assets/profile-2.png";
-import star from "../assets/Star-PNG-Images.png";
+import banner from "../../assets/banner.png";
+import profile from "../../assets/profile-2.png";
+import star from "../../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
-import { useAuthedProfile } from "../context/UserContext";
-import nft1 from "../assets/nft-1.jpeg";
-import nft2 from "../assets/nft-2.jpeg";
-import nft3 from "../assets/nft-3.webp";
-import nft4 from "../assets/nft-4.jpeg";
-import nft5 from "../assets/nft-5.jpeg";
-import nft6 from "../assets/nft-6.jpeg";
-import nft7 from "../assets/nft-7.png";
-import nft10 from "../assets/nft-10.png";
+import { useAuthedProfile } from "../../context/UserContext";
+import nft1 from "../../assets/nft-1.jpeg";
+import nft2 from "../../assets/nft-2.jpeg";
+import nft3 from "../../assets/nft-3.webp";
+import nft4 from "../../assets/nft-4.jpeg";
+import nft5 from "../../assets/nft-5.jpeg";
+import nft6 from "../../assets/nft-6.jpeg";
+import nft7 from "../../assets/nft-7.png";
+import nft10 from "../../assets/nft-10.png";
 import Link from "next/link";
 import axios from "axios";
-import Users from "../model/users";
-import connectDB from "../lib/connectDB";
+import Username from "./Username";
+import Bio from "./Bio";
 
 type Props = {
   cropperOpen: boolean;
@@ -26,14 +26,16 @@ type Props = {
   croppedImg: string | StaticImageData;
 };
 
-const ProfileComponent = (/*
-  data,
-}: InferGetServerSidePropsType<typeof getServerSideProps>*/) => {
+const ProfileComponent = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
-  const [scaleValue, setScaleValue] = React.useState<number>(1);
+  const [bio, setBio] = React.useState<any>({
+    bio: "",
+    open: false,
+  });
+
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  // console.log(authedProfile);
+  console.log(authedProfile);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -49,11 +51,6 @@ const ProfileComponent = (/*
 
   const { mutateAsync: upload } = useStorageUpload();
 
-  const onScaleChange = (e: any) => {
-    const scaleValue = parseFloat(e.target.value);
-    setScaleValue(scaleValue);
-  };
-
   const handleCancel = () => {
     setPicture({
       ...picture,
@@ -62,54 +59,68 @@ const ProfileComponent = (/*
   };
   const setEditorRef = (editor: any) => setEditor(editor);
 
-  const uploadToIpfs = async () => {
+  const uploadToIpfs = async (image: any) => {
     setLoading(true);
+    if (image == picture) {
+      const uploadUrl = await upload({
+        data: [file],
+        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+      });
 
-    const uploadUrl = await upload({
-      data: [file],
-      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
-    });
+      if (uploadUrl) {
+        axios
+          .post("/api/updateProfile", {
+            address: authedProfile.address,
+            imgUrl: uploadUrl[0],
+          })
+          .then((response) => {
+            setAuthedProfile(response.data);
+            console.log(response);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+          .finally(() => setLoading(false));
+      }
+    } else if (image == bannerPicture) {
+      const bannerUploadUrl = await upload({
+        data: [file],
+        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+      });
 
-    if (uploadUrl) {
-      let imgUrl;
-      axios
-        .post("/api/updateProfile", {
-          address: authedProfile.address,
-          imgUrl: uploadUrl[0],
-        })
-        .then((response) => {
-          setAuthedProfile(response.data);
-          console.log(response);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        })
-        .finally(() => setLoading(false));
+      if (bannerUploadUrl) {
+        axios
+          .post("/api/updateProfile", {
+            address: authedProfile.address,
+            bannerImgUrl: bannerUploadUrl[0],
+          })
+          .then((response) => {
+            setAuthedProfile(response.data);
+            console.log(response);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+          .finally(() => setLoading(false));
+      }
     }
   };
 
   const handleSave = (e: any) => {
-    if (editor) {
-      // console.log(editor);
+    const croppedImg = picture.img;
 
-      const canvasScaled = editor.getImageScaledToCanvas();
-      const croppedImg = canvasScaled.toDataURL();
+    setPicture({
+      ...picture,
+      img: null,
+      cropperOpen: false,
+      croppedImg: croppedImg,
+    });
 
-      setPicture({
-        ...picture,
-        img: null,
-        cropperOpen: false,
-        croppedImg: croppedImg,
-      });
-
-      uploadToIpfs();
-    }
+    uploadToIpfs(picture);
   };
 
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
-    // console.log(URL.createObjectURL(file));
-
     if (file) {
       const url = URL.createObjectURL(file);
 
@@ -129,27 +140,25 @@ const ProfileComponent = (/*
   };
 
   // Banner image upload
-
   const handleCancelBanner = () => {
     setBannerPicture({
       ...bannerPicture,
+      img: null,
       cropperOpen: false,
     });
   };
   const setEditorRefBanner = (editor: any) => setEditor(editor);
 
-  const handleSaveBanner = (e: any) => {
-    if (editor) {
-      const canvasScaled = editor.getImageScaledToCanvas();
-      const croppedImg = canvasScaled.toDataURL();
+  const handleSaveBanner = () => {
+    const croppedImg = bannerPicture.img;
+    setBannerPicture({
+      ...bannerPicture,
+      img: null,
+      cropperOpen: false,
+      croppedImg: croppedImg,
+    });
 
-      setBannerPicture({
-        ...bannerPicture,
-        img: null,
-        cropperOpen: false,
-        croppedImg: croppedImg,
-      });
-    }
+    uploadToIpfs(bannerPicture);
   };
 
   const handleFileChangeBanner = (e: any) => {
@@ -161,6 +170,7 @@ const ProfileComponent = (/*
         ...bannerPicture,
         img: url,
       });
+      setFile(file);
     }
   };
   const handleOpenCropperBanner = () => {
@@ -169,6 +179,8 @@ const ProfileComponent = (/*
       cropperOpen: true,
     });
   };
+
+  //Bio change
   // console.log(file);
   return (
     <div
@@ -183,11 +195,17 @@ const ProfileComponent = (/*
           onClick={handleOpenCropperBanner}
         >
           <Image
-            src={bannerPicture.croppedImg}
+            src={
+              authedProfile
+                ? authedProfile?.banner !== ""
+                  ? authedProfile?.bannerPicture
+                  : banner
+                : banner
+            }
             width={1600}
             height={200}
             alt="banner"
-            className="h-[12vh] md:h-[14vh] object-cover "
+            className="h-[12vh] md:h-[14vh]  object-cover   z-0"
           />
           <input
             id="input-banner"
@@ -217,18 +235,9 @@ const ProfileComponent = (/*
                     border={50}
                     color={[1, 1, 1, 0.5]} // RGBA
                     rotate={0}
-                    scale={scaleValue}
+                    scale={1}
                   />
-                  <input
-                    className="w-full h-2 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                    type="range"
-                    value={scaleValue}
-                    name="points"
-                    step={0.25}
-                    min="1"
-                    max="10"
-                    onChange={onScaleChange}
-                  />
+
                   <div className="flex w-full justify-around">
                     <button
                       className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
@@ -255,8 +264,14 @@ const ProfileComponent = (/*
             onClick={handleOpenCropper}
           >
             <Image
-              className="border border-green rounded-full bg-black object-center object-cover aspect-square"
-              src={authedProfile ? authedProfile?.profilePicture : profile}
+              className="border border-green rounded-full hover:brightness-125 bg-black z-10 object-center object-cover aspect-square"
+              src={
+                authedProfile
+                  ? authedProfile?.profilePicture !== ""
+                    ? authedProfile?.profilePicture
+                    : profile
+                  : profile
+              }
               width={70}
               height={70}
               alt="profile"
@@ -294,18 +309,9 @@ const ProfileComponent = (/*
                     borderRadius={100}
                     color={[1, 1, 1, 0.5]} // RGBA
                     rotate={0}
-                    scale={scaleValue}
+                    scale={1}
                   />
-                  {/* <input
-                    className="w-full h-2 mt-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                    type="range"
-                    value={scaleValue}
-                    name="points"
-                    step={0.25}
-                    min="1"
-                    max="10"
-                    onChange={onScaleChange}
-                  /> */}
+
                   <div className="flex w-full justify-around">
                     <button
                       className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
@@ -326,13 +332,9 @@ const ProfileComponent = (/*
           )}
         </div>
         <div className="flex flex-col w-full mt-4 text-left text-xs">
-          <h1 className="text-2xl mb-3 font-bold">JOH KANE</h1>
-          <p>
-            Hi all, I&apos;m Ahad aka wiresandtrees, I&apos;m a freelance artist
-            and architect (RIBA Part II) based in the UK. I love visually
-            exploring the state between &apos;dreams&apos; and
-            &apos;nightmares&apos;.
-          </p>
+          {/* Username */}
+          <Username loading={loading} setLoading={setLoading} />
+          <Bio loading={loading} setLoading={setLoading} />
         </div>
         <div className="flex  flex-col-reverse md:flex-col">
           <div className="flex md:mt-5 h-full flex-wrap">

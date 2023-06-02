@@ -11,6 +11,21 @@ const UsersSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  bannerPicture: {
+    type: String,
+  },
+  username: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
+  isArtist: {
+    type: Boolean,
+  },
+  email: {
+    type: String,
+  },
   //   email: {
   //     type: String,
   //     required: [true, "must provide an email"],

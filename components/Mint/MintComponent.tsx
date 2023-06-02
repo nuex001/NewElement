@@ -35,14 +35,12 @@ const MintComponent = (props: Props) => {
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
-    console.log(value, name);
 
     setFormValues({ ...formValues, [name]: value });
   };
 
   const handleChangeCollection = (e: any) => {
     const { value, name } = e.target;
-    console.log(value, name);
 
     setFormValuesCollection({ ...formValuesCollection, [name]: value });
   };
@@ -74,15 +72,15 @@ const MintComponent = (props: Props) => {
   const uploadToIpfs = async () => {
     setLoading(true);
     let uploadUrl;
-    let url;
+    let resolvedUrl;
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      image: file,
       collection: formValues.collection,
+      image: file,
     };
     let collectionData = {
-      title: formValuesCollection.title,
+      collectionName: formValuesCollection.title,
       description: formValuesCollection.description,
       token: formValuesCollection.token,
       image: file,
@@ -90,9 +88,9 @@ const MintComponent = (props: Props) => {
     {
       mintType === "SingleNFT"
         ? ((uploadUrl = await storage.upload(singleNFTData)),
-          (url = await storage.resolveScheme(uploadUrl)))
+          (resolvedUrl = await storage.resolveScheme(uploadUrl)))
         : ((uploadUrl = await storage.upload(collectionData)),
-          (url = await storage.resolveScheme(uploadUrl)));
+          (resolvedUrl = await storage.resolveScheme(uploadUrl)));
     }
 
     setLoading(false);
@@ -101,7 +99,7 @@ const MintComponent = (props: Props) => {
     setImage("");
     setImageCollection("");
     setFile(null);
-    alert(url);
+    alert(uploadUrl);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileComponent from "../components/ProfileComponent";
+import ProfileComponent from "../components/Profile/ProfileComponent";
 
 type Props = {};
 
