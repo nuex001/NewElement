@@ -49,9 +49,9 @@ const SingleNFT = ({
                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
               ></path>
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+            <p className="mb-2 text-sm font-ibmPlex text-gray-500 dark:text-gray-400">
+              <span className="font-semibold ">Click to upload</span> or drag
+              and drop
             </p>
           </div>
         )}{" "}
@@ -69,7 +69,7 @@ const SingleNFT = ({
         name="title"
         value={formValues.title}
         onChange={handleChange}
-        className="w-full h-16 mt-3 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-16 mt-3 border-green placeholder:text-sm border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
 
       <input
@@ -79,7 +79,7 @@ const SingleNFT = ({
         type="text"
         value={formValues.description}
         onChange={handleChange}
-        className="w-full h-20 mt-3 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-20 mt-3 border-green placeholder:text-sm border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
       <div className="font-ibmPlex text-left">
         <p className="my-4 text-[13px]">
@@ -87,7 +87,7 @@ const SingleNFT = ({
         </p>
         <Menu as="div" className="relative inline-block w-full">
           <div>
-            <Menu.Button className="inline-flex items-center mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out ">
+            <Menu.Button className="inline-flex items-center text-sm mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out ">
               <p> Collection</p>
               <div className="flex-grow"></div>
               <ChevronDownIcon

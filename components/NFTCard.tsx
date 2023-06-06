@@ -65,7 +65,14 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
               </div>
 
               <div className=" flex mt-3">
-                <div className="font-bold flex">
+                <div
+                  onClick={() => {
+                    Router.push({
+                      pathname: `/user/1`,
+                    });
+                  }}
+                  className="font-bold flex cursor-pointer"
+                >
                   <p>BY @RODRI</p>
                   <Image
                     className="ml-3 h-5"

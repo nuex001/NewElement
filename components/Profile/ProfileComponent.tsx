@@ -205,7 +205,7 @@ const ProfileComponent = () => {
             width={1600}
             height={200}
             alt="banner"
-            className="h-[12vh] md:h-[14vh]  object-cover   z-0"
+            className="h-[12vh] md:h-[14vh]  object-cover   z-0 border border-transparent hover:border-green"
           />
           <input
             id="input-banner"

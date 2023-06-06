@@ -7,10 +7,7 @@ type Props = {
   isModalClosed: () => void;
 };
 
-const ApplySubmitModal: FunctionComponent<Props> = ({
-  modalOpen,
-  isModalClosed,
-}) => {
+const MintModal: FunctionComponent<Props> = ({ modalOpen, isModalClosed }) => {
   const router = useRouter();
   const customStyles = {
     overlay: {
@@ -47,20 +44,17 @@ const ApplySubmitModal: FunctionComponent<Props> = ({
               <div className=" flex w-full fontIbm">
                 <div className=" flex text-left">
                   {" "}
-                  <p className="pr-6 text-green">
-                    THANK YOU! <br />
-                    WE WILL BE IN TOUCH SOON.
-                  </p>
+                  <p className="pr-6 text-green">Successfully minted!</p>
                 </div>
               </div>
               <button
                 onClick={() => {
-                  router.push("/");
+                  router.push("/profile");
                 }}
                 type="submit"
                 className="bg-blue whitespace-nowrap text-green fontCompress font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[2vw] md:px-[6vw] z-2 text-2xl  "
               >
-                Back To Market
+                Back To Profile
               </button>
             </div>
           </div>
@@ -70,4 +64,4 @@ const ApplySubmitModal: FunctionComponent<Props> = ({
   );
 };
 
-export default ApplySubmitModal;
+export default MintModal;

@@ -88,7 +88,7 @@ export default function ProfileMenu() {
                 <Menu.Item>
                   {({ active }) => (
                     <Link
-                      href="#"
+                      href="/profile/settings"
                       className={classNames(
                         active ? "bg-gray-400 text-green" : "text-green",
                         "block px-4 py-2 text-xs"

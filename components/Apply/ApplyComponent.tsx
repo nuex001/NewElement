@@ -3,6 +3,7 @@ import axios from "axios";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import ApplySubmitModal from "./ApplySubmitModal";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
+import { isValidEmail } from "../../lib/emailValidation";
 
 const ApplyComponent = () => {
   const initialValues = { website: "", twitter: "", email: "", instagram: "" };
@@ -29,12 +30,6 @@ const ApplyComponent = () => {
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const isValidEmail = (email: string) => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  };
-
   const isValidWebsite = (name: string) => {
     const re =
       /^[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
@@ -45,19 +40,6 @@ const ApplyComponent = () => {
     const nameValue = formValues.website.trim();
     const emailValue = formValues.email.trim();
     let formIsValid = true;
-
-    // if (formValues.website === "") {
-    //   setErrorMessageWebsite("Website is required");
-    //   setErrorWebsite(true);
-    //   formIsValid = false;
-    // } else if (!isValidWebsite(formValues.website)) {
-    //   setErrorMessageEmail("Provide a valid website");
-    //   setErrorEmail(true);
-    //   formIsValid = false;
-    // } else {
-    //   setErrorWebsite(false);
-    //   setFormWebsite(formValues.website);
-    // }
 
     if (formValues.email === "") {
       setErrorMessageEmail("Email is required");

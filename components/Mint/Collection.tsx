@@ -22,7 +22,7 @@ const Collection = ({
         name="title"
         value={formValuesCollection.title}
         onChange={handleChangeCollection}
-        className="w-full h-16 mt-3 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-16 mt-3 placeholder:text-sm border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
 
       <input
@@ -32,9 +32,9 @@ const Collection = ({
         type="text"
         value={formValuesCollection.description}
         onChange={handleChangeCollection}
-        className="w-full h-20 mt-3 mb-3 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-20 mt-3 mb-3 placeholder:text-sm border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
-      <p className="text-left w-full pl-5 mb-1 text-neutral-400 font-ibmPlex">
+      <p className="text-left text-sm w-full pl-5 mb-1 text-neutral-400 font-ibmPlex">
         Logo Image
       </p>
       <label
@@ -64,9 +64,9 @@ const Collection = ({
                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
               ></path>
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+            <p className="mb-2 text-sm font-ibmPlex text-gray-500 dark:text-gray-400">
+              <span className="font-semibold ">Click to upload</span> or drag
+              and drop
             </p>
           </div>
         )}{" "}
@@ -87,7 +87,7 @@ const Collection = ({
         name="token"
         value={formValuesCollection.token}
         onChange={handleChangeCollection}
-        className="w-full h-16 mt-1 border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-16 mt-1 border-green border placeholder:text-sm pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
     </div>
   );

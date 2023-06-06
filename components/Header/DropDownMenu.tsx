@@ -35,15 +35,6 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
 
   return (
     <div className="relative z-2 lg:hidden">
-      {/* <header className="flex items-center">
-        <button
-          className="inline-flex items-center justify-center  text-gray-400 "
-          onClick={isOpen}
-        >
-          <Bars2Icon className="h-7 w-7 mr-2" aria-hidden="true" />
-          <span className="sr-only">Open menu</span>
-        </button>
-      </header> */}
       <AnimatePresence>
         {openMenu && (
           <motion.div
@@ -63,12 +54,6 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
                 <span className="sr-only">Close menu</span>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
-
-              {/* <Link href="/">
-                <h1 className="text-3xl font-compressed text-white">
-                  NEW ELEMENTS
-                </h1>
-              </Link> */}
             </div>
             {navigation.map((item, index) => (
               <motion.a

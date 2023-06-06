@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { Sepolia } from "@thirdweb-dev/chains";
 import "../styles/globals.css";
 import Head from "next/head";
 import localFont from "next/font/local";

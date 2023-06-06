@@ -74,3 +74,43 @@ input[type="radio"] {
 .inherit {
   height: inherit;
 }
+
+input[type="checkbox"] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  background: transparent;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #32ff91;
+  position: relative;
+}
+input[type="checkbox"]:checked {
+  background: transparent;
+}
+input[type="checkbox"]:checked:after {
+  /* Heres your symbol replacement */
+  content: "✕";
+  font-size: 30px;
+  padding-bottom: 2px;
+  color: #32ff91;
+
+  /* The following positions my tick in the center, 
+     * but you could just overlay the entire box
+     * with a full after element with a background if you want to */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  /*
+     * If you want to fully change the check appearance, use the following:
+     * content: " ";
+     * width: 100%;
+     * height: 100%;
+     * background: blue;
+     * top: 0;
+     * left: 0;
+     */
+}
