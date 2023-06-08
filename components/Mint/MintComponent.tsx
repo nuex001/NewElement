@@ -89,50 +89,50 @@ const MintComponent = (props: Props) => {
   const handleMintType = () => {
     setIsCollection((prev) => !prev);
   };
-  const fetchAllFromWallet = () => {
-    const options = {
-      method: "GET",
-      url: baseURL,
-      params: {
-        owner: address,
-        // "contractAddresses[]": contractAddress,
-        withMetadata: "true",
+  // const fetchAllFromWallet = () => {
+  //   const options = {
+  //     method: "GET",
+  //     url: baseURL,
+  //     params: {
+  //       owner: address,
+  //       // "contractAddresses[]": contractAddress,
+  //       withMetadata: "true",
 
-        pageSize: "100",
-      },
-      headers: { accept: "application/json" },
-    };
-    let allNftsFromWallet;
-    let collectionName = formValuesCollection.title;
-    console.log(collectionName);
+  //       pageSize: "100",
+  //     },
+  //     headers: { accept: "application/json" },
+  //   };
+  //   let allNftsFromWallet;
+  //   let collectionName = formValuesCollection.title;
+  //   console.log(collectionName);
 
-    axios
-      .request(options)
-      .then(function (response) {
-        allNftsFromWallet = response.data.ownedNfts;
-        console.log(allNftsFromWallet);
+  //   axios
+  //     .request(options)
+  //     .then(function (response) {
+  //       allNftsFromWallet = response.data.ownedNfts;
+  //       console.log(allNftsFromWallet);
 
-        let collAddress;
-        allNftsFromWallet.forEach((nft: any) => {
-          if (nft.contractMetadata.name == collectionName) {
-            collAddress = nft.contract.address;
-          } else {
-            console.log("No collection found");
-          }
-        });
-        console.log(collAddress);
+  //       let collAddress;
+  //       allNftsFromWallet.forEach((nft: any) => {
+  //         if (nft.contractMetadata.name == collectionName) {
+  //           collAddress = nft.contract.address;
+  //         } else {
+  //           console.log("No collection found");
+  //         }
+  //       });
+  //       console.log(collAddress);
 
-        setCollectionAddress(collAddress);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
+  //       setCollectionAddress(collAddress);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // };
   // console.log(collectionAddress);
 
   // Upload to IPFS function
   // It triggers an alert with all the data when MINT Button is clicked
-  const uploadToIpfs = async () => {
+  const mint = async () => {
     setLoading(true);
     let uploadUrl;
     let resolvedUrl;
@@ -148,6 +148,8 @@ const MintComponent = (props: Props) => {
       token: formValuesCollection.token,
       image: file,
     };
+
+    //Upload to IPFS
     {
       if (!isCollection) {
         // Upload single NFT
@@ -163,27 +165,29 @@ const MintComponent = (props: Props) => {
         try {
           (uploadUrl = await storage.upload(collectionData)),
             (resolvedUrl = await storage.resolveScheme(uploadUrl)),
-            fetchAllFromWallet();
-
-          axios
-            .post("/api/addCollection", {
-              collectionName: formValuesCollection.title,
-              collectionAddress,
-              address,
-            })
-            .then((res) => {
-              console.log(res.data);
-              setAuthedProfile(res.data);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-          isModalOpen();
+            isModalOpen();
         } catch (e) {
           console.log(e);
           alert("Something went wrong, please try again later.");
         }
       }
+      // Deploy contract
+
+      // setCollectionAddress();
+      // Update user database
+      axios
+        .post("/api/addCollection", {
+          collectionName: formValuesCollection.title,
+          collectionAddress,
+          address,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAuthedProfile(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     setLoading(false);
@@ -243,7 +247,7 @@ const MintComponent = (props: Props) => {
           </p>
           <div className="hidden md:block">
             <button
-              onClick={uploadToIpfs}
+              onClick={mint}
               type="submit"
               className="bg-blue text-green font-compressed mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
             >
