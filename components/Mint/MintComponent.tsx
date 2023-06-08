@@ -14,6 +14,7 @@ import Collection from "./Collection";
 import axios from "axios";
 import { Alchemy, Network } from "alchemy-sdk";
 import MintModal from "./MintModal";
+import { useAuthedProfile } from "../../context/UserContext";
 
 type Props = {};
 
@@ -22,14 +23,16 @@ const MintComponent = (props: Props) => {
   const [image, setImage] = useState<string>("");
   const [imageCollection, setImageCollection] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [mintType, setMintType] = useState("SingleNFT");
+  const [isCollection, setIsCollection] = useState(false);
+  const [collection, setCollection] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const initialMintValues = {
     title: "",
     description: "",
     reservePrice: "",
-    collection: "",
   };
   const initialCollectionValues = {
     title: "",
@@ -43,34 +46,34 @@ const MintComponent = (props: Props) => {
   );
 
   // Fetching NFTs from Wallet address
-  const address = "0x5D7aAa862681920Ea4f350a670816b0977c80B37";
+  const address = useAddress();
   const contractAddress = "0xED5AF388653567Af2F388E6224dC7C4b3241C544";
   // Change the testnet to mainnet when ready
-  const baseURL = `https://eth-mainnet.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
+  const baseURL = `https://eth-goerli.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
 
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      url: baseURL,
-      params: {
-        owner: address,
-        "contractAddresses[]": contractAddress,
-        withMetadata: "true",
+  // useEffect(() => {
+  //   const options = {
+  //     method: "GET",
+  //     url: baseURL,
+  //     params: {
+  //       owner: address,
+  //       "contractAddresses[]": contractAddress,
+  //       withMetadata: "true",
 
-        pageSize: "100",
-      },
-      headers: { accept: "application/json" },
-    };
+  //       pageSize: "100",
+  //     },
+  //     headers: { accept: "application/json" },
+  //   };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }, [address]);
+  //   axios
+  //     .request(options)
+  //     .then(function (response) {
+  //       console.log(response.data);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // }, [address]);
 
   const storage = new ThirdwebStorage();
   const { mutateAsync: upload } = useStorageUpload();
@@ -105,9 +108,8 @@ const MintComponent = (props: Props) => {
       setFile(file);
     }
   };
-  const handleMintType = (e: any) => {
-    const { value } = e.target;
-    setMintType(value);
+  const handleMintType = () => {
+    setIsCollection((prev) => !prev);
   };
   // Upload to IPFS function
   // It triggers an alert with all the data when MINT Button is clicked
@@ -118,7 +120,7 @@ const MintComponent = (props: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collection: formValues.collection,
+      collection: collection,
       image: file,
     };
     let collectionData = {
@@ -128,7 +130,7 @@ const MintComponent = (props: Props) => {
       image: file,
     };
     {
-      if (mintType == "singleNFT") {
+      if (!isCollection) {
         try {
           (uploadUrl = await storage.upload(singleNFTData)),
             (resolvedUrl = await storage.resolveScheme(uploadUrl));
@@ -140,6 +142,18 @@ const MintComponent = (props: Props) => {
         try {
           (uploadUrl = await storage.upload(collectionData)),
             (resolvedUrl = await storage.resolveScheme(uploadUrl));
+          axios
+            .post("/api/addCollection", {
+              collectionName: formValuesCollection.title,
+              address,
+            })
+            .then((res) => {
+              console.log(res.data);
+              setAuthedProfile(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } catch (e) {
           console.log(e);
           alert("Something went wrong, please try again later.");
@@ -150,6 +164,7 @@ const MintComponent = (props: Props) => {
     setLoading(false);
     setFormValues(initialMintValues);
     setFormValuesCollection(initialCollectionValues);
+    setCollection("");
     setImage("");
     setImageCollection("");
     setFile(null);
@@ -184,7 +199,7 @@ const MintComponent = (props: Props) => {
             <p className="uppercase mr-3">single image</p>
             <input
               value="SingleNFT"
-              checked={mintType === "SingleNFT"}
+              checked={!isCollection}
               onChange={handleMintType}
               className="mr-8 bg-green"
               type="radio"
@@ -192,7 +207,7 @@ const MintComponent = (props: Props) => {
             <p className="uppercase mr-3">collection</p>
             <input
               value="Collection"
-              checked={mintType === "Collection"}
+              checked={isCollection}
               onChange={handleMintType}
               className="mr-8 bg-green"
               type="radio"
@@ -217,12 +232,15 @@ const MintComponent = (props: Props) => {
           </div>
         </div>
         <div className="md:basis-1/2 md:p-2 flex justify-center  md:items-start md:justify-end md:mx-4 w-full mt-8 md:mt-0">
-          {mintType === "SingleNFT" ? (
+          {!isCollection ? (
             <SingleNFT
               handleChange={handleChange}
               handleImageChange={handleImageChange}
               formValues={formValues}
               image={image}
+              collections={authedProfile?.collections}
+              collection={collection}
+              setCollection={setCollection}
             />
           ) : (
             <Collection

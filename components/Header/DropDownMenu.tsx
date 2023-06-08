@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Bars2Icon from "@heroicons/react/24/outline/Bars2Icon";
 import XMarkIcon from "@heroicons/react/24/outline/XMarkIcon";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,7 +16,7 @@ function DropDownMenu({ openMenu, closeMenu }: Props) {
   const navigation = [
     { name: "Marketplace", href: "/", current: true },
     { name: "Apply to join", href: "/apply", current: false },
-    { name: "Ranking", href: "/ranking", current: false },
+    // { name: "Ranking", href: "/ranking", current: false },
     { name: "About Us", href: "/about", current: false },
   ];
   //lets start animation

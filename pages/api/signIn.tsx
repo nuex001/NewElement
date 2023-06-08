@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   //Sign In
   if (req.method === "POST") {
-    const { address } = req.body;
+    const { address, banner } = req.body;
 
     const user = await Users.findOne({ address });
 
@@ -16,9 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const newUser = new Users({
         address,
         profilePicture: "",
-        bannerPicture: "",
+        bannerPicture: banner.src,
         bio: "",
         username: "",
+        collections: [],
         isArtist: true,
       });
 
@@ -26,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .save()
         .then(() => {
           console.log("Saved successfully." + newUser);
-          res.status(200).json({ message: "Registration successful" });
+          res.status(200).json({ user: newUser });
         })
         .catch((err: any) => {
           res.status(400).send({ message: "Saving failed" });

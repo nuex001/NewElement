@@ -1,18 +1,15 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
-
-import { Fragment } from "react";
-import { Popover, Transition } from "@headlessui/react";
+import { Bars2Icon } from "@heroicons/react/24/outline";
+import { Popover } from "@headlessui/react";
 import ProfileMenu from "./ProfileMenu";
 import { usePathname } from "next/navigation";
 import DropDownMenu from "./DropDownMenu";
-import { useAuthedProfile } from "../../context/UserContext";
 
 const navigation = [
   { name: "Marketplace", href: "/", current: true },
   { name: "Apply to join", href: "/apply", current: false },
-  { name: "Ranking", href: "/ranking", current: false },
+  // { name: "Ranking", href: "/ranking", current: false },
   { name: "About Us", href: "/about", current: false },
 ];
 function classNames(...classes: string[]) {

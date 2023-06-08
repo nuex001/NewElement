@@ -4,10 +4,16 @@ import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 import Link from "next/link";
 import axios from "axios";
 import { useAuthedProfile } from "../../context/UserContext";
+import banner1 from "../../assets/Banners/banner1.jpeg";
+import banner2 from "../../assets/Banners/banner2.jpg";
+import banner3 from "../../assets/Banners/banner3.jpg";
+import banner4 from "../../assets/Banners/banner4.jpeg";
+import banner5 from "../../assets/Banners/banner5.jpeg";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+const banners = [banner1, banner2, banner3, banner4, banner5];
 
 export default function ProfileMenu() {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
@@ -16,11 +22,13 @@ export default function ProfileMenu() {
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
 
+  const random = Math.floor(Math.random() * banners.length);
   useEffect(() => {
     if (!address) return;
     (async () => {
       const userData = {
         address,
+        banner: banners[random],
       };
       axios
         .post("/api/signIn", userData)

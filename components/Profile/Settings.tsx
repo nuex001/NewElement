@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { isValidEmail } from "../../lib/emailValidation";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 import SettingsModal from "./SettingsModal";
+import Link from "next/link";
 
 type Props = {};
 
@@ -63,6 +64,14 @@ const Settings = (props: Props) => {
         className={`flex w-screen   mt-24 lg:mt-32 items-center justify-center `}
       >
         <div className="flex mb-10 w-full px-5 md:px-0 md:w-[50vw] xl:w-[40vw] max-w-[1600px] flex-col items-center  text-left  font-ibmPlex">
+          <div className="absolute translate-x-[100%] lg:translate-x-[30px] lg:right-[70%] xl:translate-x-[200px] xl:right-1/2  left-0 hidden md:block ">
+            <Link
+              href="/profile"
+              className="font-ibmPlex cursor-pointer uppercase font-bold text-green text-xs -z-10"
+            >
+              {"<<<"} Back
+            </Link>
+          </div>
           <div className=" w-full  text-xs ">
             <form id="contact-form" onSubmit={handleSubmit} method="POST">
               <div className="flex flex-col font-semibold mb-10">

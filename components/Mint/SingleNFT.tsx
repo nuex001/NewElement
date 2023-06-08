@@ -12,6 +12,9 @@ type Props = {
   image: string;
   handleImageChange: any;
   handleChange: any;
+  collections: Array<string>;
+  collection: string;
+  setCollection: any;
 };
 
 const SingleNFT = ({
@@ -19,7 +22,15 @@ const SingleNFT = ({
   formValues,
   handleImageChange,
   handleChange,
+  collections,
+  collection,
+  setCollection,
 }: Props) => {
+  const handleCollectionChange = (collection: string) => {
+    setCollection(collection);
+  };
+  console.log(collection);
+
   return (
     <div className="flex flex-col items-center justify-center md:w-3/4 ">
       <label
@@ -88,7 +99,9 @@ const SingleNFT = ({
         <Menu as="div" className="relative inline-block w-full">
           <div>
             <Menu.Button className="inline-flex items-center text-sm mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out ">
-              <p> Collection</p>
+              <p className="text-gray-400">
+                {collection ? collection : "Collection"}
+              </p>
               <div className="flex-grow"></div>
               <ChevronDownIcon
                 className="mr-3 h-5 w-5 text-gray-400"
@@ -108,36 +121,23 @@ const SingleNFT = ({
           >
             <Menu.Items className="absolute right-0 z-10 w-full origin-top-right  border-green border cursor-pointer dark:bg-neutral-800 ">
               <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active
-                          ? "bg-neutral-700 text-gray-200"
-                          : "text-gray-400",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Collection 1
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active
-                          ? "bg-neutral-700 text-gray-200"
-                          : "text-gray-400",
-                        "block px-4 py-2 text-sm"
-                      )}
-                    >
-                      Collection 2
-                    </a>
-                  )}
-                </Menu.Item>
+                {collections?.map((collection, i) => (
+                  <Menu.Item key={i}>
+                    {({ active }) => (
+                      <div
+                        onClick={() => handleCollectionChange(collection)}
+                        className={classNames(
+                          active
+                            ? "bg-neutral-700 text-gray-200"
+                            : "text-gray-400",
+                          "block px-4 py-2 text-sm"
+                        )}
+                      >
+                        {collection}
+                      </div>
+                    )}
+                  </Menu.Item>
+                ))}
               </div>
             </Menu.Items>
           </Transition>

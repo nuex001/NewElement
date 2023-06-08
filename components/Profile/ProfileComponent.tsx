@@ -29,10 +29,6 @@ type Props = {
 const ProfileComponent = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
-  const [bio, setBio] = React.useState<any>({
-    bio: "",
-    open: false,
-  });
 
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
   console.log(authedProfile);

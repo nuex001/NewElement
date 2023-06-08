@@ -12,21 +12,22 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
+import CollectionComponent from "../components/Collection/CollectionComponent";
 
 const Home: NextPage = () => {
-  const [filter, setFilter] = useState("all");
+  const [isCollection, setIsCollection] = useState(false);
 
   const { contract: marketplace } = useContract(
     marketplaceContractAddress,
     "marketplace"
   );
-  const address = useAddress();
+  // const address = useAddress();
   const { data: listings, isLoading: loadingListings } =
     useActiveListings(marketplace);
 
-  const changeFilter = (filter: string) => {
-    setFilter(filter);
-  };
+  // const changeFilter = (filter: string) => {
+  //   setIsCollection(isCollection);
+  // };
 
   return (
     <>
@@ -49,52 +50,48 @@ const Home: NextPage = () => {
                 <>
                   <div className="flex font-ibmPlex text-xs mx-4 lg:mx-8 mb-5">
                     <button
-                      onClick={() => changeFilter("all")}
+                      onClick={() => setIsCollection(false)}
                       className={`${
-                        filter == "all" ? "border-b-white" : ""
+                        !isCollection ? "border-b-white" : ""
                       }  mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
                     >
                       ALL
                     </button>
                     <button
-                      onClick={() => changeFilter("auctions")}
+                      onClick={() => setIsCollection(true)}
                       className={`${
-                        filter === "auctions" ? "border-b-white" : ""
+                        isCollection ? "border-b-white" : ""
                       } mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
                     >
-                      AUCTIONS{" "}
-                    </button>
-                    <button
-                      onClick={() => changeFilter("drops")}
-                      className={`${
-                        filter === "drops" ? "border-b-white" : ""
-                      } hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
-                    >
-                      DROPS
+                      COLLECTIONS{" "}
                     </button>
                   </div>
-                  <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-                    {listings?.map((listing, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ y: 80, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: index * 0.1 + 0.4 }}
-                        exit={{
-                          opacity: 0,
-                          y: 90,
-                          transition: {
-                            ease: "easeInOut",
-                            delay: 1,
-                          },
-                        }}
-                      >
-                        <>
-                          <NFTCard key={index} listing={listing} />
-                        </>
-                      </motion.div>
-                    ))}
-                  </div>
+                  {!isCollection ? (
+                    <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
+                      {listings?.map((listing, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ y: 80, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: index * 0.1 + 0.4 }}
+                          exit={{
+                            opacity: 0,
+                            y: 90,
+                            transition: {
+                              ease: "easeInOut",
+                              delay: 1,
+                            },
+                          }}
+                        >
+                          <>
+                            <NFTCard key={index} listing={listing} />
+                          </>
+                        </motion.div>
+                      ))}
+                    </div>
+                  ) : (
+                    <CollectionComponent />
+                  )}
                 </>
               )
             }

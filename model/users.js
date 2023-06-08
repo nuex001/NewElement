@@ -26,6 +26,9 @@ const UsersSchema = new mongoose.Schema({
   email: {
     type: String,
   },
+  collections: {
+    type: Array,
+  },
   //   email: {
   //     type: String,
   //     required: [true, "must provide an email"],
