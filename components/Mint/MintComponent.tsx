@@ -152,7 +152,7 @@ const MintComponent = (props: Props) => {
     //Upload to IPFS
     {
       if (!isCollection) {
-        // Upload single NFT
+        // Upload single NFT IPFS
         try {
           (uploadUrl = await storage.upload(singleNFTData)),
             (resolvedUrl = await storage.resolveScheme(uploadUrl));
@@ -161,11 +161,11 @@ const MintComponent = (props: Props) => {
           alert("Something went wrong, please try again later.");
         }
       } else {
-        // Upload collection
+        // Upload collection IPFS
         try {
           (uploadUrl = await storage.upload(collectionData)),
-            (resolvedUrl = await storage.resolveScheme(uploadUrl)),
-            isModalOpen();
+            (resolvedUrl = await storage.resolveScheme(uploadUrl));
+          // isModalOpen();
         } catch (e) {
           console.log(e);
           alert("Something went wrong, please try again later.");
