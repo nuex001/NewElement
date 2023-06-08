@@ -13,7 +13,7 @@ type Props = {
   handleImageChange: any;
   handleChange: any;
   collections: Array<string>;
-  collection: string;
+  collection: any;
   setCollection: any;
 };
 
@@ -29,7 +29,6 @@ const SingleNFT = ({
   const handleCollectionChange = (collection: string) => {
     setCollection(collection);
   };
-  console.log(collection);
 
   return (
     <div className="flex flex-col items-center justify-center md:w-3/4 ">
@@ -100,7 +99,7 @@ const SingleNFT = ({
           <div>
             <Menu.Button className="inline-flex items-center text-sm mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out ">
               <p className="text-gray-400">
-                {collection ? collection : "Collection"}
+                {collection ? collection.name : "Collection"}
               </p>
               <div className="flex-grow"></div>
               <ChevronDownIcon
@@ -121,7 +120,7 @@ const SingleNFT = ({
           >
             <Menu.Items className="absolute right-0 z-10 w-full origin-top-right  border-green border cursor-pointer dark:bg-neutral-800 ">
               <div className="py-1">
-                {collections?.map((collection, i) => (
+                {collections?.map((collection: any, i) => (
                   <Menu.Item key={i}>
                     {({ active }) => (
                       <div
@@ -133,7 +132,7 @@ const SingleNFT = ({
                           "block px-4 py-2 text-sm"
                         )}
                       >
-                        {collection}
+                        {collection?.name}
                       </div>
                     )}
                   </Menu.Item>

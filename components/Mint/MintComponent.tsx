@@ -24,9 +24,10 @@ const MintComponent = (props: Props) => {
   const [imageCollection, setImageCollection] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [isCollection, setIsCollection] = useState(false);
-  const [collection, setCollection] = useState<string>("");
+  const [collection, setCollection] = useState<any>(null);
+  const [collectionAddress, setCollectionAddress] = useState<any>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-
+  const [allNftsFromWallet, setAllNftsFromWallet] = useState<any[]>([]);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const initialMintValues = {
@@ -47,33 +48,10 @@ const MintComponent = (props: Props) => {
 
   // Fetching NFTs from Wallet address
   const address = useAddress();
-  const contractAddress = "0xED5AF388653567Af2F388E6224dC7C4b3241C544";
+  // const address = "0x5E2A711B59cFdD589dac3eCE637Be50493A0A3F5";
+  // const contractAddress = "0x838B165A94067cA0D4D2def448a03EA4232bD431";
   // Change the testnet to mainnet when ready
   const baseURL = `https://eth-goerli.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
-
-  // useEffect(() => {
-  //   const options = {
-  //     method: "GET",
-  //     url: baseURL,
-  //     params: {
-  //       owner: address,
-  //       "contractAddresses[]": contractAddress,
-  //       withMetadata: "true",
-
-  //       pageSize: "100",
-  //     },
-  //     headers: { accept: "application/json" },
-  //   };
-
-  //   axios
-  //     .request(options)
-  //     .then(function (response) {
-  //       console.log(response.data);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // }, [address]);
 
   const storage = new ThirdwebStorage();
   const { mutateAsync: upload } = useStorageUpload();
@@ -111,6 +89,47 @@ const MintComponent = (props: Props) => {
   const handleMintType = () => {
     setIsCollection((prev) => !prev);
   };
+  const fetchAllFromWallet = () => {
+    const options = {
+      method: "GET",
+      url: baseURL,
+      params: {
+        owner: address,
+        // "contractAddresses[]": contractAddress,
+        withMetadata: "true",
+
+        pageSize: "100",
+      },
+      headers: { accept: "application/json" },
+    };
+    let allNftsFromWallet;
+    let collectionName = formValuesCollection.title;
+    console.log(collectionName);
+
+    axios
+      .request(options)
+      .then(function (response) {
+        allNftsFromWallet = response.data.ownedNfts;
+        console.log(allNftsFromWallet);
+
+        let collAddress;
+        allNftsFromWallet.forEach((nft: any) => {
+          if (nft.contractMetadata.name == collectionName) {
+            collAddress = nft.contract.address;
+          } else {
+            console.log("No collection found");
+          }
+        });
+        console.log(collAddress);
+
+        setCollectionAddress(collAddress);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+  // console.log(collectionAddress);
+
   // Upload to IPFS function
   // It triggers an alert with all the data when MINT Button is clicked
   const uploadToIpfs = async () => {
@@ -120,7 +139,7 @@ const MintComponent = (props: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collection: collection,
+      collectionContract: collection.collectionAddress,
       image: file,
     };
     let collectionData = {
@@ -131,6 +150,7 @@ const MintComponent = (props: Props) => {
     };
     {
       if (!isCollection) {
+        // Upload single NFT
         try {
           (uploadUrl = await storage.upload(singleNFTData)),
             (resolvedUrl = await storage.resolveScheme(uploadUrl));
@@ -139,12 +159,16 @@ const MintComponent = (props: Props) => {
           alert("Something went wrong, please try again later.");
         }
       } else {
+        // Upload collection
         try {
           (uploadUrl = await storage.upload(collectionData)),
-            (resolvedUrl = await storage.resolveScheme(uploadUrl));
+            (resolvedUrl = await storage.resolveScheme(uploadUrl)),
+            fetchAllFromWallet();
+
           axios
             .post("/api/addCollection", {
               collectionName: formValuesCollection.title,
+              collectionAddress,
               address,
             })
             .then((res) => {
@@ -154,6 +178,7 @@ const MintComponent = (props: Props) => {
             .catch((err) => {
               console.log(err);
             });
+          isModalOpen();
         } catch (e) {
           console.log(e);
           alert("Something went wrong, please try again later.");
@@ -168,7 +193,7 @@ const MintComponent = (props: Props) => {
     setImage("");
     setImageCollection("");
     setFile(null);
-    isModalOpen();
+
     console.log(uploadUrl);
   };
 
@@ -179,7 +204,6 @@ const MintComponent = (props: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
-
   return (
     <>
       <div className="flex w-screen  xl:max-w-[1600px] px-5 md:px-2 flex-col md:flex-row items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">

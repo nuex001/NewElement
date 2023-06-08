@@ -1,5 +1,5 @@
 import React from "react";
-import Settings from "../../components/Profile/Settings";
+import Settings from "../../components/Header/Settings";
 
 type Props = {};
 

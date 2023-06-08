@@ -12,11 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!data) {
       return res.status(400).send({ message: "Bad request" });
     }
-    const { collectionName, address } = req.body;
+    const { collectionName, address, collectionAddress } = req.body;
 
     await Users.findOneAndUpdate(
       { address },
-      { $push: { collections: collectionName } },
+      { $push: { collections: { name: collectionName, collectionAddress } } },
 
       {
         new: true,

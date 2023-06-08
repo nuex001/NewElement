@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         bio: "",
         username: "",
         collections: [],
-        isArtist: true,
+        isArtist: false,
       });
 
       newUser

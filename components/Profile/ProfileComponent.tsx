@@ -4,6 +4,7 @@ import { useStorageUpload } from "@thirdweb-dev/react";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
+import avatar from "../../assets/avatar.gif";
 import star from "../../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
 import { useAuthedProfile } from "../../context/UserContext";
@@ -31,7 +32,10 @@ const ProfileComponent = () => {
   const [editor, setEditor] = React.useState<any>(null);
 
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  console.log(authedProfile);
+  if (authedProfile) {
+    const { isArtist } = authedProfile;
+    console.log(isArtist);
+  }
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -265,8 +269,8 @@ const ProfileComponent = () => {
                 authedProfile
                   ? authedProfile?.profilePicture !== ""
                     ? authedProfile?.profilePicture
-                    : profile
-                  : profile
+                    : avatar
+                  : avatar
               }
               width={70}
               height={70}
