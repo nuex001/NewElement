@@ -1,9 +1,9 @@
 import React from "react";
+import type { NextPage } from "next";
+import CollectionListing from "../../components/Collection/CollectionListing";
 
-type Props = {};
-
-const CollectionListing = (props: Props) => {
+const CollectionListingPage: NextPage = () => {
   return <CollectionListing />;
 };
 
-export default CollectionListing;
+export default CollectionListingPage;
