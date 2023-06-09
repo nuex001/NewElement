@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 type Props = {};
 
-const profile = (props: Props) => {
+const Profile = (props: Props) => {
   const router = useRouter();
   const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
   useEffect(() => {
@@ -26,4 +26,4 @@ const profile = (props: Props) => {
   return <ProfileComponent />;
 };
 
-export default profile;
+export default Profile;

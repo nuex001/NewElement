@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import Settings from "../../components/Header/Settings";
+import ProfileSettings from "../../components/Header/ProfileSettings";
 import { useAuthedProfile } from "../../context/UserContext";
 import { useRouter } from "next/router";
 
 type Props = {};
 
-const settings = (props: Props) => {
+const Settings = (props: Props) => {
   const router = useRouter();
   const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
   useEffect(() => {
@@ -21,4 +21,4 @@ const settings = (props: Props) => {
   return <Settings />;
 };
 
-export default settings;
+export default Settings;

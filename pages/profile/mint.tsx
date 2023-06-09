@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 type Props = {};
 
-const mint = (props: Props) => {
+const Mint = (props: Props) => {
   const router = useRouter();
   const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
   useEffect(() => {
@@ -19,4 +19,4 @@ const mint = (props: Props) => {
   return <MintComponent />;
 };
 
-export default mint;
+export default Mint;
