@@ -6,7 +6,7 @@ import { collectionContractAddress } from "../../addresses";
 
 type Props = {};
 
-const CollectionComponent = (props: Props) => {
+const CollectionMarketPage = (props: Props) => {
   // const { contract } = useContract(collectionContractAddress);
 
   const listings = [
@@ -57,4 +57,4 @@ const CollectionComponent = (props: Props) => {
   );
 };
 
-export default CollectionComponent;
+export default CollectionMarketPage;

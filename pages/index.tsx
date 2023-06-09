@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
-import CollectionComponent from "../components/Collection/CollectionComponent";
+import CollectionMarketPage from "../components/Collection/CollectionMarketPage";
 
 const Home: NextPage = () => {
   const [isCollection, setIsCollection] = useState(false);
@@ -90,7 +90,7 @@ const Home: NextPage = () => {
                       ))}
                     </div>
                   ) : (
-                    <CollectionComponent />
+                    <CollectionMarketPage />
                   )}
                 </>
               )
