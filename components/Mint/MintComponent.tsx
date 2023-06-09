@@ -15,6 +15,9 @@ import axios from "axios";
 import { Alchemy, Network } from "alchemy-sdk";
 import MintModal from "./MintModal";
 import { useAuthedProfile } from "../../context/UserContext";
+import contractABI from "../../contracts/collectionContractABI";
+import { contractBytecode } from "../../contracts/collectionContractBytecode";
+import { ethers } from "ethers";
 
 type Props = {};
 
@@ -136,6 +139,8 @@ const MintComponent = (props: Props) => {
     setLoading(true);
     let uploadUrl;
     let resolvedUrl;
+    let imageUploadUrl;
+    let contractAddress;
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
@@ -146,9 +151,10 @@ const MintComponent = (props: Props) => {
       collectionName: formValuesCollection.title,
       description: formValuesCollection.description,
       token: formValuesCollection.token,
-      image: file,
     };
-
+    let collectionImage = {
+      file,
+    };
     //Upload to IPFS
     {
       if (!isCollection) {
@@ -164,7 +170,8 @@ const MintComponent = (props: Props) => {
         // Upload collection IPFS
         try {
           (uploadUrl = await storage.upload(collectionData)),
-            (resolvedUrl = await storage.resolveScheme(uploadUrl));
+            (resolvedUrl = await storage.resolveScheme(uploadUrl)),
+            (imageUploadUrl = await storage.upload(collectionImage));
           // isModalOpen();
         } catch (e) {
           console.log(e);
@@ -172,13 +179,35 @@ const MintComponent = (props: Props) => {
         }
       }
       // Deploy contract
+      if (collection) {
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
 
-      // setCollectionAddress();
+        await window?.ethereum?.request({ method: "eth_requestAccounts" });
+        const signer = provider.getSigner();
+        // Deploy the new contract
+        const factory = new ethers.ContractFactory(
+          contractABI,
+          contractBytecode,
+          signer
+        );
+        const contract = await factory.deploy(
+          formValues.title,
+          formValuesCollection.token
+        );
+        await contract.deployed();
+        contractAddress = contract.address;
+      } else {
+        // Mint NFT Contract
+      }
+
       // Update user database
       axios
         .post("/api/addCollection", {
           collectionName: formValuesCollection.title,
-          collectionAddress,
+          contractAddress,
+          collectionLogo: imageUploadUrl,
           address,
         })
         .then((res) => {
