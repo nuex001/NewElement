@@ -18,7 +18,7 @@ const Settings = (props: Props) => {
 
   // if (!authedProfile) return null;
 
-  return <Settings />;
+  return <ProfileSettings />;
 };
 
 export default Settings;
