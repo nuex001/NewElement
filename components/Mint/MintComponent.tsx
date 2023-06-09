@@ -28,9 +28,7 @@ const MintComponent = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [isCollection, setIsCollection] = useState(false);
   const [collection, setCollection] = useState<any>(null);
-  const [collectionAddress, setCollectionAddress] = useState<any>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [allNftsFromWallet, setAllNftsFromWallet] = useState<any[]>([]);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const initialMintValues = {
@@ -49,15 +47,12 @@ const MintComponent = (props: Props) => {
     initialCollectionValues
   );
 
-  // Fetching NFTs from Wallet address
   const address = useAddress();
-  // const address = "0x5E2A711B59cFdD589dac3eCE637Be50493A0A3F5";
-  // const contractAddress = "0x838B165A94067cA0D4D2def448a03EA4232bD431";
   // Change the testnet to mainnet when ready
-  const baseURL = `https://eth-goerli.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
+  // const baseURL = `https://eth-goerli.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
 
   const storage = new ThirdwebStorage();
-  const { mutateAsync: upload } = useStorageUpload();
+  // const { mutateAsync: upload } = useStorageUpload();
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
@@ -92,49 +87,9 @@ const MintComponent = (props: Props) => {
   const handleMintType = () => {
     setIsCollection((prev) => !prev);
   };
-  // const fetchAllFromWallet = () => {
-  //   const options = {
-  //     method: "GET",
-  //     url: baseURL,
-  //     params: {
-  //       owner: address,
-  //       // "contractAddresses[]": contractAddress,
-  //       withMetadata: "true",
 
-  //       pageSize: "100",
-  //     },
-  //     headers: { accept: "application/json" },
-  //   };
-  //   let allNftsFromWallet;
-  //   let collectionName = formValuesCollection.title;
-  //   console.log(collectionName);
+  // Minting NFT
 
-  //   axios
-  //     .request(options)
-  //     .then(function (response) {
-  //       allNftsFromWallet = response.data.ownedNfts;
-  //       console.log(allNftsFromWallet);
-
-  //       let collAddress;
-  //       allNftsFromWallet.forEach((nft: any) => {
-  //         if (nft.contractMetadata.name == collectionName) {
-  //           collAddress = nft.contract.address;
-  //         } else {
-  //           console.log("No collection found");
-  //         }
-  //       });
-  //       console.log(collAddress);
-
-  //       setCollectionAddress(collAddress);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // };
-  // console.log(collectionAddress);
-
-  // Upload to IPFS function
-  // It triggers an alert with all the data when MINT Button is clicked
   const mint = async () => {
     setLoading(true);
     let uploadUrl;
@@ -144,7 +99,7 @@ const MintComponent = (props: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collectionContract: collection?.collectionAddress,
+      collectionContract: collection?.contractAddress,
       image: file,
     };
     let collectionData = {
@@ -179,7 +134,7 @@ const MintComponent = (props: Props) => {
         }
       }
       // Deploy contract
-      if (collection) {
+      if (isCollection) {
         const provider = new ethers.providers.Web3Provider(
           window.ethereum as any
         );
