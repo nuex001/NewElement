@@ -139,7 +139,7 @@ const MintComponent = (props: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collectionContract: collection.collectionAddress,
+      collectionContract: collection?.collectionAddress,
       image: file,
     };
     let collectionData = {

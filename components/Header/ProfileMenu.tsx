@@ -9,7 +9,6 @@ import banner2 from "../../assets/Banners/banner2.jpg";
 import banner3 from "../../assets/Banners/banner3.jpg";
 import banner4 from "../../assets/Banners/banner4.jpeg";
 import banner5 from "../../assets/Banners/banner5.jpeg";
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -21,6 +20,11 @@ export default function ProfileMenu() {
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
+
+  const disconnectWalletAndUser = () => {
+    disconnectWallet();
+    setAuthedProfile(null);
+  };
 
   const random = Math.floor(Math.random() * banners.length);
   useEffect(() => {
@@ -41,6 +45,7 @@ export default function ProfileMenu() {
         });
     })();
   }, [address]);
+  // console.log("authedProfile", authedProfile);
 
   return (
     <Menu as="div" className="relative inline-block">
@@ -132,7 +137,7 @@ export default function ProfileMenu() {
                           active ? "bg-gray-400 text-green" : "text-green",
                           "block px-4 py-2 text-xs  hover:bg-gray-400"
                         )}
-                        onClick={() => disconnectWallet()}
+                        onClick={disconnectWalletAndUser}
                       >
                         <h1>
                           {">"}
