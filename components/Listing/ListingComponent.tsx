@@ -56,11 +56,17 @@ const ListingComponent: NextPage = () => {
   const [bidAmount, setBidAmount] = useState<string>("");
 
   if (loadingListing) {
-    return <div className={styles.loadingOrError}>Loading...</div>;
+    return (
+      <div className={`font-ibmPlex ${styles.loadingOrError}`}>Loading...</div>
+    );
   }
 
   if (!listing) {
-    return <div className={styles.loadingOrError}>Listing not found</div>;
+    return (
+      <div className={`font-ibmPlex ${styles.loadingOrError}`}>
+        Listing not found
+      </div>
+    );
   }
 
   async function createBidOrOffer() {
@@ -96,23 +102,6 @@ const ListingComponent: NextPage = () => {
       alert(error);
     }
   }
-
-  // async function buyNft() {
-  //   try {
-  //     // Ensure user is on the correct network
-  //     if (networkMismatch) {
-  //       switchNetwork && switchNetwork(ChainId.Mumbai);
-  //       return;
-  //     }
-
-  //     // Simple one-liner for buying the NFT
-  //     await marketplace?.buyoutListing(listingId, 1);
-  //     alert("NFT bought successfully!");
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error);
-  //   }
-  // }
 
   // Modal Place Bid
   const isModalOpen = () => {
