@@ -192,6 +192,7 @@ const MintComponent = (props: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
+  if (!authedProfile) return null;
   return (
     <>
       <div className="flex w-screen  xl:max-w-[1600px] px-5 md:px-2 flex-col md:flex-row items-center md:items-start  mt-28  justify-center bg-black overflow-hidden">

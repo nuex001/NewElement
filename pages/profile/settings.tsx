@@ -9,10 +9,8 @@ const Settings = (props: Props) => {
   const router = useRouter();
   const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
   useEffect(() => {
-    if (!loading) {
-      if (!authedProfile) {
-        router.push("/");
-      }
+    if (!authedProfile) {
+      router.push("/");
     }
   }, [router, authedProfile]);
 

@@ -3,6 +3,7 @@ import { isValidEmail } from "../../lib/emailValidation";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 import SettingsModal from "./SettingsModal";
 import Link from "next/link";
+import { useAuthedProfile } from "../../context/UserContext";
 
 type Props = {};
 
@@ -13,6 +14,7 @@ const ProfileSettings = (props: Props) => {
   const [errorEmail, setErrorEmail] = React.useState(false);
   const [errorMessageEmail, setErrorMessageEmail] = React.useState("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { authedProfile } = useAuthedProfile();
 
   const handleChange = (e: any) => {
     const { value } = e.target;
@@ -58,6 +60,7 @@ const ProfileSettings = (props: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
+  if (!authedProfile) return null;
   return (
     <>
       <div

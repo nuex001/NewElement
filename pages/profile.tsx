@@ -9,19 +9,13 @@ const Profile = (props: Props) => {
   const router = useRouter();
   const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
   useEffect(() => {
-    console.log("1st");
+    if (!authedProfile) {
+      router.push("/");
+    }
   }, []);
-
-  if (!loading && !authedProfile) {
-    router.push("/");
-    console.log("2nd");
-  }
-
-  console.log(authedProfile);
 
   if (loading) return null;
   if (!authedProfile) return null;
-  console.log("3rd");
 
   return <ProfileComponent />;
 };
