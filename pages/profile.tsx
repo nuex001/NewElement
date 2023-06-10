@@ -12,7 +12,7 @@ const Profile = (props: Props) => {
     if (!authedProfile) {
       router.push("/");
     }
-  }, []);
+  }, [authedProfile]);
 
   if (loading) return null;
   if (!authedProfile) return null;
