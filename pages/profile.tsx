@@ -1,23 +1,33 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ProfileComponent from "../components/Profile/ProfileComponent";
-import { useAuthedProfile } from "../context/UserContext";
-import { useRouter } from "next/router";
+import { getCookie } from "cookies-next";
+import connectDB from "../lib/connectDB";
+import Users from "../model/users";
 
-type Props = {};
+type Props = {
+  user: any;
+};
 
-const Profile = (props: Props) => {
-  const router = useRouter();
-  const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
-  useEffect(() => {
-    if (!authedProfile) {
-      router.push("/");
-    }
-  }, [authedProfile]);
-
-  if (loading) return null;
-  if (!authedProfile) return null;
-
+const Profile = ({ user }: Props) => {
   return <ProfileComponent />;
+};
+export const getServerSideProps = async ({ req, res }: any) => {
+  let auth = getCookie("auth", { req, res });
+  await connectDB();
+  const json = await Users.findOne({ address: auth });
+  let user = JSON.parse(JSON.stringify(json));
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      props: { user },
+    };
+  }
 };
 
 export default Profile;

@@ -118,7 +118,7 @@ const SingleNFT = ({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 max-h-36 overflow-y-scroll z-10 w-full origin-top-right  border-green border cursor-pointer dark:bg-neutral-800 ">
+            <Menu.Items className="absolute right-0 h-10 max-h-36 overflow-y-scroll z-10 w-full origin-top-right  border-green border cursor-pointer dark:bg-neutral-800 ">
               <div className="py-1">
                 {collections?.map((collection: any, i) => (
                   <Menu.Item key={i}>

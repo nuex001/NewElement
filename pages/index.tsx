@@ -9,25 +9,31 @@ import {
 import { useEffect, useState } from "react";
 import { marketplaceContractAddress } from "../addresses";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuthedProfile } from "../context/UserContext";
 
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
 import CollectionMarketPage from "../components/Collection/CollectionMarketPage";
+import { getCookie } from "cookies-next";
+import Users from "../model/users";
+import connectDB from "../lib/connectDB";
 
-const Home: NextPage = () => {
+const Home: NextPage = ({ user }: any) => {
   const [isCollection, setIsCollection] = useState(false);
 
   const { contract: marketplace } = useContract(
     marketplaceContractAddress,
     "marketplace"
   );
-  // const address = useAddress();
   const { data: listings, isLoading: loadingListings } =
     useActiveListings(marketplace);
+  const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
-  // const changeFilter = (filter: string) => {
-  //   setIsCollection(isCollection);
-  // };
+  useEffect(() => {
+    if (user) {
+      setAuthedProfile(user);
+    }
+  }, [user]);
 
   return (
     <>
@@ -100,6 +106,16 @@ const Home: NextPage = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps = async ({ req, res }: any) => {
+  let auth = getCookie("auth", { req, res });
+
+  await connectDB();
+  const json = await Users.findOne({ address: auth });
+  let user = JSON.parse(JSON.stringify(json));
+
+  return { props: { user } };
 };
 
 export default Home;

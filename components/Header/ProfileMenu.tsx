@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import banner2 from "../../assets/Banners/banner2.jpg";
 import banner3 from "../../assets/Banners/banner3.jpg";
 import banner4 from "../../assets/Banners/banner4.jpeg";
 import banner5 from "../../assets/Banners/banner5.jpeg";
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -21,13 +22,8 @@ export default function ProfileMenu() {
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
 
-  const disconnectWalletAndUser = () => {
-    disconnectWallet();
-    setAuthedProfile(null);
-  };
-
-  const random = Math.floor(Math.random() * banners.length);
-  useEffect(() => {
+  const connectWalletAndUser = () => {
+    connectWithMetamask();
     if (!address) return;
     (async () => {
       const userData = {
@@ -44,15 +40,33 @@ export default function ProfileMenu() {
           console.log(err);
         });
     })();
-  }, [address]);
-  // console.log("authedProfile", authedProfile);
+  };
+
+  const disconnectWalletAndUser = () => {
+    const userData = {
+      address,
+    };
+    axios
+      .delete("/api/signIn")
+      .then((res) => {
+        console.log(res);
+        setAuthedProfile(res.data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    disconnectWallet();
+    setAuthedProfile(null);
+  };
+
+  const random = Math.floor(Math.random() * banners.length);
 
   return (
     <Menu as="div" className="relative inline-block">
       {!address ? (
         <button
           className="text-center w-content z-0 font-ibmPlex text-xs text-green border border-green bg-white bg-opacity-20 hover:bg-opacity-40 p-1"
-          onClick={() => connectWithMetamask()}
+          onClick={connectWalletAndUser}
         >
           <h1>Connect Wallet</h1>
         </button>
@@ -132,7 +146,7 @@ export default function ProfileMenu() {
                   {({ active }) => (
                     <>
                       <Link
-                        href="#"
+                        href="/"
                         className={classNames(
                           active ? "bg-gray-400 text-green" : "text-green",
                           "block px-4 py-2 text-xs  hover:bg-gray-400"

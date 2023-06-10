@@ -1,20 +1,27 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MintComponent from "../../components/Mint/MintComponent";
-import { useAuthedProfile } from "../../context/UserContext";
-import { useRouter } from "next/router";
+
+import { getCookie } from "cookies-next";
 
 type Props = {};
 
 const Mint = (props: Props) => {
-  const router = useRouter();
-  const { setAuthedProfile, authedProfile, loading } = useAuthedProfile();
-  useEffect(() => {
-    if (!authedProfile) {
-      router.push("/");
-    }
-  }, [router, authedProfile]);
-  // if (!authedProfile) return null;
   return <MintComponent />;
 };
+export const getServerSideProps = async ({ req, res }: any) => {
+  let auth = getCookie("auth", { req, res });
 
+  if (!auth) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      props: { auth },
+    };
+  }
+};
 export default Mint;

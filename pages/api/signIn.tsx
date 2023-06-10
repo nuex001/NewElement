@@ -1,6 +1,7 @@
 import Users from "../../model/users";
 import connectDB from "../../lib/connectDB";
 import type { NextApiRequest, NextApiResponse } from "next";
+import cookie from "cookie";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await connectDB();
@@ -34,8 +35,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           console.log("Saving failed.", err);
         });
     } else {
-      res.status(200).json({ message: "User already exists", user });
+      res.setHeader(
+        "Set-Cookie",
+        cookie.serialize("auth", address, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV !== "development",
+          sameSite: "strict",
+          maxAge: 3600,
+          path: "/",
+        })
+      );
+      res.status(200).json({ message: "Welcome back", user });
     }
+  } else if (
+    //Sign out
+    req.method === "DELETE"
+  ) {
+    res.setHeader("Set-Cookie", [
+      cookie.serialize("auth", "", {
+        maxAge: -1,
+        path: "/",
+      }),
+    ]);
+
+    return res.status(200).json({
+      success: "Successfully logged out",
+    });
   }
 };
 
