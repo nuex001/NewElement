@@ -55,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           path: "/",
         })
       );
-      res.status(200).json({ message: "Welcome back" });
+      return res.status(200).json({ message: "Welcome back" });
     }
   } else if (
     //Sign out

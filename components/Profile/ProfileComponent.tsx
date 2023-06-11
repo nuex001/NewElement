@@ -27,15 +27,17 @@ type Props = {
   croppedImg: string | StaticImageData;
 };
 
-const ProfileComponent = ({ user }: any) => {
+const ProfileComponent = ({ authedProfile }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
 
-  const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  const { setAuthedProfile } = useAuthedProfile();
   if (authedProfile) {
     const { isArtist } = authedProfile;
     // console.log(isArtist);
   }
+  // console.log(user);
+  // setAuthedProfile(user);
   // useEffect(() => {
   //   if (user) {
   //     setAuthedProfile(user);
@@ -337,8 +339,16 @@ const ProfileComponent = ({ user }: any) => {
         </div>
         <div className="flex flex-col w-full mt-4 text-left text-xs">
           {/* Username */}
-          <Username loading={loading} setLoading={setLoading} />
-          <Bio loading={loading} setLoading={setLoading} />
+          <Username
+            authedProfile={authedProfile}
+            loading={loading}
+            setLoading={setLoading}
+          />
+          <Bio
+            authedProfile={authedProfile}
+            loading={loading}
+            setLoading={setLoading}
+          />
         </div>
         <div className="flex  flex-col-reverse md:flex-col">
           <div className="flex md:mt-5 h-full flex-wrap">

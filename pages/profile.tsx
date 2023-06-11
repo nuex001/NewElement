@@ -10,11 +10,11 @@ type Props = {
 };
 
 const Profile = ({ user }: Props) => {
-  const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  React.useEffect(() => {
-    setAuthedProfile(user);
-  }, [user]);
-  return <ProfileComponent />;
+  // const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  // React.useEffect(() => {
+  //   setAuthedProfile(user);
+  // }, [user]);
+  return <ProfileComponent authedProfile={user} />;
 };
 export const getServerSideProps = async ({ req, res }: any) => {
   let auth = getCookie("auth", { req, res });

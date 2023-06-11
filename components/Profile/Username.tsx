@@ -5,15 +5,16 @@ import { useAuthedProfile } from "../../context/UserContext";
 type Props = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  authedProfile: any;
 };
 
-const Username = ({ loading, setLoading }: Props) => {
+const Username = ({ loading, setLoading, authedProfile }: Props) => {
   const [username, setUsername] = React.useState<any>({
     username: "",
     open: false,
   });
 
-  const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  const { setAuthedProfile } = useAuthedProfile();
 
   //Username change
 

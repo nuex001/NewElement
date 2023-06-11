@@ -60,7 +60,6 @@ const ProfileSettings = (props: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
-  if (!authedProfile) return null;
   return (
     <>
       <div
