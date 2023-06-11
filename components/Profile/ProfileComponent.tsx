@@ -27,7 +27,7 @@ type Props = {
   croppedImg: string | StaticImageData;
 };
 
-const ProfileComponent = () => {
+const ProfileComponent = ({ user }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
 
@@ -36,6 +36,12 @@ const ProfileComponent = () => {
     const { isArtist } = authedProfile;
     // console.log(isArtist);
   }
+  // useEffect(() => {
+  //   if (user) {
+  //     setAuthedProfile(user);
+  //   }
+  // }, []);
+  console.log(authedProfile);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -179,7 +185,7 @@ const ProfileComponent = () => {
       cropperOpen: true,
     });
   };
-  if (!authedProfile) return null;
+
   return (
     <div
       className={`flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${

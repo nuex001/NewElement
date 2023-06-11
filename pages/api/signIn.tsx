@@ -27,6 +27,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       newUser
         .save()
         .then(() => {
+          res.setHeader(
+            "Set-Cookie",
+            cookie.serialize("auth", address, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "strict",
+              maxAge: 3600,
+              path: "/",
+            })
+          );
           console.log("Saved successfully." + newUser);
           res.status(200).json({ user: newUser });
         })
@@ -45,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           path: "/",
         })
       );
-      res.status(200).json({ message: "Welcome back", user });
+      res.status(200).json({ message: "Welcome back" });
     }
   } else if (
     //Sign out
