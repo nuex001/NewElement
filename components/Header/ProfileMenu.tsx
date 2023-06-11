@@ -64,6 +64,7 @@ export default function ProfileMenu() {
     (async () => {
       const userData = {
         address,
+        banner: banners[random],
       };
       axios
         .post("/api/signIn", userData)

@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const newUser = new Users({
         address,
         profilePicture: "",
-        bannerPicture: banner.src,
+        bannerPicture: banner?.src,
         bio: "",
         username: "",
         collections: [],
