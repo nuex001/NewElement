@@ -20,7 +20,7 @@ import connectDB from "../lib/connectDB";
 
 const Home: NextPage = ({ user }: any) => {
   const [isCollection, setIsCollection] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const { contract: marketplace } = useContract(
     marketplaceContractAddress,
     "marketplace"
@@ -38,7 +38,11 @@ const Home: NextPage = ({ user }: any) => {
   return (
     <>
       {/* Content */}
-      <div className="flex w-screen overflow-hidden mt-24 max-w-[1600px] flex-col items-center content-center">
+      <div
+        className={`flex w-screen overflow-hidden mt-24 max-w-[1600px] flex-col items-center content-center ${
+          loading && `cursor-progress`
+        }`}
+      >
         <AnimatePresence>
           <div className="mb-5 w-full px-1 lg:px-0">
             {
@@ -90,7 +94,11 @@ const Home: NextPage = ({ user }: any) => {
                           }}
                         >
                           <>
-                            <NFTCard key={index} listing={listing} />
+                            <NFTCard
+                              key={index}
+                              listing={listing}
+                              setLoading={setLoading}
+                            />
                           </>
                         </motion.div>
                       ))}

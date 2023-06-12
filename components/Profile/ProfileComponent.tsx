@@ -20,6 +20,7 @@ import Link from "next/link";
 import axios from "axios";
 import Username from "./Username";
 import Bio from "./Bio";
+import Router from "next/router";
 
 type Props = {
   cropperOpen: boolean;
@@ -694,57 +695,68 @@ const ProfileComponent = ({ authedProfile }: any) => {
             </>
           ) : null}
           {/* SAVED */}
+
           <div className="flex flex-col">
             <h3 className="font-bold">SAVED</h3>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              {/* nft 1 */}
-              <div className="flex  flex-col h-full items-start w-max ">
-                <div className="">
-                  <Image
-                    src={nft5}
-                    alt="nft7"
-                    width={150}
-                    height={200}
-                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                  />{" "}
-                </div>
-                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <div className=" flex ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6 ">
-                        Reserve <br /> Price
-                      </p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold ">
-                        1.1 <br /> ETH
-                      </p>
-                    </div>
+              {authedProfile.savedNfts.map((nft: any) => (
+                <div className="flex  flex-col h-full items-start w-max ">
+                  <div
+                    onClick={() => {
+                      Router.push({
+                        pathname: `/listing/${nft.id}`,
+                      });
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Image
+                      src={nft.asset.image}
+                      alt="nft7"
+                      width={150}
+                      height={200}
+                      className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                    />{" "}
                   </div>
+                  <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                    <div className=" flex ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6 ">
+                          Reserve <br /> Price
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold ">
+                          1.1 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
 
-                  <div className=" flex mt-3  ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6  ">
-                        Current <br /> Bid
-                      </p>
+                    <div className=" flex mt-3  ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6  ">
+                          Current <br /> Bid
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold text-green">
+                          2.5 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" flex mt-3">
                       <div className="flex grow"></div>
-                      <p className="font-bold text-green">
-                        2.5 <br /> ETH
-                      </p>
+                      <div className=" flex font-bold text-green">
+                        {" "}
+                        <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                      </div>
+                      <div className="flex grow"></div>
                     </div>
-                  </div>
-                  <div className=" flex mt-3">
-                    <div className="flex grow"></div>
-                    <div className=" flex font-bold text-green">
-                      {" "}
-                      <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
-                    </div>
-                    <div className="flex grow"></div>
                   </div>
                 </div>
-              </div>
+              ))}
+              {/* nft 1 */}
+
               {/* nft 2 */}
             </div>
           </div>

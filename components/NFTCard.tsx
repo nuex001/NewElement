@@ -6,14 +6,17 @@ import Link from "next/link";
 import profile from "../assets/PROFILE.png";
 import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";
+import axios from "axios";
+import { useAddress } from "@thirdweb-dev/react";
 
 type Props = {
   listing: object | any;
+  setLoading: Function;
 };
-const NFTCard: FunctionComponent<Props> = ({ listing }) => {
+const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
-
+  const address = useAddress();
   // useEffect(() => {
   //   const listing = listings.find(
   //     (listing: any) => listing.asset.id === nftItem.id
@@ -23,11 +26,26 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
   //     setPrice(listing.buyoutCurrencyValuePerToken.displayValue);
   //   }
   // }, [listings, nftItem]);
-
+  const handleSaveToProfile = () => {
+    setLoading(true);
+    const data = {
+      nft: listing,
+      address: address,
+    };
+    axios
+      .post("/api/saveNft", data)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setLoading(false);
+  };
   return (
     <>
       {listing ? (
-        <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between">
+        <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between ">
           <div className="flex flex-col h-full">
             {/* <div className="flex grow"></div> */}
             <div
@@ -95,7 +113,10 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                 </div>
               </div>
               <div className=" flex mt-3">
-                <div className="font-bold flex">
+                <button
+                  onClick={handleSaveToProfile}
+                  className="font-bold flex"
+                >
                   <Image
                     className=" h-5"
                     src={ribbon}
@@ -103,7 +124,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing }) => {
                     width={20}
                     alt={""}
                   />
-                </div>
+                </button>
 
                 <div className="flex grow"></div>
                 <div className=" flex font-bold text-green">

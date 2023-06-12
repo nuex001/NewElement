@@ -29,6 +29,9 @@ const UsersSchema = new mongoose.Schema({
   collections: {
     type: Array,
   },
+  savedNfts: {
+    type: Array,
+  },
   //   email: {
   //     type: String,
   //     required: [true, "must provide an email"],
