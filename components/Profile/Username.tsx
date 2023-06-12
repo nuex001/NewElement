@@ -60,6 +60,7 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
       })
       .finally(() => setLoading(false));
   };
+  console.log(authedProfile);
 
   return (
     <>
@@ -69,17 +70,16 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
         htmlFor="input-username"
         onClick={handleUsernameOpen}
       >
-        {authedProfile ? (
-          authedProfile?.username !== "" ? (
-            <h1 className="text-2xl mb-1 font-bold">
-              {" "}
-              {authedProfile?.username}
-            </h1>
-          ) : (
-            <h1 className="text-2xl mb-1 font-bold">JOH KANE</h1>
-          )
+        {authedProfile?.name ? (
+          <h1 className="text-2xl mb-1 font-bold"> {authedProfile.username}</h1>
         ) : (
-          <h1 className="text-2xl mb-3 font-bold">JOH KANE</h1>
+          <h1 className="text-2xl mb-1 font-bold text-green">
+            {" "}
+            {authedProfile.address
+              .slice(0, 6)
+              .concat("...")
+              .concat(authedProfile?.address.slice(-4))}
+          </h1>
         )}
       </label>
       {username.open && (

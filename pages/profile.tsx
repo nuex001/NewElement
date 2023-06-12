@@ -10,10 +10,10 @@ type Props = {
 };
 
 const Profile = ({ user }: Props) => {
-  // const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  // React.useEffect(() => {
-  //   setAuthedProfile(user);
-  // }, [user]);
+  const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  React.useEffect(() => {
+    setAuthedProfile(user);
+  }, [user]);
   return <ProfileComponent authedProfile={user} />;
 };
 export const getServerSideProps = async ({ req, res }: any) => {

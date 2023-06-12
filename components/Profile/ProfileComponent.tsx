@@ -32,10 +32,11 @@ const ProfileComponent = ({ authedProfile }: any) => {
   const [editor, setEditor] = React.useState<any>(null);
 
   const { setAuthedProfile } = useAuthedProfile();
-  if (authedProfile) {
-    const { isArtist } = authedProfile;
-    // console.log(isArtist);
-  }
+  let isArtist = true;
+  // if (authedProfile) {
+  //   isArtist = authedProfile.isArtist;
+  //   // console.log(isArtist);
+  // }
   // console.log(user);
   // setAuthedProfile(user);
   // useEffect(() => {
@@ -283,16 +284,20 @@ const ProfileComponent = ({ authedProfile }: any) => {
               alt="profile"
             />
           </label>
-          <Image
-            className="ml-4 mb-1 h-5 self-center"
-            src={star}
-            width={20}
-            height={10}
-            alt="star"
-          />
-          <p className="text-xs pl-1 font-bold tracking-wider self-center">
-            ARTIST
-          </p>
+          {isArtist ? (
+            <>
+              <Image
+                className="ml-4 mb-1 h-5 self-center"
+                src={star}
+                width={20}
+                height={10}
+                alt="star"
+              />
+              <p className="text-xs pl-1 font-bold tracking-wider self-center">
+                ARTIST
+              </p>{" "}
+            </>
+          ) : null}
         </div>
         <div className="w-fit border border-green flex flex-col align-center">
           {picture.cropperOpen && (
@@ -350,338 +355,344 @@ const ProfileComponent = ({ authedProfile }: any) => {
             setLoading={setLoading}
           />
         </div>
-        <div className="flex  flex-col-reverse md:flex-col">
-          <div className="flex md:mt-5 h-full flex-wrap">
-            <div className="flex flex-col mr-10 w-16">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
-                5
-              </h1>
-              <p className="text-xs">
-                TOTAL
-                <br /> LISTED
-              </p>
-            </div>
-            <div className="flex flex-col mr-10 w-16">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                2
-              </h1>
-              <p className="text-xs">
-                TOTAL
-                <br /> SOLD
-              </p>
-            </div>
-            <div className="flex grow md:hidden"></div>
+        {isArtist ? ( // if artist
+          <div className="flex  flex-col-reverse md:flex-col">
+            <div className="flex md:mt-5 h-full flex-wrap">
+              <div className="flex flex-col mr-10 w-16">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
+                  5
+                </h1>
+                <p className="text-xs">
+                  TOTAL
+                  <br /> LISTED
+                </p>
+              </div>
+              <div className="flex flex-col mr-10 w-16">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                  2
+                </h1>
+                <p className="text-xs">
+                  TOTAL
+                  <br /> SOLD
+                </p>
+              </div>
+              <div className="flex grow md:hidden"></div>
 
-            <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                0.1
-              </h1>
-              <p className="text-xs">
-                PROFIT
-                <br /> IN ETH
-              </p>
-            </div>
-            <div className="basis-full h-0"></div>
-            <div className="flex flex-col mr-10 w-16">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                4
-              </h1>
+              <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                  0.1
+                </h1>
+                <p className="text-xs">
+                  PROFIT
+                  <br /> IN ETH
+                </p>
+              </div>
+              <div className="basis-full h-0"></div>
+              <div className="flex flex-col mr-10 w-16">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                  4
+                </h1>
 
-              <p className="text-xs">
-                TOTAL
-                <br /> COLLECTED
-              </p>
+                <p className="text-xs">
+                  TOTAL
+                  <br /> COLLECTED
+                </p>
+              </div>
+              <div className="flex flex-col mr-10 w-16">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                  4
+                </h1>
+                <p className="text-xs">
+                  TOTAL
+                  <br /> FLIPPED
+                </p>
+              </div>
+              <div className="flex grow md:hidden"></div>
+              <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
+                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                  1.1
+                </h1>
+                <p className="text-xs">
+                  P/L
+                  <br /> IN ETH
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col mr-10 w-16">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                4
-              </h1>
-              <p className="text-xs">
-                TOTAL
-                <br /> FLIPPED
-              </p>
-            </div>
-            <div className="flex grow md:hidden"></div>
-            <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
-              <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                1.1
-              </h1>
-              <p className="text-xs">
-                P/L
-                <br /> IN ETH
-              </p>
-            </div>
+            <div className="flex overflow-hidden md:w-[60%]">
+              <Link
+                href="/profile/mint"
+                className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
+              >
+                LIST NEW
+              </Link>
+            </div>{" "}
           </div>
-          <div className="flex overflow-hidden md:w-[60%]">
-            <Link
-              href="/profile/mint"
-              className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
-            >
-              LIST NEW
-            </Link>
-          </div>{" "}
-        </div>
-        <div className="flex flex-col font-ibmPlex mt-10 md:mt-0 text-left">
-          <h3 className="font-bold">LISTED</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
-            {/* NFT 1  */}
-            <div className="flex md: flex-col h-full items-start w-max ">
-              <div className="">
-                <Image
-                  src={nft7}
-                  alt="nft7"
-                  width={150}
-                  height={200}
-                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                />{" "}
-              </div>
-              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                <div className=" flex ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6 ">
-                      Reserve NOt
-                      <br /> met
-                    </p>
-                    <div className="flex grow"></div>
+        ) : null}
+        <div className="flex flex-col font-ibmPlex mt-10 md:mt-4 text-left">
+          {isArtist ? (
+            <>
+              <h3 className="font-bold">LISTED</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
+                {/* NFT 1  */}
+                <div className="flex md: flex-col h-full items-start w-max ">
+                  <div className="">
+                    <Image
+                      src={nft7}
+                      alt="nft7"
+                      width={150}
+                      height={200}
+                      className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                    />{" "}
                   </div>
-                </div>
-              </div>
-            </div>
-            {/* NFT 2  */}
-
-            <div className="flex  flex-col h-full items-start w-max ">
-              <div className="">
-                <Image
-                  src={nft6}
-                  alt="nft7"
-                  width={150}
-                  height={200}
-                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                />{" "}
-              </div>
-              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                <div className=" flex ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6 ">
-                      Reserve <br /> Price
-                    </p>
-                    <div className="flex grow"></div>
-                    <p className="font-bold ">
-                      1.1 <br /> ETH
-                    </p>
-                  </div>
-                </div>
-
-                <div className=" flex mt-3  ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6  ">
-                      Current <br /> Bid
-                    </p>
-                    <div className="flex grow"></div>
-                    <p className="font-bold text-green">
-                      2.5 <br /> ETH
-                    </p>
-                  </div>
-                </div>
-                <div className=" flex mt-3">
-                  <div className="flex grow"></div>
-                  <div className=" flex font-bold text-green">
-                    {" "}
-                    <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
-                  </div>
-                  <div className="flex grow"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* NFT 3  */}
-            <div className="flex  flex-col h-full items-start w-max">
-              <div className="">
-                <Image
-                  src={nft4}
-                  alt="nft7"
-                  width={150}
-                  height={200}
-                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                />{" "}
-              </div>
-              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                <div className=" flex ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6 ">
-                      Reserve <br /> Price
-                    </p>
-                    <div className="flex grow"></div>
-                    <p className="font-bold ">
-                      1.1 <br /> ETH
-                    </p>
-                  </div>
-                </div>
-
-                <div className=" flex mt-3  ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6  ">
-                      Current <br /> Bid
-                    </p>
-                    <div className="flex grow"></div>
-                    <p className="font-bold text-green">
-                      2.5 <br /> ETH
-                    </p>
-                  </div>
-                </div>
-                <div className=" flex mt-3">
-                  <div className="flex grow"></div>
-                  <div className=" flex font-bold text-green">
-                    {" "}
-                    <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
-                  </div>
-                  <div className="flex grow"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* NFT 4  */}
-            <div className="flex  flex-col h-full items-start w-max ">
-              <div className="">
-                <Image
-                  src={nft10}
-                  alt="nft7"
-                  width={150}
-                  height={200}
-                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                />{" "}
-              </div>
-              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                <div className=" flex ">
-                  <div className=" flex w-full">
-                    {" "}
-                    <p className="pr-6 ">
-                      Reserve not
-                      <br /> met
-                    </p>
-                    <div className="flex grow"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SOLD */}
-          <div className="flex flex-col">
-            <h3 className="font-bold">SOLD</h3>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              {/* nft 1 */}
-              <div className="flex  flex-col h-full items-start w-max ">
-                <div className="">
-                  <Image
-                    src={nft1}
-                    alt="nft7"
-                    width={150}
-                    height={200}
-                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                  />{" "}
-                </div>
-                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <div className=" flex ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6 ">
-                        Sale <br /> Price
-                      </p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold ">
-                        1.1 <br /> ETH
-                      </p>
+                  <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                    <div className=" flex ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6 ">
+                          Reserve NOt
+                          <br /> met
+                        </p>
+                        <div className="flex grow"></div>
+                      </div>
                     </div>
                   </div>
+                </div>
+                {/* NFT 2  */}
 
-                  <div className=" flex mt-3  ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6  ">Owner</p>
+                <div className="flex  flex-col h-full items-start w-max ">
+                  <div className="">
+                    <Image
+                      src={nft6}
+                      alt="nft7"
+                      width={150}
+                      height={200}
+                      className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                    />{" "}
+                  </div>
+                  <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                    <div className=" flex ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6 ">
+                          Reserve <br /> Price
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold ">
+                          1.1 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className=" flex mt-3  ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6  ">
+                          Current <br /> Bid
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold text-green">
+                          2.5 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" flex mt-3">
                       <div className="flex grow"></div>
-                      <p className="font-bold text-green">@Rodri</p>
+                      <div className=" flex font-bold text-green">
+                        {" "}
+                        <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                      </div>
+                      <div className="flex grow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* NFT 3  */}
+                <div className="flex  flex-col h-full items-start w-max">
+                  <div className="">
+                    <Image
+                      src={nft4}
+                      alt="nft7"
+                      width={150}
+                      height={200}
+                      className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                    />{" "}
+                  </div>
+                  <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                    <div className=" flex ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6 ">
+                          Reserve <br /> Price
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold ">
+                          1.1 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className=" flex mt-3  ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6  ">
+                          Current <br /> Bid
+                        </p>
+                        <div className="flex grow"></div>
+                        <p className="font-bold text-green">
+                          2.5 <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" flex mt-3">
+                      <div className="flex grow"></div>
+                      <div className=" flex font-bold text-green">
+                        {" "}
+                        <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                      </div>
+                      <div className="flex grow"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* NFT 4  */}
+                <div className="flex  flex-col h-full items-start w-max ">
+                  <div className="">
+                    <Image
+                      src={nft10}
+                      alt="nft7"
+                      width={150}
+                      height={200}
+                      className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                    />{" "}
+                  </div>
+                  <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                    <div className=" flex ">
+                      <div className=" flex w-full">
+                        {" "}
+                        <p className="pr-6 ">
+                          Reserve not
+                          <br /> met
+                        </p>
+                        <div className="flex grow"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* nft 2 */}
-              <div className="flex  flex-col h-full items-start w-max ">
-                <div className="">
-                  <Image
-                    src={nft7}
-                    alt="nft7"
-                    width={150}
-                    height={200}
-                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                  />{" "}
-                </div>
-                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <div className=" flex ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6 ">
-                        Sale <br /> Price
-                      </p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold ">
-                        1.1 <br /> ETH
-                      </p>
+
+              {/* SOLD */}
+              <div className="flex flex-col">
+                <h3 className="font-bold">SOLD</h3>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                  {/* nft 1 */}
+                  <div className="flex  flex-col h-full items-start w-max ">
+                    <div className="">
+                      <Image
+                        src={nft1}
+                        alt="nft7"
+                        width={150}
+                        height={200}
+                        className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                      />{" "}
+                    </div>
+                    <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                      <div className=" flex ">
+                        <div className=" flex w-full">
+                          {" "}
+                          <p className="pr-6 ">
+                            Sale <br /> Price
+                          </p>
+                          <div className="flex grow"></div>
+                          <p className="font-bold ">
+                            1.1 <br /> ETH
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className=" flex mt-3  ">
+                        <div className=" flex w-full">
+                          {" "}
+                          <p className="pr-6  ">Owner</p>
+                          <div className="flex grow"></div>
+                          <p className="font-bold text-green">@Rodri</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {/* nft 2 */}
+                  <div className="flex  flex-col h-full items-start w-max ">
+                    <div className="">
+                      <Image
+                        src={nft7}
+                        alt="nft7"
+                        width={150}
+                        height={200}
+                        className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                      />{" "}
+                    </div>
+                    <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                      <div className=" flex ">
+                        <div className=" flex w-full">
+                          {" "}
+                          <p className="pr-6 ">
+                            Sale <br /> Price
+                          </p>
+                          <div className="flex grow"></div>
+                          <p className="font-bold ">
+                            1.1 <br /> ETH
+                          </p>
+                        </div>
+                      </div>
 
-                  <div className=" flex mt-3  ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6  ">Owner</p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold text-green">@Rodri</p>
+                      <div className=" flex mt-3  ">
+                        <div className=" flex w-full">
+                          {" "}
+                          <p className="pr-6  ">Owner</p>
+                          <div className="flex grow"></div>
+                          <p className="font-bold text-green">@Rodri</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          {/* COLLECTION */}
-          <div className="flex flex-col">
-            <h3 className="font-bold">COLLECTION</h3>
+              {/* COLLECTION */}
+              <div className="flex flex-col">
+                <h3 className="font-bold">COLLECTION</h3>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              {/* nft 1 */}
-              <div className="flex  flex-col h-full items-start w-max ">
-                <div className="">
-                  <Image
-                    src={nft2}
-                    alt="nft7"
-                    width={150}
-                    height={200}
-                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                  />{" "}
-                </div>
-                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <div className=" flex ">
-                    <div className=" flex w-full">
-                      {" "}
-                      <p className="pr-6 ">
-                        Bought <br /> For
-                      </p>
-                      <div className="flex grow"></div>
-                      <p className="font-bold text-green">
-                        1.1 <br /> ETH
-                      </p>
+                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                  {/* nft 1 */}
+                  <div className="flex  flex-col h-full items-start w-max ">
+                    <div className="">
+                      <Image
+                        src={nft2}
+                        alt="nft7"
+                        width={150}
+                        height={200}
+                        className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                      />{" "}
+                    </div>
+                    <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                      <div className=" flex ">
+                        <div className=" flex w-full">
+                          {" "}
+                          <p className="pr-6 ">
+                            Bought <br /> For
+                          </p>
+                          <div className="flex grow"></div>
+                          <p className="font-bold text-green">
+                            1.1 <br /> ETH
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  {/* nft 2 */}
                 </div>
               </div>
-              {/* nft 2 */}
-            </div>
-          </div>
+            </>
+          ) : null}
           {/* SAVED */}
           <div className="flex flex-col">
             <h3 className="font-bold">SAVED</h3>

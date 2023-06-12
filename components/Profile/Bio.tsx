@@ -69,24 +69,10 @@ const Bio = ({ loading, setLoading, authedProfile }: Props) => {
         htmlFor="input-bio"
         onClick={handleBioOpen}
       >
-        {authedProfile ? (
-          authedProfile?.bio !== "" ? (
-            <p> {authedProfile?.bio}</p>
-          ) : (
-            <p>
-              Hi all, I&apos;m Ahad aka wiresandtrees, I&apos;m a freelance
-              artist and architect (RIBA Part II) based in the UK. I love
-              visually exploring the state between &apos;dreams&apos; and
-              &apos;nightmares&apos;.
-            </p>
-          )
+        {authedProfile?.bio ? (
+          <p> {authedProfile?.bio}</p>
         ) : (
-          <p>
-            Hi all, I&apos;m Ahad aka wiresandtrees, I&apos;m a freelance artist
-            and architect (RIBA Part II) based in the UK. I love visually
-            exploring the state between &apos;dreams&apos; and
-            &apos;nightmares&apos;.
-          </p>
+          <p>Add your bio here...</p>
         )}
       </label>
       {bio.open && (

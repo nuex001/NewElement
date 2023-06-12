@@ -19,9 +19,11 @@ import contractABI from "../../contracts/collectionContractABI";
 import { contractBytecode } from "../../contracts/collectionContractBytecode";
 import { ethers } from "ethers";
 
-type Props = {};
+type Props = {
+  user: any;
+};
 
-const MintComponent = (props: Props) => {
+const MintComponent = ({ user }: Props) => {
   const [file, setFile] = useState(null);
   const [image, setImage] = useState<string>("");
   const [imageCollection, setImageCollection] = useState<string>("");
@@ -29,8 +31,8 @@ const MintComponent = (props: Props) => {
   const [isCollection, setIsCollection] = useState(false);
   const [collection, setCollection] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { authedProfile, setAuthedProfile } = useAuthedProfile();
-
+  const { setAuthedProfile } = useAuthedProfile();
+  const authedProfile = user;
   const initialMintValues = {
     title: "",
     description: "",
@@ -153,25 +155,37 @@ const MintComponent = (props: Props) => {
         );
         await contract.deployed();
         contractAddress = contract.address;
+
+        // Update user database
+        axios
+          .post("/api/addCollection", {
+            collectionName: formValuesCollection.title,
+            contractAddress,
+            collectionLogo: imageUploadUrl,
+            address,
+          })
+          .then((res) => {
+            console.log(res.data);
+            setAuthedProfile(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         // Mint NFT Contract
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
+        await window?.ethereum?.request({ method: "eth_requestAccounts" });
+        const signer = provider.getSigner();
+        const currentContract = new ethers.Contract(
+          collection?.contractAddress,
+          contractABI,
+          signer
+        );
+        const tx = await currentContract.mintNFT(uploadUrl);
+        await tx.wait();
       }
-
-      // Update user database
-      axios
-        .post("/api/addCollection", {
-          collectionName: formValuesCollection.title,
-          contractAddress,
-          collectionLogo: imageUploadUrl,
-          address,
-        })
-        .then((res) => {
-          console.log(res.data);
-          setAuthedProfile(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
 
     setLoading(false);
@@ -181,8 +195,6 @@ const MintComponent = (props: Props) => {
     setImage("");
     setImageCollection("");
     setFile(null);
-
-    console.log(uploadUrl);
   };
 
   // Modal
