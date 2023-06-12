@@ -701,7 +701,10 @@ const ProfileComponent = ({ authedProfile }: any) => {
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
               {authedProfile.savedNfts.map((nft: any) => (
-                <div className="flex  flex-col h-full items-start w-max ">
+                <div
+                  key={nft.id}
+                  className="flex  flex-col h-full items-start w-max "
+                >
                   <div
                     onClick={() => {
                       Router.push({
