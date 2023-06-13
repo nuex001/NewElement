@@ -11,6 +11,7 @@ type Props = {
 const WhitelistComponent = ({ user, artists }: Props) => {
   const [userAddress, setUserAddress] = useState("");
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = React.useState(false);
 
@@ -27,6 +28,7 @@ const WhitelistComponent = ({ user, artists }: Props) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post("/api/whitelistUser", { address: userAddress })
       .then((res) => {
@@ -40,10 +42,12 @@ const WhitelistComponent = ({ user, artists }: Props) => {
       })
       .finally(() => {
         setUserAddress("");
+        setLoading(false);
       });
   };
   const handleDeleteArtist = (e: any, userAddress: string) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post("/api/deleteArtist", { address: userAddress })
       .then((res) => {
@@ -55,11 +59,12 @@ const WhitelistComponent = ({ user, artists }: Props) => {
       })
       .finally(() => {
         setShowModal(false);
+        setLoading(false);
       });
   };
   return (
     <div className="ml-64">
-      <div className="flex min-h-full font-ibmPlex  mt-20 items-center justify-center py-12  px-4 sm:px-6 lg:px-8">
+      <div className="flex min-h-full w-screen font-ibmPlex  mt-20 items-center justify-center py-12  px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-200">
@@ -110,14 +115,14 @@ const WhitelistComponent = ({ user, artists }: Props) => {
                     />
                   </svg>
                 </span>
-                Register
+                Whitelist
               </button>{" "}
             </div>{" "}
           </form>
         </div>{" "}
       </div>{" "}
       <div className="flex flex-wrap min-h-full items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
-        {artists ? (
+        {!loading ? (
           artists.map((artist: any, i: any) => (
             <>
               <button

@@ -12,7 +12,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
   const [userAddress, setUserAddress] = useState("");
   const [isErrorAddress, setIsErrorAddress] = useState(null) as any;
   const [showModal, setShowModal] = React.useState(false);
-  const [helperTextAddress, setHelperTextAddress] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { superAdmin } = user;
 
@@ -29,6 +29,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post("/api/registerAdmin", { address: userAddress })
       .then((res) => {
@@ -42,11 +43,13 @@ const RegistrationComponents = ({ user, admins }: Props) => {
       })
       .finally(() => {
         setUserAddress("");
+        setLoading(false);
       });
   };
 
   const handleDeleteArtist = (e: any, userAddress: string) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post("/api/deleteAdmin", { address: userAddress })
       .then((res) => {
@@ -58,11 +61,12 @@ const RegistrationComponents = ({ user, admins }: Props) => {
       })
       .finally(() => {
         setShowModal(false);
+        setLoading(false);
       });
   };
   return (
-    <>
-      <div className="flex min-h-full font-ibmPlex  mt-20 items-center justify-center py-12 ml-64 px-4 sm:px-6 lg:px-8">
+    <div className="ml-64">
+      <div className="flex min-h-full font-ibmPlex w-screen  mt-20 items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-200">
@@ -123,7 +127,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
         </div>{" "}
       </div>{" "}
       <div className="flex flex-wrap min-h-full items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
-        {admins ? (
+        {!loading ? (
           admins.map((admin: any, i: any) => (
             <>
               <button
@@ -195,7 +199,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
           <ButtonSpinner />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
