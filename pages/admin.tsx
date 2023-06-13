@@ -7,10 +7,10 @@ type Props = {};
 
 const AdminPage = (props: Props) => {
   return (
-    <>
+    <div className="">
       <SideBar />
       <Admin />
-    </>
+    </div>
   );
 };
 export const getServerSideProps = async ({ req, res }: any) => {

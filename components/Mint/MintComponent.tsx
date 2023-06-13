@@ -135,7 +135,6 @@ const MintComponent = ({ user }: Props) => {
         (uploadUrl = await storage.upload(collectionData)),
           (resolvedUrl = await storage.resolveScheme(uploadUrl)),
           (imageUploadUrl = await storage.upload(collectionImage));
-        // isModalOpen();
       } catch (e) {
         console.log(e);
         alert("Something went wrong, please try again later.");
@@ -177,6 +176,7 @@ const MintComponent = ({ user }: Props) => {
             console.log(res.data);
             setAuthedProfile(res.data);
             refreshData();
+            isModalOpen();
           })
           .catch((err) => {
             console.log(err);
@@ -206,6 +206,7 @@ const MintComponent = ({ user }: Props) => {
         setLoadingToDeploy(true);
         setLoading(false);
         await tx.wait();
+        isModalOpen();
       } catch (e) {
         alert("Something went wrong, please try again later.");
       }
@@ -318,13 +319,14 @@ const MintComponent = ({ user }: Props) => {
         {/* Mobile */}
         <div className="w-full md:hidden my-6">
           <button
+            onClick={mint}
             type="submit"
             className="bg-blue text-green font-compressed mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
           >
             {loading ? (
               <>
                 <ButtonSpinner />
-                <p className="font-ibmPlex text-xs tracking-normalmt-1">
+                <p className="font-ibmPlex text-xs tracking-normal mt-1">
                   MetaMask will open to process your transaction
                 </p>
               </>

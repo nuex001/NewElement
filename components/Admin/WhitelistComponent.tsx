@@ -12,7 +12,7 @@ const WhitelistComponent = ({ user, artists }: Props) => {
   const [userAddress, setUserAddress] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [deleteArtist, setDeleteArtist] = useState(null as any);
   const [showModal, setShowModal] = React.useState(false);
 
   let newAdminList: any[] = [];
@@ -45,6 +45,12 @@ const WhitelistComponent = ({ user, artists }: Props) => {
         setLoading(false);
       });
   };
+  const handleDeleteModal = (e: any, artist: any) => {
+    e.preventDefault();
+
+    setDeleteArtist(artist);
+    setShowModal(true);
+  };
   const handleDeleteArtist = (e: any, userAddress: string) => {
     e.preventDefault();
     setLoading(true);
@@ -62,9 +68,11 @@ const WhitelistComponent = ({ user, artists }: Props) => {
         setLoading(false);
       });
   };
+  console.log(deleteArtist);
+
   return (
-    <div className="ml-64">
-      <div className="flex min-h-full w-screen font-ibmPlex  mt-20 items-center justify-center py-12  px-4 sm:px-6 lg:px-8">
+    <div className="md:w-auto w-full md:ml-64">
+      <div className="flex min-h-full md:w-screen font-ibmPlex  md:mt-20 items-center justify-center mx-12 md:mx-0 py-5 md:py-12  md:px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-200">
@@ -121,24 +129,31 @@ const WhitelistComponent = ({ user, artists }: Props) => {
           </form>
         </div>{" "}
       </div>{" "}
-      <div className="flex flex-wrap min-h-full items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-wrap min-h-full  items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
         {!loading ? (
           artists.map((artist: any, i: any) => (
-            <>
+            <div key={i}>
               <button
-                className="bg-transparent text-white active:bg-gray-600 hover:bg-gray-700 font-bold uppercase text-sm  rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                className="bg-transparent text-white active:bg-gray-600 hover:bg-gray-700 font-bold uppercase text-xs md:text-sm  rounded shadow hover:shadow-lg outline-none w-[80%] md:w-auto focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={() => setShowModal(true)}
+                onClick={(e) => handleDeleteModal(e, artist)}
               >
                 <div className=" px-4 py-2 border m-1 rounded-xl " key={i}>
                   <p>Username: {artist.username ? artist.username : "N/A"}</p>
-                  <p>{artist.address}</p>
+                  <p className="md:hidden">
+                    {artist.address
+                      .slice(0, 6)
+                      .concat("...")
+                      .concat(artist.address.slice(-4))}
+                  </p>
+                  <p className="hidden md:block">{artist.address}</p>
                   <p>artist :{artist.isArtist ? " Yes" : " No"}</p>
                 </div>
               </button>
+
               {showModal ? (
                 <>
-                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto ml-52 fixed inset-0 z-50 outline-none focus:outline-none">
+                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto md:ml-52 fixed inset-0 z-50 outline-none focus:outline-none">
                     <div className="relative w-auto my-6 mx-auto max-w-3xl">
                       {/*content*/}
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -147,20 +162,23 @@ const WhitelistComponent = ({ user, artists }: Props) => {
                           <h3 className="text-3xl font-semibold text-gray-600">
                             Delete Artist Rank
                           </h3>
-                          <button
+                          {/* <button
                             className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                             onClick={() => setShowModal(false)}
                           >
                             <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                               ×
                             </span>
-                          </button>
+                          </button> */}
                         </div>
                         {/*body*/}
                         <div className="relative p-6 flex-auto">
                           <p className="my-4 text-slate-500 text-lg leading-relaxed">
                             Are you sure you want to delete Artist rank for{" "}
-                            {artist.username ? artist.username : "user"}?
+                            {deleteArtist?.username
+                              ? deleteArtist?.username
+                              : "user"}
+                            ?
                           </p>
                         </div>
                         {/*footer*/}
@@ -176,7 +194,7 @@ const WhitelistComponent = ({ user, artists }: Props) => {
                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"
                             onClick={(e) =>
-                              handleDeleteArtist(e, artist.address)
+                              handleDeleteArtist(e, deleteArtist.address)
                             }
                           >
                             Save Changes
@@ -188,7 +206,7 @@ const WhitelistComponent = ({ user, artists }: Props) => {
                   <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
                 </>
               ) : null}
-            </>
+            </div>
           ))
         ) : (
           <ButtonSpinner />

@@ -14,7 +14,7 @@ const Collection = ({
   handleChangeCollection,
 }: Props) => {
   return (
-    <div className="flex flex-col items-center justify-center md:w-3/4 ">
+    <div className="flex flex-col items-center justify-center w-full md:w-3/4 ">
       <input
         id="title1"
         placeholder="Collection Title"

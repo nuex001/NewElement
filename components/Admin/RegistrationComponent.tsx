@@ -13,6 +13,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
   const [isErrorAddress, setIsErrorAddress] = useState(null) as any;
   const [showModal, setShowModal] = React.useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteAdmin, setDeleteAdmin] = useState(null as any);
 
   const { superAdmin } = user;
 
@@ -46,7 +47,12 @@ const RegistrationComponents = ({ user, admins }: Props) => {
         setLoading(false);
       });
   };
+  const handleDeleteModal = (e: any, admin: any) => {
+    e.preventDefault();
 
+    setDeleteAdmin(admin);
+    setShowModal(true);
+  };
   const handleDeleteArtist = (e: any, userAddress: string) => {
     e.preventDefault();
     setLoading(true);
@@ -65,8 +71,8 @@ const RegistrationComponents = ({ user, admins }: Props) => {
       });
   };
   return (
-    <div className="ml-64">
-      <div className="flex min-h-full font-ibmPlex w-screen  mt-20 items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="md:w-auto w-full md:ml-64">
+      <div className="flex min-h-full md:w-screen font-ibmPlex  md:mt-20 items-center justify-center mx-12 md:mx-0 py-5 md:py-12  md:px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-200">
@@ -126,24 +132,30 @@ const RegistrationComponents = ({ user, admins }: Props) => {
           )}
         </div>{" "}
       </div>{" "}
-      <div className="flex flex-wrap min-h-full items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-wrap min-h-full  items-center font-ibmPlex justify-center py-12 px-4 sm:px-6 lg:px-8">
         {!loading ? (
           admins.map((admin: any, i: any) => (
-            <>
+            <div key={i}>
               <button
-                className="bg-transparent text-white active:bg-gray-600 hover:bg-gray-700 font-bold uppercase text-sm  rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                className="bg-transparent text-white active:bg-gray-600 hover:bg-gray-700 font-bold uppercase text-xs md:text-sm  rounded shadow hover:shadow-lg outline-none w-full md:w-auto focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={() => setShowModal(true)}
+                onClick={(e) => handleDeleteModal(e, admin)}
               >
                 <div className=" px-4 py-2 border m-1 rounded-xl " key={i}>
                   <p>Username: {admin.username ? admin.username : "N/A"}</p>
-                  <p>{admin.address}</p>
+                  <p className="md:hidden">
+                    {admin.address
+                      .slice(0, 6)
+                      .concat("...")
+                      .concat(admin.address.slice(-4))}
+                  </p>
+                  <p className="hidden md:block">{admin.address}</p>
                   <p>admin :{admin.admin ? " Yes" : " No"}</p>
                 </div>
               </button>
               {showModal ? (
                 <>
-                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto ml-52 fixed inset-0 z-50 outline-none focus:outline-none">
+                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto md:ml-52 fixed inset-0 z-50 outline-none focus:outline-none">
                     <div className="relative w-auto my-6 mx-auto max-w-3xl">
                       {/*content*/}
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -180,9 +192,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
                           <button
                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"
-                            onClick={(e) =>
-                              handleDeleteArtist(e, admin.address)
-                            }
+                            onClick={(e) => handleDeleteArtist(e, deleteAdmin)}
                           >
                             Save Changes
                           </button>
@@ -193,7 +203,7 @@ const RegistrationComponents = ({ user, admins }: Props) => {
                   <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
                 </>
               ) : null}
-            </>
+            </div>
           ))
         ) : (
           <ButtonSpinner />

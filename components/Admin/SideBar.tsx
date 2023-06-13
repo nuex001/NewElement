@@ -40,7 +40,7 @@ const SideBar = (props: Props) => {
   };
   return (
     <div className=" flex flex-col flex-auto font-ibmPlex  flex-shrink-0 antialiased bg-transparent text-gray-800">
-      <div className="fixed flex  z-0  flex-col top-0 left-0 w-64 bg-transparent mt-24 h-full border-r">
+      <div className="md:fixed flex  z-0  flex-col top-0 left-0  w-full border-b md:borderb-0 md:w-64 bg-transparent mt-5 md:mt-24 h-full md:border-r">
         <div className="overflow-y-auto mt-14 overflow-x-hidden flex-grow">
           <ul className="flex flex-col py-4 space-y-1">
             <li className="px-5">

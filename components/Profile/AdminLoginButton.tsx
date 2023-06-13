@@ -28,7 +28,7 @@ const AdminLoginButton = ({ authedProfile }: Props) => {
         <button
           onClick={loginAddress}
           type="submit"
-          className="group relative flex md:w-[24%] justify-center rounded-md border border-transparent bg-green py-2 px-4 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+          className="group relative flex w-full md:w-[24%] justify-center rounded-md border border-transparent bg-green py-2 px-4 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
         >
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg
