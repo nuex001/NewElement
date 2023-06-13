@@ -20,7 +20,6 @@ const Banner = ({
   bannerPicture,
   uploadToIpfs,
   setFile,
-
   banner,
 }: Props) => {
   // Banner image upload

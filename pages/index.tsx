@@ -29,11 +29,11 @@ const Home: NextPage = ({ user }: any) => {
     useActiveListings(marketplace);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
-  useEffect(() => {
-    if (user) {
-      setAuthedProfile(user);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setAuthedProfile(user);
+  //   }
+  // }, [user]);
 
   return (
     <>

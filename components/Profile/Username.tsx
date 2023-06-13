@@ -75,7 +75,7 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
         htmlFor="input-username"
         onClick={handleUsernameOpen}
       >
-        {authedProfile ? (
+        {authedProfile.username ? (
           <h1 className="text-2xl mb-1 font-bold">
             {" "}
             {authedProfile?.username}

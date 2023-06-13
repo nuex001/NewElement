@@ -3,13 +3,14 @@ import connectDB from "../../lib/connectDB";
 import type { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: any) => {
   await connectDB();
   console.log("Connected to Mongo");
 
   //Sign In
   if (req.method === "POST") {
     const { address, banner } = req.body;
+    // console.log(banner);
 
     const user = await Users.findOne({ address });
 

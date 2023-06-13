@@ -13,7 +13,6 @@ import banner5 from "../../assets/Banners/banner5.jpeg";
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
-const banners = [banner1, banner2, banner3, banner4, banner5];
 
 export default function ProfileMenu() {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
@@ -22,24 +21,28 @@ export default function ProfileMenu() {
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
 
+  //Banners
+  const banners = [banner1, banner2, banner3, banner4, banner5];
+  const random = Math.floor(Math.random() * banners.length);
+
   const connectWalletAndUser = () => {
     connectWithMetamask();
-    // if (!address) return;
-    // (async () => {
-    //   const userData = {
-    //     address,
-    //     banner: banners[random],
-    //   };
-    //   axios
-    //     .post("/api/signIn", userData)
-    //     .then((res) => {
-    //       console.log(res);
-    //       setAuthedProfile(res.data.user);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // })();
+    if (!address) return;
+    (async () => {
+      const userData = {
+        address,
+        banner: banners[random],
+      };
+      axios
+        .post("/api/signIn", userData)
+        .then((res) => {
+          console.log(res);
+          setAuthedProfile(res.data.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })();
   };
 
   const disconnectWalletAndUser = () => {
@@ -60,25 +63,8 @@ export default function ProfileMenu() {
   };
 
   useEffect(() => {
-    if (!address) return;
-    (async () => {
-      const userData = {
-        address,
-        banner: banners[random],
-      };
-      axios
-        .post("/api/signIn", userData)
-        .then((res) => {
-          console.log(res);
-          setAuthedProfile(res.data.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })();
-  }, [address]);
-
-  const random = Math.floor(Math.random() * banners.length);
+    connectWalletAndUser();
+  }, []);
 
   return (
     <Menu as="div" className="relative inline-block">
