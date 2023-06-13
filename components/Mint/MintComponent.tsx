@@ -18,6 +18,7 @@ import { useAuthedProfile } from "../../context/UserContext";
 import contractABI from "../../contracts/collectionContractABI";
 import { contractBytecode } from "../../contracts/collectionContractBytecode";
 import { ethers } from "ethers";
+import router from "next/router";
 
 type Props = {
   user: any;
@@ -28,6 +29,7 @@ const MintComponent = ({ user }: Props) => {
   const [image, setImage] = useState<string>("");
   const [imageCollection, setImageCollection] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [loadingToDeploy, setLoadingToDeploy] = useState(false);
   const [isCollection, setIsCollection] = useState(false);
   const [collection, setCollection] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -89,6 +91,10 @@ const MintComponent = ({ user }: Props) => {
   const handleMintType = () => {
     setIsCollection((prev) => !prev);
   };
+  // Rehydrate the user's collection from server
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   // Minting NFT
 
@@ -113,36 +119,39 @@ const MintComponent = ({ user }: Props) => {
       file,
     };
     //Upload to IPFS
-    {
-      if (!isCollection) {
-        // Upload single NFT IPFS
-        try {
-          (uploadUrl = await storage.upload(singleNFTData)),
-            (resolvedUrl = await storage.resolveScheme(uploadUrl));
-        } catch (e) {
-          console.log(e);
-          alert("Something went wrong, please try again later.");
-        }
-      } else {
-        // Upload collection IPFS
-        try {
-          (uploadUrl = await storage.upload(collectionData)),
-            (resolvedUrl = await storage.resolveScheme(uploadUrl)),
-            (imageUploadUrl = await storage.upload(collectionImage));
-          // isModalOpen();
-        } catch (e) {
-          console.log(e);
-          alert("Something went wrong, please try again later.");
-        }
-      }
-      // Deploy contract
-      if (isCollection) {
-        const provider = new ethers.providers.Web3Provider(
-          window.ethereum as any
-        );
 
-        await window?.ethereum?.request({ method: "eth_requestAccounts" });
-        const signer = provider.getSigner();
+    if (!isCollection) {
+      // Upload single NFT IPFS
+      try {
+        (uploadUrl = await storage.upload(singleNFTData)),
+          (resolvedUrl = await storage.resolveScheme(uploadUrl));
+      } catch (e) {
+        console.log(e);
+        alert("Something went wrong, please try again later.");
+      }
+    } else {
+      // Upload collection IPFS
+      try {
+        (uploadUrl = await storage.upload(collectionData)),
+          (resolvedUrl = await storage.resolveScheme(uploadUrl)),
+          (imageUploadUrl = await storage.upload(collectionImage));
+        // isModalOpen();
+      } catch (e) {
+        console.log(e);
+        alert("Something went wrong, please try again later.");
+      }
+    }
+    // Deploy contract
+    if (isCollection) {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
+
+      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      const signer = provider.getSigner();
+
+      try {
+        setLoadingToDeploy(true);
         // Deploy the new contract
         const factory = new ethers.ContractFactory(
           contractABI,
@@ -153,9 +162,9 @@ const MintComponent = ({ user }: Props) => {
           formValues.title,
           formValuesCollection.token
         );
+        setLoading(false);
         await contract.deployed();
         contractAddress = contract.address;
-
         // Update user database
         axios
           .post("/api/addCollection", {
@@ -167,27 +176,41 @@ const MintComponent = ({ user }: Props) => {
           .then((res) => {
             console.log(res.data);
             setAuthedProfile(res.data);
+            refreshData();
           })
           .catch((err) => {
             console.log(err);
+          })
+          .finally(() => {
+            setLoadingToDeploy(false);
           });
-      } else {
-        // Mint NFT Contract
-        const provider = new ethers.providers.Web3Provider(
-          window.ethereum as any
-        );
-        await window?.ethereum?.request({ method: "eth_requestAccounts" });
-        const signer = provider.getSigner();
+      } catch (e) {
+        console.log(e);
+        alert("Something went wrong, please try again later.");
+      }
+    } else {
+      // Mint NFT Contract
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
+      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      const signer = provider.getSigner();
+      try {
         const currentContract = new ethers.Contract(
           collection?.contractAddress,
           contractABI,
           signer
         );
+
         const tx = await currentContract.mintNFT(uploadUrl);
+        setLoadingToDeploy(true);
+        setLoading(false);
         await tx.wait();
+      } catch (e) {
+        alert("Something went wrong, please try again later.");
       }
     }
-
+    setLoadingToDeploy(false);
     setLoading(false);
     setFormValues(initialMintValues);
     setFormValuesCollection(initialCollectionValues);
@@ -246,9 +269,25 @@ const MintComponent = ({ user }: Props) => {
             <button
               onClick={mint}
               type="submit"
-              className="bg-blue text-green flex flex-col items-center font-compressed mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
+              className="bg-blue text-green flex flex-col items-center mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
             >
-              {loading ? <ButtonSpinner /> : "Mint"}
+              {loading ? (
+                <>
+                  <ButtonSpinner />
+                  <p className="font-ibmPlex text-xs tracking-normal mt-1">
+                    MetaMask will open to process your transaction
+                  </p>
+                </>
+              ) : loadingToDeploy ? (
+                <>
+                  <ButtonSpinner />
+                  <p className="font-ibmPlex text-xs tracking-normal mt-1">
+                    Processing...
+                  </p>
+                </>
+              ) : (
+                <p className="font-compressed">Mint</p>
+              )}
             </button>
             <p className="text-[10px] w-3/6">
               By pressing sumbit you agree to our terms and conditions laid out{" "}
@@ -282,7 +321,23 @@ const MintComponent = ({ user }: Props) => {
             type="submit"
             className="bg-blue text-green font-compressed mb-6 md:mb-0  border border-green w-full md:w-3/6 uppercase tracking-[10px] mt-1  bg-white bg-opacity-20 hover:bg-opacity-30 transition duration-300 ease-in-out font-semibold py-1 md:py-[1.2vh] md:px-[7vh] z-2 text-2xl md:text-xl  "
           >
-            {loading ? <ButtonSpinner /> : "Mint"}
+            {loading ? (
+              <>
+                <ButtonSpinner />
+                <p className="font-ibmPlex text-xs tracking-normalmt-1">
+                  MetaMask will open to process your transaction
+                </p>
+              </>
+            ) : loadingToDeploy ? (
+              <>
+                <ButtonSpinner />
+                <p className="font-ibmPlex text-xs tracking-normal mt-1">
+                  Proccesing...
+                </p>
+              </>
+            ) : (
+              <p className="font-compressed">Mint</p>
+            )}
           </button>
           <p className="text-[10px] text-left">
             By pressing sumbit you agree to our terms and conditions laid out{" "}
