@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import AvatarEditor from "react-avatar-editor";
+import banner from "../../assets/banner.png";
 
 type Props = {
   authedProfile: any;
@@ -10,7 +11,6 @@ type Props = {
   uploadToIpfs: (bannerPicture: any) => void;
   setEditor: React.Dispatch<React.SetStateAction<any>>;
   handleFileChange: (e: any) => void;
-  banner: any;
 };
 
 const Banner = ({
@@ -20,7 +20,6 @@ const Banner = ({
   bannerPicture,
   uploadToIpfs,
   setFile,
-  banner,
 }: Props) => {
   // Banner image upload
   const handleCancelBanner = () => {
@@ -62,6 +61,8 @@ const Banner = ({
       cropperOpen: true,
     });
   };
+  console.log(authedProfile.bannerPicture);
+
   return (
     <>
       <label
@@ -71,11 +72,9 @@ const Banner = ({
       >
         <Image
           src={
-            authedProfile
-              ? authedProfile?.banner !== ""
-                ? authedProfile?.bannerPicture
-                : banner
-              : banner
+            authedProfile.bannerPicture == ""
+              ? banner
+              : authedProfile?.bannerPicture
           }
           width={1600}
           height={200}

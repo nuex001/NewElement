@@ -21,18 +21,14 @@ export default function ProfileMenu() {
   const connectWithMetamask = useMetamask();
   const disconnectWallet = useDisconnect();
 
-  //Banners
-  const banners = [banner1, banner2, banner3, banner4, banner5];
-  const random = Math.floor(Math.random() * banners.length);
-
   const connectWalletAndUser = () => {
     connectWithMetamask();
     if (!address) return;
     (async () => {
       const userData = {
         address,
-        banner: banners[random],
       };
+
       axios
         .post("/api/signIn", userData)
         .then((res) => {

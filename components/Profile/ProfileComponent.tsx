@@ -165,7 +165,6 @@ const ProfileComponent = ({ authedProfile }: any) => {
           bannerPicture={bannerPicture}
           handleFileChange={handleFileChange}
           setEditor={setEditor}
-          banner={banner}
           setFile={setFile}
           uploadToIpfs={uploadToIpfs}
         />
