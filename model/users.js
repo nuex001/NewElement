@@ -23,6 +23,12 @@ const UsersSchema = new mongoose.Schema({
   isArtist: {
     type: Boolean,
   },
+  admin: {
+    type: Boolean,
+  },
+  superAdmin: {
+    type: Boolean,
+  },
   email: {
     type: String,
   },

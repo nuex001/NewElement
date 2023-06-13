@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuthedProfile } from "../../context/UserContext";
+import router from "next/router";
 
 type Props = {
   loading: boolean;
@@ -46,6 +47,9 @@ const Bio = ({ loading, setLoading, authedProfile }: Props) => {
       bio: "",
       open: false,
     });
+    const refreshData = () => {
+      router.replace(router.asPath);
+    };
     axios
       .post("/api/updateProfile", {
         address: authedProfile.address,
@@ -53,7 +57,7 @@ const Bio = ({ loading, setLoading, authedProfile }: Props) => {
       })
       .then((response) => {
         setAuthedProfile(response.data);
-        console.log(response);
+        refreshData();
       })
       .catch((err: any) => {
         console.log(err);

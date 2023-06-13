@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuthedProfile } from "../../context/UserContext";
+import router from "next/router";
 
 type Props = {
   loading: boolean;
@@ -39,6 +40,9 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
     });
     console.log(username);
   };
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
   const handleUsernameSave = () => {
     setLoading(true);
     setUsername({
@@ -48,11 +52,12 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
     });
     axios
       .post("/api/updateProfile", {
-        address: authedProfile.address,
+        address: authedProfile?.address,
         username: username.username,
       })
       .then((response) => {
         setAuthedProfile(response.data);
+        refreshData();
         console.log(response);
       })
       .catch((err: any) => {
@@ -60,7 +65,7 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
       })
       .finally(() => setLoading(false));
   };
-  console.log(authedProfile);
+  // console.log(authedProfile);
 
   return (
     <>
@@ -70,12 +75,15 @@ const Username = ({ loading, setLoading, authedProfile }: Props) => {
         htmlFor="input-username"
         onClick={handleUsernameOpen}
       >
-        {authedProfile?.name ? (
-          <h1 className="text-2xl mb-1 font-bold"> {authedProfile.username}</h1>
+        {authedProfile ? (
+          <h1 className="text-2xl mb-1 font-bold">
+            {" "}
+            {authedProfile?.username}
+          </h1>
         ) : (
           <h1 className="text-2xl mb-1 font-bold text-green">
             {" "}
-            {authedProfile.address
+            {authedProfile?.address
               .slice(0, 6)
               .concat("...")
               .concat(authedProfile?.address.slice(-4))}

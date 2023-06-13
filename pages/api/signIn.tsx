@@ -22,6 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         username: "",
         collections: [],
         isArtist: false,
+        admin: false,
+        superAdmin: false,
       });
 
       newUser
@@ -55,7 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           path: "/",
         })
       );
-      return res.status(200).json({ message: "Welcome back" });
+      return res.status(200).json({ message: "Welcome back", user });
     }
   } else if (
     //Sign out

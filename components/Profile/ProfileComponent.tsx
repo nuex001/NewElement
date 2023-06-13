@@ -1,7 +1,6 @@
 import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
 import { useStorageUpload } from "@thirdweb-dev/react";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
 import avatar from "../../assets/avatar.gif";
@@ -10,9 +9,7 @@ import AvatarEditor from "react-avatar-editor";
 import { useAuthedProfile } from "../../context/UserContext";
 import nft1 from "../../assets/nft-1.jpeg";
 import nft2 from "../../assets/nft-2.jpeg";
-import nft3 from "../../assets/nft-3.webp";
 import nft4 from "../../assets/nft-4.jpeg";
-import nft5 from "../../assets/nft-5.jpeg";
 import nft6 from "../../assets/nft-6.jpeg";
 import nft7 from "../../assets/nft-7.png";
 import nft10 from "../../assets/nft-10.png";
@@ -21,6 +18,9 @@ import axios from "axios";
 import Username from "./Username";
 import Bio from "./Bio";
 import Router from "next/router";
+import router from "next/router";
+import AdminLoginButton from "./AdminLoginButton";
+import Banner from "./Banner";
 
 type Props = {
   cropperOpen: boolean;
@@ -33,7 +33,7 @@ const ProfileComponent = ({ authedProfile }: any) => {
   const [editor, setEditor] = React.useState<any>(null);
 
   const { setAuthedProfile } = useAuthedProfile();
-  let isArtist = true;
+  let { isArtist } = authedProfile;
   // if (authedProfile) {
   //   isArtist = authedProfile.isArtist;
   //   // console.log(isArtist);
@@ -41,10 +41,8 @@ const ProfileComponent = ({ authedProfile }: any) => {
   // console.log(user);
   // setAuthedProfile(user);
   // useEffect(() => {
-  //   if (user) {
-  //     setAuthedProfile(user);
-  //   }
-  // }, []);
+  //   setAuthedProfile(user);
+  // }, [user]);
   console.log(authedProfile);
 
   const [picture, setPicture] = useState<Props>({
@@ -69,6 +67,11 @@ const ProfileComponent = ({ authedProfile }: any) => {
   };
   const setEditorRef = (editor: any) => setEditor(editor);
 
+  // Rehydrate data from server
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+
   const uploadToIpfs = async (image: any) => {
     setLoading(true);
     if (image == picture) {
@@ -85,7 +88,7 @@ const ProfileComponent = ({ authedProfile }: any) => {
           })
           .then((response) => {
             setAuthedProfile(response.data);
-            console.log(response);
+            refreshData();
           })
           .catch((err: any) => {
             console.log(err);
@@ -106,7 +109,7 @@ const ProfileComponent = ({ authedProfile }: any) => {
           })
           .then((response) => {
             setAuthedProfile(response.data);
-            console.log(response);
+            refreshData();
           })
           .catch((err: any) => {
             console.log(err);
@@ -149,122 +152,23 @@ const ProfileComponent = ({ authedProfile }: any) => {
     });
   };
 
-  // Banner image upload
-  const handleCancelBanner = () => {
-    setBannerPicture({
-      ...bannerPicture,
-      img: null,
-      cropperOpen: false,
-    });
-  };
-  const setEditorRefBanner = (editor: any) => setEditor(editor);
-
-  const handleSaveBanner = () => {
-    const croppedImg = bannerPicture.img;
-    setBannerPicture({
-      ...bannerPicture,
-      img: null,
-      cropperOpen: false,
-      croppedImg: croppedImg,
-    });
-
-    uploadToIpfs(bannerPicture);
-  };
-
-  const handleFileChangeBanner = (e: any) => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      console.log(url);
-      setBannerPicture({
-        ...bannerPicture,
-        img: url,
-      });
-      setFile(file);
-    }
-  };
-  const handleOpenCropperBanner = () => {
-    setBannerPicture({
-      ...bannerPicture,
-      cropperOpen: true,
-    });
-  };
-
   return (
     <div
-      className={`flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${
+      className={`flex flex-col w-full max-w-[1590px]  px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${
         loading && `cursor-progress`
       }`}
     >
-      <div className="flex flex-col w-full font-ibmPlex ">
-        <label
-          className="cursor-pointer"
-          htmlFor="input-banner"
-          onClick={handleOpenCropperBanner}
-        >
-          <Image
-            src={
-              authedProfile
-                ? authedProfile?.banner !== ""
-                  ? authedProfile?.bannerPicture
-                  : banner
-                : banner
-            }
-            width={1600}
-            height={200}
-            alt="banner"
-            className="h-[12vh] md:h-[14vh]  object-cover   z-0 border border-transparent hover:border-green"
-          />
-          <input
-            id="input-banner"
-            className="text-xs hidden"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChangeBanner}
-          />
-        </label>
-        <div className="w-fit border border-green flex flex-col align-center">
-          {bannerPicture.cropperOpen && (
-            <div className="flex flex-col items-center">
-              {/* <input
-                className="text-xs"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              /> */}
-              {bannerPicture.img && (
-                <>
-                  <AvatarEditor
-                    className="w-screen"
-                    ref={setEditorRefBanner}
-                    image={bannerPicture.img}
-                    width={300}
-                    height={50}
-                    border={50}
-                    color={[1, 1, 1, 0.5]} // RGBA
-                    rotate={0}
-                    scale={1}
-                  />
-
-                  <div className="flex w-full justify-around">
-                    <button
-                      className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                      onClick={handleSaveBanner}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className=" text-green font-xxCompressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                      onClick={handleCancelBanner}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </div>
+      <div className="flex flex-col w-full overflow-hidden font-ibmPlex ">
+        <Banner
+          authedProfile={authedProfile}
+          setBannerPicture={setBannerPicture}
+          bannerPicture={bannerPicture}
+          handleFileChange={handleFileChange}
+          setEditor={setEditor}
+          banner={banner}
+          setFile={setFile}
+          uploadToIpfs={uploadToIpfs}
+        />
         <div className="flex w-full -mt-4">
           <label
             className="cursor-pointer"
@@ -356,6 +260,9 @@ const ProfileComponent = ({ authedProfile }: any) => {
             setLoading={setLoading}
           />
         </div>
+        {authedProfile?.admin ? (
+          <AdminLoginButton authedProfile={authedProfile} />
+        ) : null}
         {isArtist ? ( // if artist
           <div className="flex  flex-col-reverse md:flex-col">
             <div className="flex md:mt-5 h-full flex-wrap">
@@ -700,7 +607,7 @@ const ProfileComponent = ({ authedProfile }: any) => {
             <h3 className="font-bold">SAVED</h3>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              {authedProfile.savedNfts.map((nft: any) => (
+              {authedProfile?.savedNfts.map((nft: any) => (
                 <div
                   key={nft.id}
                   className="flex  flex-col h-full items-start w-max "
