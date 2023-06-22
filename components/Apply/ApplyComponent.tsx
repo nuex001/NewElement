@@ -98,8 +98,12 @@ const ApplyComponent = () => {
             console.log("Message Sent.");
             setFormValues(initialValues);
             isModalOpen();
-          } else {
+          } else if (response.status === 400) {
             alert("Sorry, something went wrong. Please try again.");
+            setFormValues(initialValues);
+          } else if (response.status === 200) {
+            alert("Message Sent");
+            setFormValues(initialValues);
           }
         })
         .catch((err) => console.log(err));
