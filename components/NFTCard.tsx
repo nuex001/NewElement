@@ -57,8 +57,8 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
               className=" overflow-hidden h-full flex min-h-[370px] max-h-[450px]  xl:max-h-[580px] justify-center items-center mb-3"
             >
               <Image
-                src={listing?.asset.image}
-                alt={listing?.asset.name}
+                src={listing?.image}
+                alt={listing?.title}
                 width={400}
                 height={400}
                 className="w-full  object-cover cursor-pointer"
@@ -68,7 +68,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
             <div className="flex flex-col font-ibmPlex mb-16 uppercase text-xs text-[#e4e8eb] ">
               <div className=" flex ">
                 <div className="">
-                  <p>{listing?.asset.description}</p>
+                  <p>{listing?.title}</p>
                 </div>
                 <div className="flex grow"></div>
                 <div className=" flex text-left">
@@ -77,7 +77,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
                     Reserve <br /> Price
                   </p>
                   <p className="font-bold ">
-                    1.1 <br /> ETH
+                    {listing?.price} <br /> ETH
                   </p>
                 </div>
               </div>
@@ -91,7 +91,12 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
                   }}
                   className="font-bold flex cursor-pointer"
                 >
-                  <p>BY @RODRI</p>
+                  <p>BY @
+                    {listing.seller
+                      .slice(0, 3)
+                      .concat("...")
+                      .concat(listing.seller.slice(-4))}
+                  </p>
                   <Image
                     className="ml-3 h-5"
                     src={profile}
@@ -108,7 +113,7 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
                     Current <br /> Bid
                   </p>
                   <p className="font-bold text-green">
-                    1.1 <br /> ETH
+                    {listing.Bid} <br /> ETH
                   </p>
                 </div>
               </div>
@@ -128,8 +133,24 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
 
                 <div className="flex grow"></div>
                 <div className=" flex font-bold text-green">
-                  {" "}
-                  <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                  {
+                    listing.timeElapse ?
+                      <>
+                        <p className="pr-5">
+                          ENDS IN</p> <p> {listing?.time}</p>
+                      </> :
+                      
+                      <p className="pr-5">
+                         {
+                                listing.endTime != 0 ?
+                                  listing.endTime
+                                  :
+                                  "place bid"
+                              }
+                      </p>
+                  }
+
+
                 </div>
                 <div className="flex grow"></div>
 

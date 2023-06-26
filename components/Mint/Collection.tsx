@@ -25,14 +25,14 @@ const Collection = ({
         className="w-full h-16 mt-3 placeholder:text-sm border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
 
-      <input
+      <textarea
         id="description1"
         name="description"
         placeholder="Collection Description"
-        type="text"
+        // type="text"
         value={formValuesCollection.description}
         onChange={handleChangeCollection}
-        className="w-full h-20 mt-3 mb-3 placeholder:text-sm border-green border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-20 mt-3 mb-3 placeholder:text-sm border-green border pl-5 pt-2 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
       <p className="text-left text-sm w-full pl-5 mb-1 text-neutral-400 font-ibmPlex">
         Logo Image
@@ -78,14 +78,14 @@ const Collection = ({
         />
       </label>
       <p className="text-left w-full pl-5 mt-3 text-neutral-400 font-ibmPlex">
-        Token Symbol
+        Total Supply
       </p>
       <input
-        id="title1"
-        placeholder="EMNT"
-        type="text"
-        name="token"
-        value={formValuesCollection.token}
+        id="totalsuply"
+        placeholder="0"
+        type="number"
+        name="totalsuply"
+        value={formValuesCollection.totalsuply}
         onChange={handleChangeCollection}
         className="w-full h-16 mt-1 border-green border placeholder:text-sm pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />

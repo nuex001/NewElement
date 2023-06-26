@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect , useState} from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ethers } from "ethers";
+import { ContractAbi, ContractAddress } from "../utils/constants";
+import { fetCollectiontitle } from "../utils/utils";
+
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -29,6 +33,31 @@ const SingleNFT = ({
   const handleCollectionChange = (collection: string) => {
     setCollection(collection);
   };
+  const [menuItems,setMenuItems]= useState(null)
+  // const menuItems = ["Option 1", "Option 2", "Option 3"];
+
+
+  const fetchCollection = async ( ) =>{
+    const provider = new ethers.providers.Web3Provider(
+      window.ethereum as any
+    );
+
+    await window?.ethereum?.request({ method: "eth_requestAccounts" });
+    const signer = provider.getSigner();
+
+    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+      
+    const collectionTx = await contract.fetchMyCollections();
+    console.log(collectionTx)
+   const res = await fetCollectiontitle(collectionTx);
+   console.log(res);
+   setMenuItems(res);
+  }
+  useEffect(()=>{
+    if(typeof window !== "undefined"){
+      fetchCollection();
+    }
+  },[])
 
   return (
     <div className="flex flex-col items-center justify-center md:w-3/4 ">
@@ -82,14 +111,13 @@ const SingleNFT = ({
         className="w-full h-16 mt-3 border-green placeholder:text-sm border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800 focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
 
-      <input
+      <textarea
         id="description1"
         name="description"
         placeholder="Description"
-        type="text"
         value={formValues.description}
         onChange={handleChange}
-        className="w-full h-20 mt-3 border-green placeholder:text-sm border pl-5 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
+        className="w-full h-20 mt-3 border-green placeholder:text-sm border pl-5  pt-2 cursor-pointer font-ibmPlex text-green  dark:bg-neutral-800  focus:bg-neutral-700 focus:outline-none transition duration-300 ease-in-out"
       />
       <div className="font-ibmPlex text-left">
         <p className="my-4 text-[13px]">
@@ -97,16 +125,21 @@ const SingleNFT = ({
         </p>
         <Menu as="div" className="relative inline-block w-full">
           <div>
-            <Menu.Button className="inline-flex items-center text-sm mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out ">
-              <p className="text-gray-400">
-                {collection ? collection.name : "Collection"}
-              </p>
-              <div className="flex-grow"></div>
-              <ChevronDownIcon
-                className="mr-3 h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </Menu.Button>
+          <select  className="inline-flex items-center text-sm mb-3 pl-5 w-full h-14 border-green border cursor-pointer bg-gray-50 dark:hover:bg-neutral-700 dark:bg-neutral-800 hover:bg-gray-100 transition duration-300 ease-in-out "
+           onChange={handleChange}
+          style={{
+            color: '#333',
+            outline:"none",
+          }}
+          name="collectionId"
+          >
+      <option value={0}>Select a Collection</option>
+      {menuItems && menuItems.map((item) => (
+        <option key={item.id} value={item.id} style={{ color: '#32ff91' }}>
+          {item.title}
+        </option>
+      ))}
+    </select>
           </div>
 
           <Transition

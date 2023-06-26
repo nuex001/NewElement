@@ -14,12 +14,15 @@ import {
 } from "@thirdweb-dev/sdk";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { marketplaceContractAddress } from "../../addresses";
 import Router from "next/router";
 import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
 import styles from "../../styles/Home.module.css";
+import { ethers } from "ethers"
+import { ContractAbi, ContractAddress } from "../utils/constants";
+import { fetchListing } from "../utils/utils";
 
 import Link from "next/link";
 import CollectionListingCard from "./CollectionListingCard";
@@ -38,6 +41,12 @@ const CollectionListing = (props: Props) => {
   // Hooks to detect user is on the right network and switch them if they are not
   const networkMismatch = useNetworkMismatch();
   const [, switchNetwork] = useNetwork();
+
+
+  const [listings, setListings] = useState(null);
+
+  const router = useRouter();
+  const { collectionId } = router.query as { collectionId: string };
   const listing = {
     metadata: {
       name: "Summer",
@@ -71,6 +80,35 @@ const CollectionListing = (props: Props) => {
     setModalOpenEnlargeNFT(false);
   };
 
+  const fetchlisting = async () => {
+    const provider = new ethers.providers.Web3Provider(
+      window.ethereum as any
+    );
+
+    if (collectionId) {
+      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+      const id = Number(collectionId);
+      const listingTx = await contract.fetchNFT(id);
+      // console.log(listingTx)
+      const res = await contract.fetchCollection(id);
+      console.log(res);
+      // making a function to get both the collection data and nfts
+
+      // setListings(res);
+      // setloadingListing(false);
+      //  setLoadingListings(false);
+      //  console.log(res);
+      //  setMenuItems(res);
+    }
+  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      fetchlisting();
+    }
+  }, []);
   //  if (loadingListing) {
   //    return (
   //      <div className={`font-ibmPlex ${styles.loadingOrError}`}>Loading...</div>

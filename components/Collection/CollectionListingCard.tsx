@@ -18,8 +18,8 @@ const CollectionListingCard = ({
     <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between">
       <div className="flex flex-col h-full">
         <Image
-          src={listing?.metadata.image as string}
-          alt={listing?.metadata.name as string}
+          src={listing?.title as string}
+          alt={listing?.title as string}
           width={400}
           height={600}
           className="w-full mb-2 object-contain cursor-pointer"
@@ -28,13 +28,13 @@ const CollectionListingCard = ({
         <div className="flex flex-col font-ibmPlex mb-6 uppercase text-xs text-[#e4e8eb] ">
           <div className=" flex ">
             <div className="">
-              <p>{listing?.metadata.description}</p>
+              <p>{listing?.description}</p>
             </div>
             <div className="flex grow"></div>
             <div className=" flex text-left">
               {" "}
               <p className="pr-[3.25rem] ">
-                Floor <br /> Price
+              {listing?.totalsuply} <br /> TotalSupply
               </p>
               <p className="font-bold text-green">
                 1.1 <br /> ETH

@@ -17,6 +17,10 @@ import CollectionMarketPage from "../components/Collection/CollectionMarketPage"
 import { getCookie } from "cookies-next";
 import Users from "../model/users";
 import connectDB from "../lib/connectDB";
+import {ethers} from "ethers"
+import { ContractAbi, ContractAddress } from "../components/utils/constants";
+import { fetchListings } from "../components/utils/utils";
+
 
 const Home: NextPage = ({ user }: any) => {
   const [isCollection, setIsCollection] = useState(false);
@@ -25,15 +29,38 @@ const Home: NextPage = ({ user }: any) => {
     marketplaceContractAddress,
     "marketplace"
   );
-  const { data: listings, isLoading: loadingListings } =
-    useActiveListings(marketplace);
+  // const { data: listings, isLoading: loadingListings } =
+  //   useActiveListings(marketplace);
+  const [listings,setListings] = useState([]);
+  const [loadingListings,setLoadingListings] = useState(true);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setAuthedProfile(user);
-  //   }
-  // }, [user]);
+  const fetchlisting = async ( ) =>{
+    const provider = new ethers.providers.Web3Provider(
+      window.ethereum as any
+    );
+
+    await window?.ethereum?.request({ method: "eth_requestAccounts" });
+    const signer = provider.getSigner();
+
+    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+      
+    const listingTx = await contract.fetchListingItem();
+    console.log(listingTx)
+   const res = await fetchListings({contract,listingTx});
+   setListings(res);
+   setLoadingListings(false);
+  //  console.log(res);
+  //  setMenuItems(res);
+  }
+  useEffect(() => {
+    if (user) {
+      setAuthedProfile(user);
+    }
+    if(typeof window !== "undefined"){
+      fetchlisting();
+    }
+  }, [user]);
 
   return (
     <>
