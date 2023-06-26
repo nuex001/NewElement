@@ -31,7 +31,7 @@ const Home: NextPage = ({ user }: any) => {
   );
   // const { data: listings, isLoading: loadingListings } =
   //   useActiveListings(marketplace);
-  const [listings,setListings] = useState([]);
+  const [listings,setListings] = useState<any>([]);
   const [loadingListings,setLoadingListings] = useState(true);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
@@ -105,7 +105,7 @@ const Home: NextPage = ({ user }: any) => {
                   </div>
                   {!isCollection ? (
                     <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-                      {listings?.map((listing, index) => (
+                      {listings?.map((listing : any, index : number) => (
                         <motion.div
                           key={index}
                           initial={{ y: 80, opacity: 0 }}

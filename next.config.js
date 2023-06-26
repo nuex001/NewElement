@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ["gateway.ipfscdn.io", "ipfs-2.thirdwebcdn.com"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;

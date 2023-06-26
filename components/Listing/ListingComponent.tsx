@@ -27,9 +27,9 @@ import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
 
 
-const ListingComponent: NextPage = () => {
+const ListingComponent: any = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [listing, setListing] = useState(null);
+  const [listing, setListing] = useState<any>(null);
   const [loadingListing, setloadingListing] = useState<boolean>(true);
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);

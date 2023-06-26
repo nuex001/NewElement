@@ -46,7 +46,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   const [balance, setBalance] = useState<number>(0);
   const [address, setAddress] = useState<number>(0);
   const getBalance = async () => {
-    if (typeof window !== "undefined") {
+    if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(
         window.ethereum as any
       );
@@ -60,7 +60,8 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       const balance = await provider.getBalance(address);
 
       // Convert the balance to Ether units
-      const balanceInEther = Math.round(ethers.utils.formatEther(balance));
+      const bal = ethers.utils.formatEther(balance);
+      const balanceInEther = Math.round(Number(bal));
 
       setBalance(balanceInEther);
     }

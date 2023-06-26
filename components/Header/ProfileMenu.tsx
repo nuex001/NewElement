@@ -19,7 +19,7 @@ export default function ProfileMenu() {
   const disconnectWallet = useDisconnect();
 
 
-  const reg = (userData : any) => {
+  const reg = (userData: any) => {
     axios
       .post("/api/signIn", userData)
       .then((res) => {
@@ -33,16 +33,16 @@ export default function ProfileMenu() {
 
   const connectWallet = async () => {
     try {
-      if (typeof window.ethereum !== "undefined") {
+      if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
         let web3;
-    web3 = new Web3(window.ethereum);
-      // Request account access
-      await window.ethereum.enable();
-      const accounts = await web3.eth.getAccounts();
-      const accountAddress = accounts[0];
-      console.log('Account address:', accountAddress)
+        web3 = new Web3(window.ethereum);
+        // Request account access
+        await (window.ethereum as any).enable();
+        const accounts = await web3.eth.getAccounts();
+        const accountAddress = accounts[0];
+        console.log('Account address:', accountAddress)
         setAddress(accountAddress);
-    
+
         // const web3 = await new Web3(window.ethereum);
         // const accounts = await web3.eth.getAccounts();
 
@@ -60,9 +60,9 @@ export default function ProfileMenu() {
     // Connect to an Ethereum provider
     // Get the account address
   }
-  const checkIfConnected = () =>{
+  const checkIfConnected = () => {
     if (typeof window !== "undefined") {
-      if(window.localStorage.getItem("tw:provider:connectors")){
+      if (window.localStorage.getItem("tw:provider:connectors")) {
         connectWallet();
       }
     }
@@ -90,8 +90,9 @@ export default function ProfileMenu() {
 
   const disconnectWalletAndUser = async () => {
     if (typeof window !== "undefined") {
-      if(window.localStorage.getItem("tw:provider:connectors")){
+      if (window.localStorage.getItem("tw:provider:connectors")) {
         const web3 = new Web3(window.ethereum);
+        if (typeof web3 !== 'undefined' && typeof web3.currentProvider !== 'undefined') {
         const accounts = await web3.eth.getAccounts();
         const address = accounts[0];
         if (web3.currentProvider.disconnect) {
@@ -110,6 +111,7 @@ export default function ProfileMenu() {
           web3.currentProvider.disconnect();
           setAddress("");
         }
+      }
       }
     }
     setAuthedProfile(null);

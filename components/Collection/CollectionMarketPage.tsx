@@ -7,9 +7,17 @@ import {ethers} from "ethers"
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchcontractListings } from "../utils/utils";
 type Props = {};
+interface Listing {
+  id: number;
+  title: any;
+  image: any;
+  creator: any;
+  counter: number;
+  totalSupply: number;
+}
 
 const CollectionMarketPage = (props: Props) => {
-  const [listings,setListings] = useState([]);
+  const [listings,setListings] = useState<Listing[]>([]);
   // const { contract } = useContract(collectionContractAddress);
   const fetchlisting = async ( ) =>{
     const provider = new ethers.providers.Web3Provider(
@@ -24,8 +32,6 @@ const CollectionMarketPage = (props: Props) => {
     const collectionTx = await contract.fetchMyCollections();
     console.log(collectionTx)
    const res = await fetchcontractListings(collectionTx);
-   console.log(res);
-   
    setListings(res);
   }
   useEffect(() => {

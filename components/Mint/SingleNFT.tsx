@@ -33,7 +33,7 @@ const SingleNFT = ({
   const handleCollectionChange = (collection: string) => {
     setCollection(collection);
   };
-  const [menuItems,setMenuItems]= useState(null)
+  const [menuItems,setMenuItems]= useState<any>(null)
   // const menuItems = ["Option 1", "Option 2", "Option 3"];
 
 
@@ -134,7 +134,7 @@ const SingleNFT = ({
           name="collectionId"
           >
       <option value={0}>Select a Collection</option>
-      {menuItems && menuItems.map((item) => (
+      {menuItems && menuItems.map((item : any) => (
         <option key={item.id} value={item.id} style={{ color: '#32ff91' }}>
           {item.title}
         </option>
