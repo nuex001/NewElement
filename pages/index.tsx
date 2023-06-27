@@ -46,7 +46,7 @@ const Home: NextPage = ({ user }: any) => {
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
       
     const listingTx = await contract.fetchListingItem();
-    console.log(listingTx)
+    // console.log(listingTx)
    const res = await fetchListings({contract,listingTx});
    setListings(res);
    setLoadingListings(false);

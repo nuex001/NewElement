@@ -50,17 +50,17 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
             <div className="flex flex-col font-ibmPlex mb-16 uppercase text-xs text-[#e4e8eb] ">
               <div className=" flex ">
                 <div className="">
-                  <p>{listing?.description}</p>
+                  {/* <p>{listing?.description}</p> */}
                 </div>
                 <div className="flex grow"></div>
                 <div className=" flex text-left">
                   {" "}
-                  <p className="pr-[1.25rem]">
-                  TotalSupply
+                  {/* <p className="pr-[1.25rem]">
+                  Token <br /> symbol
                   </p>
                   <p className="font-bold text-green">
-                  {listing?.totalSupply}
-                  </p>
+                  {listing?.Tokensymbol}
+                  </p> */}
                 </div>
               </div>
 
@@ -91,10 +91,12 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
                 <div className="flex grow"></div>
                 <div className=" flex text-left">
                   {" "}
-                  <p className="pr-6">
-                    Collection <br /> Count
+                  <p className="pr-[1.25rem]">
+                  Token <br /> symbol
                   </p>
-                  <p className="font-bold ">{listing?.counter}</p>
+                  <p className="font-bold text-green">
+                  {listing?.Tokensymbol}
+                  </p>
                 </div>
               </div>
               <div className=" flex mt-3">

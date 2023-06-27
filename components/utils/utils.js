@@ -72,7 +72,7 @@ export const fetchListings = async (data) => {
     if (listingTx) {
         for await (const response of listingTx) {
             let timeElapse = false;
-            let time;
+            let time = Number(response.endTime);
             if (Number(response.endTime) !== 0) {
                 const currentTime = new Date().getTime();
                 const uintTimestamp = Math.floor(currentTime / 1000);
@@ -91,7 +91,7 @@ export const fetchListings = async (data) => {
             const tokenUrl = await contract.tokenURI(id);
             let Bid = await contract.gethighestBid(response.tokenId);
             Bid = Number(Bid) / 1e18;
-            const { image, title, description } = await readIPFSContent(tokenUrl);
+            const { image, title, description } = await readIPFSContent(tokenUrl) ?? {};
             const nft = {
                 id: Number(response.tokenId),
                 title: title,
@@ -116,21 +116,21 @@ export const fetchcontractListings = async (collectionTx) => {
     let collections = [];
     if (collectionTx) {
         for await (const response of collectionTx) {
-            const { image, title, description } = await readIPFSContent(response.collectionUrl);
+            const { image, title, description } = await readIPFSContent(response.collectionUrl) ?? {};
             const collection = {
                 id: Number(response.id),
                 title: title,
                 image: image,
+                description: description,
                 creator: response.creator,
                 counter: Number(response.counter),
-                totalSupply: Number(response.TotalSupply),
+                Tokensymbol:response.Tokensymbol
             }
             collections.push(collection);
         }
     }
     return collections;
 }
-
 
 export const fetchListing = async ({ contract, listingTx }) => {
     // console.log(listingTx);
@@ -169,7 +169,7 @@ export const fetchListing = async ({ contract, listingTx }) => {
         timeElapse: timeElapse,
         endTime: time,
     }
-    console.log(nft);
+    // console.log(nft);
     return nft;
 }
 
@@ -182,7 +182,7 @@ export const fetCollectiontitle = async (collectionTx) => {
             const item = {
                 title,
                 id: response.id,
-                totalsupply: response.TotalSupply,
+                tokensymbol: response.Tokensymbol,
                 creator: response.creator,
                 image
             }
@@ -192,4 +192,17 @@ export const fetCollectiontitle = async (collectionTx) => {
     } else {
         return []
     }
+}
+
+export const fetCollection = async (collectionTx) => {
+            const { title,description, image } = await readIPFSContent(collectionTx.collectionUrl);
+            const item = {
+                title,
+                id: collectionTx.id,
+                description:description,
+                tokensymbol: collectionTx.Tokensymbol,
+                creator: collectionTx.creator,
+                image
+            }
+        return item;
 }

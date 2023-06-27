@@ -1,13 +1,15 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
-
+import {ethers} from "ethers"
 type Props = {
   modalOpen: boolean;
   isModalClosed: () => void;
   listing: object | any;
   bidAmount: string;
   setBidAmount: (bidAmount: string) => void;
+  createBidOrOffer: (listingId: number) => void;
+  makeOffer: (listingId: number) => void;
 };
 
 const CollPlaceBidModal: FunctionComponent<Props> = ({
@@ -16,10 +18,14 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
   listing,
   bidAmount,
   setBidAmount,
+  createBidOrOffer,
+  makeOffer
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
-
+  // useEffect(()=>{
+  //   console.log(listing)
+  // },[])
   const customStyles = {
     overlay: {
       backgroundColor: "rgb(25, 25, 25, 0.85)",
@@ -40,6 +46,32 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
     },
   };
 
+  const [balance, setBalance] = useState<number>(0);
+  const [address, setAddress] = useState<number>(0);
+  const getBalance = async () => {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
+      // Request access to the user's Ethereum accounts (MetaMask, etc.)
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      // Return the first account address
+      const address = accounts[0];
+      setAddress(address);
+      // Get the balance of the specified address
+      const balance = await provider.getBalance(address);
+
+      // Convert the balance to Ether units
+      const bal = ethers.utils.formatEther(balance);
+      const balanceInEther = Math.round(Number(bal));
+
+      setBalance(balanceInEther);
+    }
+  }
+
+  useEffect(() => { getBalance(); }, [])
+
   return (
     <div>
       {" "}
@@ -57,8 +89,8 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                 {listing ? (
                   <div className=" overflow-hidden h-full flex justify-center items-center mb-3">
                     <Image
-                      src={listing?.metadata.image}
-                      alt={listing?.metadata.name}
+                      src={listing?.image}
+                      alt={listing?.title}
                       width={200}
                       height={300}
                       className="w-full max-h-[35vh] min-h-[250px] object-contain"
@@ -83,7 +115,7 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                         Reserve <br /> Price
                       </p>
                       <p className="font-bold ">
-                        2.1 <br /> ETH
+                        {listing?.price} <br /> ETH
                       </p>
                     </div>
                     <div className="flex grow"></div>
@@ -93,7 +125,7 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                         Current <br /> Bid
                       </p>
                       <p className="font-bold text-green">
-                        2.5 <br /> ETH
+                        {listing?.Bid} <br /> ETH
                       </p>
                     </div>
                   </div>
@@ -127,9 +159,42 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                     </div>
                   </div>
 
-                  <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
-                    Make Offer
-                  </button>
+                {
+                    listing.timeElapse && listing.endTime > 0 ?
+                      <>
+                        {listing.owner == address ?
+                          <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                            RESALE
+                          </button>
+                          :
+                          listing.sold ?
+                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                              WITHDRAW
+                            </button>
+                            :
+                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                              END
+                            </button>
+                        }
+                      </>
+                      :
+                      <>
+                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                         onClick={()=>{
+                          createBidOrOffer(listing.id)
+                        }}
+                        >
+                          Make Bid
+                        </button>
+                        <button
+                          onClick={()=>{
+                            makeOffer(listing.id)
+                          }}
+                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          Make Offer
+                        </button>
+                      </>
+                  }
                 </div>
               </div>
             </div>

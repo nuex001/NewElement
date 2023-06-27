@@ -7,17 +7,10 @@ import {ethers} from "ethers"
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchcontractListings } from "../utils/utils";
 type Props = {};
-interface Listing {
-  id: number;
-  title: any;
-  image: any;
-  creator: any;
-  counter: number;
-  totalSupply: number;
-}
+
 
 const CollectionMarketPage = (props: Props) => {
-  const [listings,setListings] = useState<Listing[]>([]);
+  const [listings,setListings] = useState<any>([]);
   // const { contract } = useContract(collectionContractAddress);
   const fetchlisting = async ( ) =>{
     const provider = new ethers.providers.Web3Provider(
@@ -62,7 +55,7 @@ const CollectionMarketPage = (props: Props) => {
   return (
     <AnimatePresence>
       <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-        {listings?.map((listing, index) => (
+        {listings?.map((listing : any, index : any) => (
           <motion.div
             key={index}
             initial={{ y: 80, opacity: 0 }}

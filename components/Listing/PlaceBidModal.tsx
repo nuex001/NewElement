@@ -10,6 +10,7 @@ type Props = {
   bidAmount: string;
   setBidAmount: (bidAmount: string) => void;
   createBidOrOffer: () => void;
+  makeOffer: () => void;
 };
 
 const PlaceBidModal: FunctionComponent<Props> = ({
@@ -18,7 +19,8 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   listing,
   bidAmount,
   setBidAmount,
-  createBidOrOffer
+  createBidOrOffer,
+  makeOffer
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
@@ -185,7 +187,9 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         >
                           Make Bid
                         </button>
-                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                        <button
+                        onClick={makeOffer}
+                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
                           Make Offer
                         </button>
                       </>

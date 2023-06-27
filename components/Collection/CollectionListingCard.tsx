@@ -7,37 +7,44 @@ type Props = {
   listing: any;
   isModalOpen: () => void;
   isModalOpenEnlargeNFT: () => void;
+  setBidListing: (listing :any) => void;
 };
 
 const CollectionListingCard = ({
   listing,
   isModalOpen,
   isModalOpenEnlargeNFT,
+  setBidListing,
 }: Props) => {
   return (
     <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between">
       <div className="flex flex-col h-full">
         <Image
-          src={listing?.title as string}
+          src={listing?.image as string}
           alt={listing?.title as string}
           width={400}
           height={600}
           className="w-full mb-2 object-contain cursor-pointer"
-          onClick={isModalOpenEnlargeNFT}
+          // onClick={isModalOpenEnlargeNFT}
+          onClick={() => {
+            Router.push({
+              pathname: `/listing/${listing.id}`,
+            });
+          }}
         />{" "}
         <div className="flex flex-col font-ibmPlex mb-6 uppercase text-xs text-[#e4e8eb] ">
           <div className=" flex ">
             <div className="">
-              <p>{listing?.description}</p>
+              <p>{listing?.title}</p>
             </div>
             <div className="flex grow"></div>
             <div className=" flex text-left">
               {" "}
-              <p className="pr-[3.25rem] ">
-              {listing?.totalsuply} <br /> TotalSupply
+              <p className="pr-[0.4rem] ">
+              Reserve <br /> Price
               </p>
               <p className="font-bold text-green">
-                1.1 <br /> ETH
+               {listing.price}<br /> ETH
               </p>
             </div>
           </div>
@@ -51,7 +58,10 @@ const CollectionListingCard = ({
               }}
               className="font-bold flex cursor-pointer"
             >
-              <p>BY @RODRI</p>
+              <p>BY @  {listing.seller.slice(0, 3)
+                .concat("...")
+                .concat(listing.seller.slice(-4))}
+              </p>
               <Image
                 className="ml-3 h-5"
                 src={profile}
@@ -65,16 +75,32 @@ const CollectionListingCard = ({
             <div className=" flex text-left">
               {" "}
               <p className="pr-6 ">
-                Collection <br /> Count
+                Current <br /> Bid
               </p>
-              <p className="font-bold ">05</p>
+              <p className="font-bold ">
+                {listing.Bid}
+              </p>
             </div>
           </div>
           <div className=" flex mt-3">
             <div className="flex grow"></div>
             <div className=" flex font-bold text-green">
               {" "}
-              <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+              {
+                listing.timeElapse?
+                  <>
+                    <p className="pr-5">
+                      ENDS IN</p> <p> {listing?.time}</p>
+                  </> :
+                  <p className="pr-5">
+                    {
+                      listing.endTime != 0 ?
+                        listing.endTime
+                        :
+                        "place bid"
+                    }
+                  </p>
+              }
             </div>
             <div className="flex grow"></div>
           </div>
@@ -83,7 +109,10 @@ const CollectionListingCard = ({
       <div className="font-ibmPlex w-full md:min-w-1 flex items-center justify-between">
         <button
           className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-          onClick={isModalOpen}
+          onClick={() => {
+            isModalOpen();
+            setBidListing(listing);
+          }}
         >
           PLACE BID
         </button>

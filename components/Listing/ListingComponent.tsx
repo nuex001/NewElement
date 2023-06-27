@@ -31,6 +31,7 @@ const ListingComponent: any = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [listing, setListing] = useState<any>(null);
   const [loadingListing, setloadingListing] = useState<boolean>(true);
+  const [bids, setBids] = useState<any>([]);
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);
 
@@ -42,46 +43,7 @@ const ListingComponent: any = () => {
   // If the user visits /listing/1 then the listingId will be 1.
   const { listingId } = router.query as { listingId: string };
 
-  // Hooks to detect user is on the right network and switch them if they are not
-  // const networkMismatch = useNetworkMismatch();
-  // const [, switchNetwork] = useNetwork();
 
-  // // Initialize the marketplace contract
-  // const { contract: marketplace } = useContract(
-  //   marketplaceContractAddress,
-  //   "marketplace"
-  // );
-
-  // Fetch the listing from the marketplace contract
-  // const { data: listing, isLoading: loadingListing } = useListing(
-  //   marketplace,
-  //   listingId
-  // );
-  // function formatTime(time : any) {
-  //   return time < 10 ? `0${time}` : `${time}`;
-  // }
-  // function countdownTimer() {
-  //   const targetDate = new Date();
-  //   targetDate.setHours(targetDate.getHours() + 10);
-  //   targetDate.setMinutes(targetDate.getMinutes() + 22);
-  //   targetDate.setSeconds(targetDate.getSeconds() + 9);
-
-  //   const countdown = setInterval(() => {
-  //     const now = new Date().getTime();
-  //     const distance = targetDate.getTime() - now;
-
-  //     if (distance < 0) {
-  //       clearInterval(countdown);
-  //       console.log('Countdown finished!');
-  //     } else {
-  //       const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-  //       const minutes = Math.floor((distance / 1000 / 60) % 60);
-  //       const seconds = Math.floor((distance / 1000) % 60);
-
-  //       console.log(`${formatTime(hours)}H ${formatTime(minutes)}M ${formatTime(seconds)}S`);
-  //     }
-  //   }, 1000);
-  // }
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
@@ -95,10 +57,23 @@ const ListingComponent: any = () => {
       const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
       const id = Number(listingId);
       const listingTx = await contract.fetchNFT(id);
-      console.log(listingTx)
+      // console.log(listingTx)
       const res = await fetchListing({ contract, listingTx });
-      // console.log(res);
+      // Get the latest block number
+      const toBlock = await provider.getBlockNumber();
+      const fromBlock = 0;
 
+      // Subscribe to the 'Bid' event
+      contract.queryFilter(contract.filters.Bid(), fromBlock, toBlock)
+        .then((events) => {
+          setBids((prevBids :any) => {
+            return events.slice(0, 4).map((event : any) => {
+              const { sender, amount } = event?.args;
+              const formattedAmount = Number(amount) / 1e18;
+              return { sender, amount: formattedAmount };
+            });
+          });
+        })
       setListing(res);
       setloadingListing(false);
       //  setLoadingListings(false);
@@ -146,6 +121,31 @@ const ListingComponent: any = () => {
 
           // Call the contract method with value
           const listingTx = await contract.bid(id, { value: valueToSend });
+          isModalClosed();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+  async function makeOffer() {
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          window.ethereum as any
+        );
+
+        if (listingId) {
+          await window?.ethereum?.request({ method: "eth_requestAccounts" });
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const id = Number(listingId);
+          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+
+          // Call the contract method with value
+          const listingTx = await contract.makeOffer(id, { value: valueToSend });
           isModalClosed();
         }
       }
@@ -236,7 +236,7 @@ const ListingComponent: any = () => {
                       <div className="flex grow"></div>
                       <div className=" flex font-bold text-green">
                         {
-                          listing.timeElapse?
+                          listing.timeElapse ?
                             <>
                               <p className="pr-5">
                                 ENDS IN</p> <p> {listing?.time}</p>
@@ -281,23 +281,36 @@ const ListingComponent: any = () => {
                 </div>
                 <div className="flex-1/2  w-1/2">
                   <p className="text-left mb-2">HISTORY</p>
-                  <div className="flex  justify-between text-left">
-                    <Image
-                      src={profile}
-                      width={30}
-                      height={10}
-                      alt="profile picture"
-                      className="hidden md:block h-fit"
-                    />
-                    <p className="md:pl-4 w-1/2 md:w-full">
-                      Bid placed by <span className="font-bold"> @Josh90</span>{" "}
-                      <br /> Jan 15, 2023 at 7.31pm
-                    </p>
-                    <div className="flex flex-grow"></div>
-                    <p className="font-bold text-green">
-                      2.5 <br /> ETH
-                    </p>
-                  </div>
+                  {
+                    bids.length > 0 &&
+                    bids.map((bid: any,key:number) => (
+                      <div className="flex  justify-between text-left mt-2">
+                        <Image
+                          src={profile}
+                          width={30}
+                          height={10}
+                          alt="profile picture"
+                          className="hidden md:block h-fit"
+                          key={key}
+                        />
+
+                        <>
+                          <p className="md:pl-4 w-1/2 md:w-full">
+                            Bid placed by <span className="font-bold">
+                              @{bid.sender?.slice(0, 6) +
+                                "..." +
+                                bid.sender?.slice(36, 40)}
+                            </span>{" "}
+                            {/* <br /> Jan 15, 2023 at 7.31pm */}
+                          </p>
+                          <div className="flex flex-grow"></div>
+                          <p className="font-bold text-green">
+                            {bid.amount} <br /> ETH
+                          </p>
+                        </>
+                      </div>
+                    ))
+                  }
                 </div>
               </div>
             </div>
@@ -310,6 +323,7 @@ const ListingComponent: any = () => {
           isModalClosed={isModalClosed}
           modalOpen={modalOpen}
           createBidOrOffer={createBidOrOffer}
+          makeOffer={makeOffer}
         />
         <EnlargeNFTModal
           isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}

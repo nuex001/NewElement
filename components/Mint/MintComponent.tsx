@@ -47,7 +47,7 @@ const MintComponent = ({ user }: Props) => {
   const initialCollectionValues = {
     title: "",
     description: "",
-    totalsuply: "",
+    tokensymbol: "",
   };
 
   const [formValues, setFormValues] = useState(initialMintValues);
@@ -84,7 +84,7 @@ const MintComponent = ({ user }: Props) => {
   };
   const handleImageChangeCollection = (e: any) => {
     const file = e.target.files[0];
-    
+
     if (file) {
       const url = URL.createObjectURL(file);
 
@@ -117,7 +117,7 @@ const MintComponent = ({ user }: Props) => {
     let collectionData = {
       collectionName: formValuesCollection.title,
       description: formValuesCollection.description,
-      totalsuply: formValuesCollection.totalsuply,
+      tokensymbol: formValuesCollection.tokensymbol,
       image: file,
     };
     let collectionImage = {
@@ -163,8 +163,9 @@ const MintComponent = ({ user }: Props) => {
         const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
 
         setLoading(false);
+        // console.log(tokenUrl, collectionData.tokensymbol);
 
-        const collectionCreatedTx = await contract.createCollection(tokenUrl, collectionData.totalsuply);
+        const collectionCreatedTx = await contract.createCollection(tokenUrl, collectionData.tokensymbol);
 
         const collectionCreated = await collectionCreatedTx.wait();
         // console.log(collectionCreated);
@@ -196,27 +197,27 @@ const MintComponent = ({ user }: Props) => {
         alert("Something went wrong, please try again later.");
       }
     } else {
-        // Mint NFT Contract
+      // Mint NFT Contract
       const tokenUrl = await submitToIpfs(singleNFTData);
       const provider = new ethers.providers.Web3Provider(
         window.ethereum as any
       );
- 
+
       await window?.ethereum?.request({ method: "eth_requestAccounts" });
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();
       try {
-        
+
         setLoadingToDeploy(true);
         // console.log(tokenUrl);
-        
+
         // Initialize the contract with the signer
         const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
 
         setLoading(false);
         // console.log(singleNFTData.name, tokenUrl, formValues.reservePrice);
-        
+
         await contract.approveArtist(address);
         const approveTx = await contract.createListing(singleNFTData.collectionId, tokenUrl, formValues.reservePrice);
 
@@ -227,7 +228,7 @@ const MintComponent = ({ user }: Props) => {
         isModalOpen();
       } catch (e) {
         console.log(e);
-        
+
         alert("Something went wrong, please try again later.");
       }
     }

@@ -29,11 +29,6 @@ export const ContractAbi = [
   },
   {
     "inputs": [],
-    "name": "NFTMARKETBase_SupplyFull",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "NFTMARKETBase__AuctionEnded",
     "type": "error"
   },
@@ -121,32 +116,6 @@ export const ContractAbi = [
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "artist",
-        "type": "address"
-      }
-    ],
-    "name": "ArtistApproved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "artist",
-        "type": "address"
-      }
-    ],
-    "name": "ArtistRemoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "uint256",
         "name": "_fromTokenId",
@@ -172,119 +141,13 @@ export const ContractAbi = [
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
       }
     ],
     "name": "Bid",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "collectionId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "totalsupply",
-        "type": "uint256"
-      }
-    ],
-    "name": "CreateCollection",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "highestBidder",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "highestBid",
-        "type": "uint256"
-      }
-    ],
-    "name": "End",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "newTokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "collectionId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "ListingCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "newTokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "collectionId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "ListingSold",
     "type": "event"
   },
   {
@@ -298,25 +161,6 @@ export const ContractAbi = [
       }
     ],
     "name": "MetadataUpdate",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "seller",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "Resell",
     "type": "event"
   },
   {
@@ -342,44 +186,6 @@ export const ContractAbi = [
       }
     ],
     "name": "Transfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "bidder",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawBids",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "offerCreated",
     "type": "event"
   },
   {
@@ -471,9 +277,9 @@ export const ContractAbi = [
         "type": "string"
       },
       {
-        "internalType": "uint256",
-        "name": "TotalSupply",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "Tokensymbol",
+        "type": "string"
       }
     ],
     "name": "createCollection",
@@ -485,7 +291,7 @@ export const ContractAbi = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "collectionId",
+        "name": "_collectionId",
         "type": "uint256"
       },
       {
@@ -545,9 +351,9 @@ export const ContractAbi = [
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "TotalSupply",
-            "type": "uint256"
+            "internalType": "string",
+            "name": "Tokensymbol",
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -646,9 +452,9 @@ export const ContractAbi = [
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "TotalSupply",
-            "type": "uint256"
+            "internalType": "string",
+            "name": "Tokensymbol",
+            "type": "string"
           },
           {
             "internalType": "uint256",
@@ -741,9 +547,9 @@ export const ContractAbi = [
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "TotalSupply",
-            "type": "uint256"
+            "internalType": "string",
+            "name": "Tokensymbol",
+            "type": "string"
           },
           {
             "internalType": "uint256",

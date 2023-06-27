@@ -136,7 +136,7 @@ const SingleNFT = ({
       <option value={0}>Select a Collection</option>
       {menuItems && menuItems.map((item : any) => (
         <option key={item.id} value={item.id} style={{ color: '#32ff91' }}>
-          {item.title}
+          {item.tokensymbol}
         </option>
       ))}
     </select>
