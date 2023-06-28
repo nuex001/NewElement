@@ -11,7 +11,7 @@ import EnlargeNFTModal from "./EnlargeNFTModal";
 import { ethers } from "ethers"
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
-
+const { BigNumber } = require('ethers');
 
 const ListingComponent: any = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -33,11 +33,11 @@ const ListingComponent: any = () => {
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
-       (window as CustomWindow).ethereum as any
+      (window as CustomWindow).ethereum as any
     );
 
     if (listingId) {
-      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+      await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
@@ -48,18 +48,24 @@ const ListingComponent: any = () => {
       // Get the latest block number
       const toBlock = await provider.getBlockNumber();
       const fromBlock = 0;
+      const tokenId = BigNumber.from(listingId);
+      console.log(tokenId);
 
       // Subscribe to the 'Bid' event
       contract.queryFilter(contract.filters.Bid(), fromBlock, toBlock)
         .then((events) => {
-          setBids((prevBids :any) => {
-            return events.slice(0, 4).map((event : any) => {
-              const { sender, amount } = event?.args;
-              const formattedAmount = Number(amount) / 1e18;
-              return { sender, amount: formattedAmount };
+          setBids((prevBids: any) => {
+            return events.slice(0, 4).map((event: any) => {
+              if(event.args.listingId == listingId){
+                const { sender, amount } = event?.args;
+                const formattedAmount = Number(amount) / 1e18;
+                return { sender, amount: formattedAmount };
+              }
             });
           });
-        })
+        });
+
+
       setListing(res);
       setloadingListing(false);
       //  setLoadingListings(false);
@@ -95,11 +101,11 @@ const ListingComponent: any = () => {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-           (window as CustomWindow).ethereum as any
+          (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
           const signer = provider.getSigner();
           const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
           const id = Number(listingId);
@@ -120,11 +126,11 @@ const ListingComponent: any = () => {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-           (window as CustomWindow).ethereum as any
+          (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
           const signer = provider.getSigner();
           const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
           const id = Number(listingId);
@@ -132,6 +138,83 @@ const ListingComponent: any = () => {
 
           // Call the contract method with value
           const listingTx = await contract.makeOffer(id, { value: valueToSend });
+          isModalClosed();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+  async function endBid() {
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          (window as CustomWindow).ethereum as any
+        );
+
+        if (listingId) {
+          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const id = Number(listingId);
+          // const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+          console.log(id);
+
+          // Call the contract method with value
+          const listingTx = await contract.end(id);
+          isModalClosed();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+  async function withBid() {
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          (window as CustomWindow).ethereum as any
+        );
+
+        if (listingId) {
+          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const id = Number(listingId);
+          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+
+          // Call the contract method with value
+          const listingTx = await contract.withdrawBids(id);
+          isModalClosed();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
+  async function resale() {
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          (window as CustomWindow).ethereum as any
+        );
+
+        if (listingId) {
+          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const id = Number(listingId);
+          const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+
+          // Call the contract method with value
+          const resellTx = await contract.reSellToken(id, price);
+          resellTx.wait();
           isModalClosed();
         }
       }
@@ -223,10 +306,12 @@ const ListingComponent: any = () => {
                       <div className=" flex font-bold text-green">
                         {
                           listing.timeElapse ?
-                            <>
+                            listing.sold ?
                               <p className="pr-5">
-                                ENDS IN</p> <p> {listing?.time}</p>
-                            </> :
+                                ENDED</p>
+                              :
+                              <p className="pr-5">
+                                END</p> :
                             <p className="pr-5">
                               {
                                 listing.endTime != 0 ?
@@ -247,7 +332,15 @@ const ListingComponent: any = () => {
                     className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                     onClick={isModalOpen}
                   >
-                    Make Payment
+                    {
+                      listing.timeElapse ?
+                        listing.sold ?
+                          "ENDED"
+                          :
+                          "END NOW"
+                        :
+                        "place bid"
+                    }
                   </button>
                 </div>
               </div>
@@ -269,7 +362,7 @@ const ListingComponent: any = () => {
                   <p className="text-left mb-2">HISTORY</p>
                   {
                     bids.length > 0 &&
-                    bids.map((bid: any,key:number) => (
+                    bids.map((bid: any, key: number) => (
                       <div className="flex  justify-between text-left mt-2">
                         <Image
                           src={profile}
@@ -283,15 +376,15 @@ const ListingComponent: any = () => {
                         <>
                           <p className="md:pl-4 w-1/2 md:w-full">
                             Bid placed by <span className="font-bold">
-                              @{bid.sender?.slice(0, 6) +
+                              @{bid?.sender?.slice(0, 6) +
                                 "..." +
-                                bid.sender?.slice(36, 40)}
+                                bid?.sender?.slice(36, 40)}
                             </span>{" "}
                             {/* <br /> Jan 15, 2023 at 7.31pm */}
                           </p>
                           <div className="flex flex-grow"></div>
                           <p className="font-bold text-green">
-                            {bid.amount} <br /> ETH
+                            {bid?.amount} <br /> ETH
                           </p>
                         </>
                       </div>
@@ -310,6 +403,9 @@ const ListingComponent: any = () => {
           modalOpen={modalOpen}
           createBidOrOffer={createBidOrOffer}
           makeOffer={makeOffer}
+          endBid={endBid}
+          withBid={withBid}
+          resale={resale}
         />
         <EnlargeNFTModal
           isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}

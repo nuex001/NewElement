@@ -11,6 +11,9 @@ type Props = {
   setBidAmount: (bidAmount: string) => void;
   createBidOrOffer: () => void;
   makeOffer: () => void;
+  endBid: () => void;
+  withBid: () => void;
+  resale: () => void;
 };
 
 const PlaceBidModal: FunctionComponent<Props> = ({
@@ -20,7 +23,10 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   bidAmount,
   setBidAmount,
   createBidOrOffer,
-  makeOffer
+  makeOffer,
+  endBid,
+  withBid,
+  resale
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
@@ -46,18 +52,27 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   };
   // initializing state for balance
   const [balance, setBalance] = useState<number>(0);
-  const [address, setAddress] = useState<number>(0);
+  const [address, setAddress] = useState<string>("");
+  const [auth, setAuth] = useState<boolean>(false);
   const getBalance = async () => {
-    if ( (window as CustomWindow).ethereum) {
+    if ((window as CustomWindow).ethereum) {
       const provider = new ethers.providers.Web3Provider(
-         (window as CustomWindow).ethereum as any
+        (window as CustomWindow).ethereum as any
       );
       // Request access to the user's Ethereum accounts (MetaMask, etc.)
-      const accounts = await  (window as CustomWindow).ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await (window as CustomWindow).ethereum.request({ method: 'eth_requestAccounts' });
 
       // Return the first account address
       const address = accounts[0];
       setAddress(address);
+      if (listing.owner !== undefined) {
+        let listingAdrress = listing.owner;
+        listingAdrress = listingAdrress.toLowerCase();
+        console.log(listingAdrress === address);
+        // setAuth(listingAdrress === address);
+      }
+      // console.log(mainaddress == "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 ");
+
       // Get the balance of the specified address
       const balance = await provider.getBalance(address);
 
@@ -106,11 +121,20 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                 <div className="flex flex-col w-full font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
                     {
-                      listing.endTime != 0 ?
-                      listing.endTime
+                      listing.timeElapse ?
+                        listing.sold ?
+                          auth?
+                            "RESALE"
+                            :
+                            "ENDED"
+                          :
+                          "END NOW"
                         :
-                        "place bid"
-                 }
+                        listing.endTime != 0 ?
+                          listing.endTime
+                          :
+                          "place bid"
+                    }
                   </h1>
                   <div className=" flex w-full fontIbm">
                     <div className=" flex text-left">
@@ -163,33 +187,47 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                     </div>
                   </div>
                   {
-                    listing.timeElapse && listing.endTime > 0 ?
+                    listing.timeElapse ?
                       <>
-                        {listing.owner == address ?
-                          <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                        {auth && listing.sold ?
+                          <button
+                            onClick={resale}
+                            className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
                             RESALE
                           </button>
                           :
-                          listing.sold ?
-                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          listing.sold || listing.isPrimary ?
+                            <button
+                              onClick={withBid}
+                              className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
                               WITHDRAW
                             </button>
                             :
-                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                            <button
+                              onClick={endBid}
+                              className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
                               END
                             </button>
                         }
                       </>
                       :
                       <>
+                       {
+                        !listing.isPrimary &&
+                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                          onClick={withBid}
+                        >
+                          Withdraw Bid
+                        </button> 
+                       }
                         <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                           onClick={createBidOrOffer}
                         >
                           Make Bid
                         </button>
                         <button
-                        onClick={makeOffer}
-                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          onClick={makeOffer}
+                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
                           Make Offer
                         </button>
                       </>

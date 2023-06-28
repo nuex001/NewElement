@@ -125,11 +125,15 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
                 <div className=" flex font-bold text-green">
                   {
                     listing.timeElapse ?
+                    !listing.sold? 
                       <>
                         <p className="pr-5">
-                          ENDS IN</p> <p> {listing?.time}</p>
+                          END NOW</p>
                       </> :
-                      
+                      <>
+                        <p className="pr-5">
+                          SOLD OUT</p>
+                      </> :
                       <p className="pr-5">
                          {
                                 listing.endTime != 0 ?

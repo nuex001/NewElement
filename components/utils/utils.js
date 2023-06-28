@@ -84,7 +84,7 @@ export const fetchListings = async (data) => {
                 const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                time = `${hours > 1 ? hours + "H" : ""},${minutes > 1 ? minutes + "M" : ""}, ${seconds > 1 ? seconds + "S" : ""}`
+                time = `${hours > 1 ? hours + "H," : ""}${minutes > 1 ? minutes + "M," : ""} ${seconds > 1 ? seconds + "S" : ""}`
             }
             const id = Number(response.tokenId);
             // console.log(id);
@@ -104,6 +104,7 @@ export const fetchListings = async (data) => {
                 owner: response.owner,
                 details: description,
                 sold: response.sold,
+                isPrimary: response.isPrimary,
                 timeElapse: timeElapse,
                 endTime: time,
             }
@@ -147,7 +148,7 @@ export const fetchListing = async ({ contract, listingTx }) => {
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        time = `${hours > 1 ? hours + "H" : ""},${minutes > 1 ? minutes + "M" : ""}, ${seconds > 1 ? seconds + "S" : ""}`
+        time = `${hours > 1 ? hours + "H," : ""}${minutes > 1 ? minutes + "M," : ""} ${seconds > 1 ? seconds + "S" : ""}`
     }
 
     const tokenUrl = await contract.tokenURI(listingTx.tokenId);
@@ -166,10 +167,11 @@ export const fetchListing = async ({ contract, listingTx }) => {
         owner: listingTx.owner,
         description: description,
         sold: listingTx.sold,
+        isPrimary: listingTx.isPrimary,
         timeElapse: timeElapse,
         endTime: time,
     }
-    // console.log(nft);
+    console.log(nft);
     return nft;
 }
 
