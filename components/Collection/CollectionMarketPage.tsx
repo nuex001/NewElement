@@ -1,7 +1,6 @@
 import React,{useState,useEffect} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CollectionCard from "./CollectionCard";
-import { useContract } from "@thirdweb-dev/react";
 import { collectionContractAddress } from "../../addresses";
 import {ethers} from "ethers"
 import { ContractAbi, ContractAddress } from "../utils/constants";
@@ -14,10 +13,10 @@ const CollectionMarketPage = (props: Props) => {
   // const { contract } = useContract(collectionContractAddress);
   const fetchlisting = async ( ) =>{
     const provider = new ethers.providers.Web3Provider(
-      window.ethereum as any
+       (window as CustomWindow).ethereum as any
     );
 
-    await window?.ethereum?.request({ method: "eth_requestAccounts" });
+    await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
     const signer = provider.getSigner();
 
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);

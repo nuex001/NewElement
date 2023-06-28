@@ -1,11 +1,5 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import {
-  MediaRenderer,
-  useActiveListings,
-  useContract,
-  useAddress,
-} from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
 import { marketplaceContractAddress } from "../addresses";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,17 +19,12 @@ import { fetchListings } from "../components/utils/utils";
 const Home: NextPage = ({ user }: any) => {
   const [isCollection, setIsCollection] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { contract: marketplace } = useContract(
-    marketplaceContractAddress,
-    "marketplace"
-  );
-  // const { data: listings, isLoading: loadingListings } =
-  //   useActiveListings(marketplace);
   const [listings,setListings] = useState<any>([]);
   const [loadingListings,setLoadingListings] = useState(true);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const fetchlisting = async ( ) =>{
+   if(typeof window.ethereum !== "undefined"){
     const provider = new ethers.providers.Web3Provider(
       window.ethereum as any
     );
@@ -50,6 +39,7 @@ const Home: NextPage = ({ user }: any) => {
    const res = await fetchListings({contract,listingTx});
    setListings(res);
    setLoadingListings(false);
+   }
   //  console.log(res);
   //  setMenuItems(res);
   }

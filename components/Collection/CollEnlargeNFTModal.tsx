@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import Modal from "react-modal";
+import Modal from 'react-modal';
 import Image from "next/image";
 
 type Props = {

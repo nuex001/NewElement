@@ -1,18 +1,8 @@
 import React, { use, useEffect, useState } from "react";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
-import { ThirdwebStorage } from "@thirdweb-dev/storage";
-import {
-  useStorageUpload,
-  useNFTBalance,
-  useContract,
-  useTotalCount,
-  useAddress,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react";
 import SingleNFT from "./SingleNFT";
 import Collection from "./Collection";
 import axios from "axios";
-import { Alchemy, Network } from "alchemy-sdk";
 import MintModal from "./MintModal";
 import { useAuthedProfile } from "../../context/UserContext";
 import contractABI from "../../contracts/collectionContractABI";
@@ -55,12 +45,6 @@ const MintComponent = ({ user }: Props) => {
     initialCollectionValues
   );
 
-  const address = useAddress();
-  // Change the testnet to mainnet when ready
-  // const baseURL = `https://eth-goerli.g.alchemy.com/v2/ORQVzR0fGO4AXjBvx-DUPmKFGWvkgiya/getNFTs`;
-
-  const storage = new ThirdwebStorage();
-  // const { mutateAsync: upload } = useStorageUpload();
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
@@ -149,10 +133,10 @@ const MintComponent = ({ user }: Props) => {
     if (isCollection) {
       const tokenUrl = await submitToIpfs(collectionData);
       const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
+         (window as CustomWindow).ethereum as any
       );
 
-      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();
@@ -200,10 +184,10 @@ const MintComponent = ({ user }: Props) => {
       // Mint NFT Contract
       const tokenUrl = await submitToIpfs(singleNFTData);
       const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
+         (window as CustomWindow).ethereum as any
       );
 
-      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();

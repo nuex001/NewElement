@@ -7,7 +7,6 @@ import profile from "../assets/PROFILE.png";
 import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";
 import axios from "axios";
-import { useAddress } from "@thirdweb-dev/react";
 
 type Props = {
   listing: object | any;
@@ -16,21 +15,12 @@ type Props = {
 const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
-  const address = useAddress();
-  // useEffect(() => {
-  //   const listing = listings.find(
-  //     (listing: any) => listing.asset.id === nftItem.id
-  //   );
-  //   if (Boolean(listing)) {
-  //     setIsListed(true);
-  //     setPrice(listing.buyoutCurrencyValuePerToken.displayValue);
-  //   }
-  // }, [listings, nftItem]);
+  
   const handleSaveToProfile = () => {
     setLoading(true);
     const data = {
       nft: listing,
-      address: address,
+      address: "address", //remeber to change this to the normal address
     };
     axios
       .post("/api/saveNft", data)

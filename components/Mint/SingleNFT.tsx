@@ -39,10 +39,10 @@ const SingleNFT = ({
 
   const fetchCollection = async ( ) =>{
     const provider = new ethers.providers.Web3Provider(
-      window.ethereum as any
+       (window as CustomWindow).ethereum as any
     );
 
-    await window?.ethereum?.request({ method: "eth_requestAccounts" });
+    await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
     const signer = provider.getSigner();
 
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);

@@ -1,6 +1,4 @@
 import type { AppProps } from "next/app";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
-import { Sepolia } from "@thirdweb-dev/chains";
 import "../styles/globals.css";
 import Head from "next/head";
 import localFont from "next/font/local";
@@ -69,12 +67,9 @@ const xxxxCompressed = localFont({
   variable: "--font-xxxxCompressed",
 });
 
-// This is the chainId your dApp will work on.
-const activeChainId = ChainId.Mumbai;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider activeChain={activeChainId}>
       <AuthedProfileProvider>
         <Head>
           <title>New Elements</title>
@@ -125,7 +120,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </main>
       </AuthedProfileProvider>
-    </ThirdwebProvider>
   );
 }
 

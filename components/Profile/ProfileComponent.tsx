@@ -1,6 +1,5 @@
 import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
-import { useStorageUpload } from "@thirdweb-dev/react";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
 import avatar from "../../assets/avatar.gif";
@@ -57,7 +56,6 @@ const ProfileComponent = ({ authedProfile }: any) => {
   });
   const [file, setFile] = useState(null);
 
-  const { mutateAsync: upload } = useStorageUpload();
 
   const handleCancel = () => {
     setPicture({
@@ -73,50 +71,7 @@ const ProfileComponent = ({ authedProfile }: any) => {
   };
 
   const uploadToIpfs = async (image: any) => {
-    setLoading(true);
-    if (image == picture) {
-      const uploadUrl = await upload({
-        data: [file],
-        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
-      });
-
-      if (uploadUrl) {
-        axios
-          .post("/api/updateProfile", {
-            address: authedProfile.address,
-            imgUrl: uploadUrl[0],
-          })
-          .then((response) => {
-            setAuthedProfile(response.data);
-            refreshData();
-          })
-          .catch((err: any) => {
-            console.log(err);
-          })
-          .finally(() => setLoading(false));
-      }
-    } else if (image == bannerPicture) {
-      const bannerUploadUrl = await upload({
-        data: [file],
-        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
-      });
-
-      if (bannerUploadUrl) {
-        axios
-          .post("/api/updateProfile", {
-            address: authedProfile.address,
-            bannerImgUrl: bannerUploadUrl[0],
-          })
-          .then((response) => {
-            setAuthedProfile(response.data);
-            refreshData();
-          })
-          .catch((err: any) => {
-            console.log(err);
-          })
-          .finally(() => setLoading(false));
-      }
-    }
+   
   };
 
   const handleSave = (e: any) => {

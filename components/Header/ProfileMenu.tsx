@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import { useAddress, useMetamask, useDisconnect } from "@thirdweb-dev/react";
 import Link from "next/link";
 import axios from "axios";
 import { useAuthedProfile } from "../../context/UserContext";
@@ -13,10 +12,6 @@ function classNames(...classes: string[]) {
 export default function ProfileMenu() {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
   const [address, setAddress] = useState<string>("");
-
-  // const address = useAddress();
-  const connectWithMetamask = useMetamask();
-  const disconnectWallet = useDisconnect();
 
 
   const reg = (userData: any) => {
@@ -33,7 +28,7 @@ export default function ProfileMenu() {
 
   const connectWallet = async () => {
     try {
-      if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+      if (typeof window !== 'undefined') {
         let web3;
         web3 = new Web3(window.ethereum);
         // Request account access
@@ -68,25 +63,24 @@ export default function ProfileMenu() {
     }
   }
 
-  const connectWalletAndUser = () => {
-    connectWithMetamask();
-    if (!address) return;
-    (async () => {
-      const userData = {
-        address,
-      };
+  // const connectWalletAndUser = () => {
+  //   if (!address) return;
+  //   (async () => {
+  //     const userData = {
+  //       address,
+  //     };
 
-      axios
-        .post("/api/signIn", userData)
-        .then((res) => {
-          console.log(res);
-          setAuthedProfile(res.data.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })();
-  };
+  //     axios
+  //       .post("/api/signIn", userData)
+  //       .then((res) => {
+  //         console.log(res);
+  //         setAuthedProfile(res.data.user);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   })();
+  // };
 
   const disconnectWalletAndUser = async () => {
     if (typeof window !== "undefined") {

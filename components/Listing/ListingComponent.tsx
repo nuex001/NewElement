@@ -1,17 +1,3 @@
-import {
-  MediaRenderer,
-  useNetwork,
-  useNetworkMismatch,
-  useListing,
-  useContract,
-  useActiveListings,
-} from "@thirdweb-dev/react";
-import {
-  ChainId,
-  ListingType,
-  Marketplace,
-  NATIVE_TOKENS,
-} from "@thirdweb-dev/sdk";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -47,11 +33,11 @@ const ListingComponent: any = () => {
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
-      window.ethereum as any
+       (window as CustomWindow).ethereum as any
     );
 
     if (listingId) {
-      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
@@ -107,13 +93,13 @@ const ListingComponent: any = () => {
   async function createBidOrOffer() {
     try {
       // bidAmount // The offer amount the user entered
-      if (typeof window.ethereum !== "undefined") {
+      if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-          window.ethereum as any
+           (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await window?.ethereum?.request({ method: "eth_requestAccounts" });
+          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
           const signer = provider.getSigner();
           const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
           const id = Number(listingId);
@@ -132,13 +118,13 @@ const ListingComponent: any = () => {
   async function makeOffer() {
     try {
       // bidAmount // The offer amount the user entered
-      if (typeof window.ethereum !== "undefined") {
+      if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-          window.ethereum as any
+           (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await window?.ethereum?.request({ method: "eth_requestAccounts" });
+          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
           const signer = provider.getSigner();
           const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
           const id = Number(listingId);

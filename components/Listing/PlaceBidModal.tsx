@@ -48,12 +48,12 @@ const PlaceBidModal: FunctionComponent<Props> = ({
   const [balance, setBalance] = useState<number>(0);
   const [address, setAddress] = useState<number>(0);
   const getBalance = async () => {
-    if (window.ethereum) {
+    if ( (window as CustomWindow).ethereum) {
       const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
+         (window as CustomWindow).ethereum as any
       );
       // Request access to the user's Ethereum accounts (MetaMask, etc.)
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await  (window as CustomWindow).ethereum.request({ method: 'eth_requestAccounts' });
 
       // Return the first account address
       const address = accounts[0];
