@@ -202,7 +202,7 @@ const MintComponent = ({ user }: Props) => {
         setLoading(false);
         // console.log(singleNFTData.name, tokenUrl, formValues.reservePrice);
 
-        await contract.approveArtist(address);
+        // await contract.approveArtist(address);
         const approveTx = await contract.createListing(singleNFTData.collectionId, tokenUrl, formValues.reservePrice);
 
         // Wait for the transaction to be mined
