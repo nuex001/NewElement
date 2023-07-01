@@ -68,8 +68,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       if (listing.owner !== undefined) {
         let listingAdrress = listing.owner;
         listingAdrress = listingAdrress.toLowerCase();
-        console.log(listingAdrress === address);
-        // setAuth(listingAdrress === address);
+        setAuth(listingAdrress === address);
       }
       // console.log(mainaddress == "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 ");
 
@@ -123,7 +122,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                     {
                       listing.timeElapse ?
                         listing.sold ?
-                          auth?
+                          auth ?
                             "RESALE"
                             :
                             "ENDED"
@@ -196,7 +195,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                             RESALE
                           </button>
                           :
-                          listing.sold || listing.isPrimary ?
+                          listing.sold ?
                             <button
                               onClick={withBid}
                               className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
@@ -212,14 +211,14 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                       </>
                       :
                       <>
-                       {
-                        !listing.isPrimary &&
-                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                          onClick={withBid}
-                        >
-                          Withdraw Bid
-                        </button> 
-                       }
+                        {
+                          !listing.isPrimary &&
+                          <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                            onClick={withBid}
+                          >
+                            Withdraw Bid
+                          </button>
+                        }
                         <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                           onClick={createBidOrOffer}
                         >

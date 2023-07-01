@@ -210,10 +210,10 @@ const ListingComponent: any = () => {
           const signer = provider.getSigner();
           const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
           const id = Number(listingId);
-          const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+          // const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
           // Call the contract method with value
-          const resellTx = await contract.reSellToken(id, price);
+          const resellTx = await contract.reSellToken(id, bidAmount);
           resellTx.wait();
           isModalClosed();
         }
