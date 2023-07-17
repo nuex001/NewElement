@@ -1,4 +1,4 @@
-export const ContractAddress = "0xd9B084ABedF73a3405626CDbFE7F9A9756b4a131";
+export const ContractAddress = "0xb9042a1be42dd74911a7091934d64B4Dfa8EdaA9";
 
 export const ContractAbi = [
   {
@@ -35,11 +35,6 @@ export const ContractAbi = [
   {
     "inputs": [],
     "name": "NFTMARKETBase__AuctionNotEnded",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NFTMARKETBase__OnlyArtists",
     "type": "error"
   },
   {
