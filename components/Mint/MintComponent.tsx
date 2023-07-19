@@ -9,9 +9,9 @@ import contractABI from "../../contracts/collectionContractABI";
 import { contractBytecode } from "../../contracts/collectionContractBytecode";
 import { ethers } from "ethers";
 import router from "next/router";
-import { submitToIpfs } from "../utils/utils"
+import { submitToIpfs } from "../utils/utils";
 import { ContractAbi, ContractAddress } from "../utils/constants";
-import Web3 from "web3"
+import Web3 from "web3";
 
 type Props = {
   user: any;
@@ -44,7 +44,6 @@ const MintComponent = ({ user }: Props) => {
   const [formValuesCollection, setFormValuesCollection] = useState(
     initialCollectionValues
   );
-
 
   const handleChange = (e: any) => {
     const { value, name } = e.target;
@@ -95,7 +94,7 @@ const MintComponent = ({ user }: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collectionId: formValues.collectionId > 0 ? formValues.collectionId : 0,
+      collectionId: collection.id > 0 ? collection.id : 0,
       image: file,
     };
     let collectionData = {
@@ -133,10 +132,12 @@ const MintComponent = ({ user }: Props) => {
     if (isCollection) {
       const tokenUrl = await submitToIpfs(collectionData);
       const provider = new ethers.providers.Web3Provider(
-         (window as CustomWindow).ethereum as any
+        (window as CustomWindow).ethereum as any
       );
 
-      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+      await (window as CustomWindow)?.ethereum?.request({
+        method: "eth_requestAccounts",
+      });
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();
@@ -144,12 +145,19 @@ const MintComponent = ({ user }: Props) => {
       try {
         setLoadingToDeploy(true);
         // Initialize the contract with the signer
-        const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
+        );
 
         setLoading(false);
         // console.log(tokenUrl, collectionData.tokensymbol);
 
-        const collectionCreatedTx = await contract.createCollection(tokenUrl, collectionData.tokensymbol);
+        const collectionCreatedTx = await contract.createCollection(
+          tokenUrl,
+          collectionData.tokensymbol
+        );
 
         const collectionCreated = await collectionCreatedTx.wait();
         // console.log(collectionCreated);
@@ -184,26 +192,35 @@ const MintComponent = ({ user }: Props) => {
       // Mint NFT Contract
       const tokenUrl = await submitToIpfs(singleNFTData);
       const provider = new ethers.providers.Web3Provider(
-         (window as CustomWindow).ethereum as any
+        (window as CustomWindow).ethereum as any
       );
 
-      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+      await (window as CustomWindow)?.ethereum?.request({
+        method: "eth_requestAccounts",
+      });
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();
       try {
-
         setLoadingToDeploy(true);
         // console.log(tokenUrl);
 
         // Initialize the contract with the signer
-        const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
+        );
 
         setLoading(false);
         // console.log(singleNFTData.name, tokenUrl, formValues.reservePrice);
 
         // await contract.approveArtist(address);
-        const approveTx = await contract.createListing(singleNFTData.collectionId, tokenUrl, formValues.reservePrice);
+        const approveTx = await contract.createListing(
+          singleNFTData.collectionId,
+          tokenUrl,
+          formValues.reservePrice
+        );
 
         // Wait for the transaction to be mined
         await approveTx.wait();
@@ -233,6 +250,7 @@ const MintComponent = ({ user }: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
+  console.log(formValues);
 
   return (
     <>

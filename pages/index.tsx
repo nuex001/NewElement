@@ -11,43 +11,47 @@ import CollectionMarketPage from "../components/Collection/CollectionMarketPage"
 import { getCookie } from "cookies-next";
 import Users from "../model/users";
 import connectDB from "../lib/connectDB";
-import {ethers} from "ethers"
+import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../components/utils/constants";
 import { fetchListings } from "../components/utils/utils";
 
-
-const Home: NextPage = ({ user }: any) => {
+const Home: NextPage = ({ user, users }: any) => {
   const [isCollection, setIsCollection] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [listings,setListings] = useState<any>([]);
-  const [loadingListings,setLoadingListings] = useState(true);
+  const [listings, setListings] = useState<any>([]);
+  const [loadingListings, setLoadingListings] = useState(true);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
+  console.log(users);
 
-  const fetchlisting = async ( ) =>{
-   if(typeof window.ethereum !== "undefined"){
-    const provider = new ethers.providers.Web3Provider(
-      window.ethereum as any
-    );
+  const fetchlisting = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum as any
+      );
 
-    await window?.ethereum?.request({ method: "eth_requestAccounts" });
-    const signer = provider.getSigner();
+      await window?.ethereum?.request({ method: "eth_requestAccounts" });
+      const signer = provider.getSigner();
 
-    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
-      
-    const listingTx = await contract.fetchListingItem();
-    // console.log(listingTx)
-   const res = await fetchListings({contract,listingTx});
-   setListings(res);
-   setLoadingListings(false);
-   }
-  //  console.log(res);
-  //  setMenuItems(res);
-  }
+      const contract = new ethers.Contract(
+        ContractAddress,
+        ContractAbi,
+        signer
+      );
+
+      const listingTx = await contract.fetchListingItem();
+      // console.log(listingTx)
+      const res = await fetchListings({ contract, listingTx });
+      setListings(res);
+      setLoadingListings(false);
+      console.log(res);
+    }
+    //  setMenuItems(res);
+  };
   useEffect(() => {
     if (user) {
       setAuthedProfile(user);
     }
-    if(typeof window !== "undefined"){
+    if (typeof window !== "undefined") {
       fetchlisting();
     }
   }, [user]);
@@ -95,7 +99,7 @@ const Home: NextPage = ({ user }: any) => {
                   </div>
                   {!isCollection ? (
                     <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-                      {listings?.map((listing : any, index : number) => (
+                      {listings?.map((listing: any, index: number) => (
                         <motion.div
                           key={index}
                           initial={{ y: 80, opacity: 0 }}
@@ -115,6 +119,8 @@ const Home: NextPage = ({ user }: any) => {
                               key={index}
                               listing={listing}
                               setLoading={setLoading}
+                              users={users}
+                              index={index}
                             />
                           </>
                         </motion.div>
@@ -139,8 +145,9 @@ export const getServerSideProps = async ({ req, res }: any) => {
   await connectDB();
   const json = await Users.findOne({ address: auth });
   let user = JSON.parse(JSON.stringify(json));
-
-  return { props: { user } };
+  const jsonUsers = await Users.find({});
+  let users = JSON.parse(JSON.stringify(jsonUsers));
+  return { props: { user, users } };
 };
 
 export default Home;

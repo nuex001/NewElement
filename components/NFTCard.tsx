@@ -1,21 +1,30 @@
-import { useEffect, useState, FunctionComponent } from "react";
+import { useEffect, useState, FunctionComponent, use } from "react";
 import Router from "next/router";
 import Image from "next/image";
 import { Interface } from "ethers/lib/utils";
 import Link from "next/link";
 import profile from "../assets/PROFILE.png";
+import avatar from "../assets/avatar.gif";
 import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";
 import axios from "axios";
+import { get } from "http";
 
 type Props = {
   listing: object | any;
   setLoading: Function;
+  users: object | any;
+  index: number;
 };
-const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
+const NFTCard: FunctionComponent<Props> = ({
+  listing,
+  setLoading,
+  users,
+  index,
+}) => {
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
-  
+
   const handleSaveToProfile = () => {
     setLoading(true);
     const data = {
@@ -32,6 +41,23 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
       });
     setLoading(false);
   };
+  console.log(listing);
+  let artistNameOrAddress;
+  let artistProfilePic: any;
+  let user: any;
+  const getArtist = () => {
+    user = users.find((user: any) => user.address === listing.seller);
+    artistNameOrAddress = user
+      ? user.username
+      : listing.seller
+          .slice(0, 3)
+          .concat("...")
+          .concat(listing.seller.slice(-4));
+    artistProfilePic = user?.profilePicture ? user.profilePicture : avatar;
+  };
+  getArtist();
+  console.log(user);
+
   return (
     <>
       {listing ? (
@@ -73,29 +99,24 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
               </div>
 
               <div className=" flex mt-3">
+                BY @
                 <div
                   onClick={() => {
                     Router.push({
-                      pathname: `/user/1`,
+                      pathname: `user/${user?._id}`,
                     });
                   }}
                   className="font-bold flex cursor-pointer"
                 >
-                  <p>BY @
-                    {listing.seller
-                      .slice(0, 3)
-                      .concat("...")
-                      .concat(listing.seller.slice(-4))}
-                  </p>
+                  <p>{artistNameOrAddress}</p>
                   <Image
-                    className="ml-3 h-5"
-                    src={profile}
+                    className="ml-3 h-5 cursor-pointer object-cover"
+                    src={artistProfilePic}
                     height={10}
-                    width={20}
+                    width={30}
                     alt={""}
                   />
                 </div>
-
                 <div className="flex grow"></div>
                 <div className=" flex text-left">
                   {" "}
@@ -123,28 +144,21 @@ const NFTCard: FunctionComponent<Props> = ({ listing, setLoading }) => {
 
                 <div className="flex grow"></div>
                 <div className=" flex font-bold text-green">
-                  {
-                    listing.timeElapse ?
-                    !listing.sold? 
+                  {listing.timeElapse ? (
+                    !listing.sold ? (
                       <>
-                        <p className="pr-5">
-                          END NOW</p>
-                      </> :
+                        <p className="pr-5">END NOW</p>
+                      </>
+                    ) : (
                       <>
-                        <p className="pr-5">
-                          SOLD OUT</p>
-                      </> :
-                      <p className="pr-5">
-                         {
-                                listing.endTime != 0 ?
-                                  listing.endTime
-                                  :
-                                  "place bid"
-                              }
-                      </p>
-                  }
-
-
+                        <p className="pr-5">SOLD OUT</p>
+                      </>
+                    )
+                  ) : (
+                    <p className="pr-5">
+                      {listing.endTime != 0 ? listing.endTime : "place bid"}
+                    </p>
+                  )}
                 </div>
                 <div className="flex grow"></div>
 

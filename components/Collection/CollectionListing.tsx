@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { marketplaceContractAddress } from "../../addresses";
 import Router from "next/router";
 import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
 import styles from "../../styles/Home.module.css";
-import { ethers } from "ethers"
+import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
-import { fetchListings , fetCollection} from "../utils/utils";
+import { fetchListings, fetCollection } from "../utils/utils";
 
 import Link from "next/link";
 import CollectionListingCard from "./CollectionListingCard";
@@ -26,26 +26,31 @@ const CollectionListing = (props: Props) => {
   const [bidAmount, setBidAmount] = useState<string>("");
   // Hooks to detect user is on the right network and switch them if they are not
 
-
   const [listing, setListing] = useState<any>(null);
   const [listings, setListings] = useState<any>(null);
   const [bidListing, setBidListing] = useState<any>(null);
 
   const router = useRouter();
   const { collectionId } = router.query as { collectionId: string };
- 
-  async function createBidOrOffer(listingId : any) {
+
+  async function createBidOrOffer(listingId: any) {
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-           (window as CustomWindow).ethereum as any
+          (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
@@ -59,24 +64,32 @@ const CollectionListing = (props: Props) => {
       alert(error);
     }
   }
-  
-  async function makeOffer(listingId : any) {
+
+  async function makeOffer(listingId: any) {
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
-           (window as CustomWindow).ethereum as any
+          (window as CustomWindow).ethereum as any
         );
 
         if (listingId) {
-          await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
           // Call the contract method with value
-          const listingTx = await contract.makeOffer(id, { value: valueToSend });
+          const listingTx = await contract.makeOffer(id, {
+            value: valueToSend,
+          });
           isModalClosed();
         }
       }
@@ -103,40 +116,45 @@ const CollectionListing = (props: Props) => {
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
-       (window as CustomWindow).ethereum as any
+      (window as CustomWindow).ethereum as any
     );
 
     if (collectionId) {
-      await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+      await (window as CustomWindow)?.ethereum?.request({
+        method: "eth_requestAccounts",
+      });
       const signer = provider.getSigner();
 
-      const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+      const contract = new ethers.Contract(
+        ContractAddress,
+        ContractAbi,
+        signer
+      );
       const id = Number(collectionId);
       // const listingTx = await contract.fetchNFT(id);
       // console.log(listingTx)
       const collectionTx = await contract.fetchCollection(id);
       const listingTx = await contract.fetchCollectionNFTs(collectionTx.id);
-      console.log(collectionTx,listingTx);
-      const listings = await fetchListings({contract,listingTx});
+      console.log(collectionTx, listingTx);
+      const listings = await fetchListings({ contract, listingTx });
       const collection = await fetCollection(collectionTx);
-      console.log(collection,listings);
-      
+      console.log(collection, listings);
+
       // console.log(collection,listings,listingTx);
-      setListing(collection)
-      setListings(listings)
+      setListing(collection);
+      setListings(listings);
       // making a function to get both the collection data and nfts
 
       //  console.log(res);
       //  setMenuItems(res);
     }
-  }
+  };
   useEffect(() => {
     if (typeof window !== "undefined") {
       fetchlisting();
     }
   }, []);
- 
-  
+  console.log(listing);
 
   return (
     <>
@@ -157,10 +175,10 @@ const CollectionListing = (props: Props) => {
                 alt={listing?.title as string}
                 width={400}
                 height={600}
-                className="w-full max-w-[250px] mt-4 object-contain cursor-pointer rounded-[200px]"
+                className="w-full max-w-[250px] mt-4 object-contain rounded-[200px]"
                 // onClick={isModalOpenEnlargeNFT}
               />{" "}
-              <h1 className="italic mt-2 text-xl">SUMMER</h1>
+              <h1 className="italic mt-2 text-xl">{listing?.title}</h1>
               <div className="flex text-xs mt-2">
                 COLLECTION BY{" "}
                 <div
@@ -171,7 +189,14 @@ const CollectionListing = (props: Props) => {
                   }}
                   className="font-bold pl-2 flex cursor-pointer"
                 >
-                  <p> @RODRI</p>
+                  <p>
+                    {" "}
+                    @
+                    {listing?.creator
+                      ?.slice(0, 3)
+                      .concat("...")
+                      .concat(listing.creator.slice(-4))}
+                  </p>
                   <Image
                     className="ml-3 h-5"
                     src={profile}
@@ -183,24 +208,20 @@ const CollectionListing = (props: Props) => {
               </div>
             </div>
             <div className="font-ibmPlex bold text-center w-full   mt-10 pb-10  leading-5 text-xs">
-              <p className="mx-4 md:mx-0">
-              {listing?.description as string}
-              </p>
+              <p className="mx-4 md:mx-0">{listing?.description as string}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-14 sm:mx-8 mb-10">
-              {
-                listings && 
-                listings.map((listing : any , index : number)=>(
+              {listings &&
+                listings.map((listing: any, index: number) => (
                   <CollectionListingCard
-                  isModalOpenEnlargeNFT={isModalOpenEnlargeNFT}
-                  isModalOpen={isModalOpen}
-                  setBidListing={setBidListing}
-                  listing={listing}
-                  key={index}
-                />
-                ))
-              }
-{/*             
+                    isModalOpenEnlargeNFT={isModalOpenEnlargeNFT}
+                    isModalOpen={isModalOpen}
+                    setBidListing={setBidListing}
+                    listing={listing}
+                    key={index}
+                  />
+                ))}
+              {/*             
               <CollectionListingCard
                 isModalOpenEnlargeNFT={isModalOpenEnlargeNFT}
                 isModalOpen={isModalOpen}

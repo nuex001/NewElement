@@ -21,7 +21,7 @@ const PublicProfileComponent = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  console.log(authedProfile);
+  // console.log(authedProfile);
 
   return (
     <div

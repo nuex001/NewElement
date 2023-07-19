@@ -7,7 +7,7 @@ type Props = {
   listing: any;
   isModalOpen: () => void;
   isModalOpenEnlargeNFT: () => void;
-  setBidListing: (listing :any) => void;
+  setBidListing: (listing: any) => void;
 };
 
 const CollectionListingCard = ({
@@ -40,11 +40,12 @@ const CollectionListingCard = ({
             <div className="flex grow"></div>
             <div className=" flex text-left">
               {" "}
-              <p className="pr-[0.4rem] ">
-              Reserve <br /> Price
+              <p className="pr-3 ">
+                Reserve <br /> Price
               </p>
-              <p className="font-bold text-green">
-               {listing.price}<br /> ETH
+              <p className="font-bold text-green w-[22px]">
+                {listing.price}
+                <br /> ETH
               </p>
             </div>
           </div>
@@ -58,9 +59,12 @@ const CollectionListingCard = ({
               }}
               className="font-bold flex cursor-pointer"
             >
-              <p>BY @  {listing.seller.slice(0, 3)
-                .concat("...")
-                .concat(listing.seller.slice(-4))}
+              <p>
+                BY @{" "}
+                {listing.seller
+                  .slice(0, 3)
+                  .concat("...")
+                  .concat(listing.seller.slice(-4))}
               </p>
               <Image
                 className="ml-3 h-5"
@@ -74,33 +78,25 @@ const CollectionListingCard = ({
             <div className="flex grow"></div>
             <div className=" flex text-left">
               {" "}
-              <p className="pr-6 ">
+              <p className="pr-3 ">
                 Current <br /> Bid
               </p>
-              <p className="font-bold ">
-                {listing.Bid}
-              </p>
+              <p className="font-bold w-[22px]">{listing.Bid}</p>
             </div>
           </div>
           <div className=" flex mt-3">
             <div className="flex grow"></div>
             <div className=" flex font-bold text-green">
               {" "}
-              {
-                listing.timeElapse?
-                  <>
-                    <p className="pr-5">
-                      ENDS IN</p> <p> {listing?.time}</p>
-                  </> :
-                  <p className="pr-5">
-                    {
-                      listing.endTime != 0 ?
-                        listing.endTime
-                        :
-                        "place bid"
-                    }
-                  </p>
-              }
+              {listing.timeElapse ? (
+                <>
+                  <p className="pr-5">ENDS IN</p> <p> {listing?.time}</p>
+                </>
+              ) : (
+                <p className="pr-5">
+                  {listing.endTime != 0 ? listing.endTime : "reserve not met"}
+                </p>
+              )}
             </div>
             <div className="flex grow"></div>
           </div>
