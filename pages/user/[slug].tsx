@@ -5,9 +5,7 @@ import connectDB from "../../lib/connectDB";
 type Props = {};
 
 const PublicProfile = ({ user }: any) => {
-  console.log(user);
-
-  return <PublicProfileComponent />;
+  return <PublicProfileComponent user={user} />;
 };
 export const getServerSideProps = async (pageContext: {
   query: { slug: any };

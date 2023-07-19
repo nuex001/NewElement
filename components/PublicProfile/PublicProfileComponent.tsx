@@ -15,13 +15,15 @@ import nft10 from "../../assets/nft-10.png";
 import Link from "next/link";
 import axios from "axios";
 
-type Props = {};
+type Props = {
+  user: any;
+};
 
-const PublicProfileComponent = () => {
+const PublicProfileComponent = ({ user }: Props) => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  // console.log(authedProfile);
+  console.log(user);
 
   return (
     <div
