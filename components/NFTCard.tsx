@@ -110,10 +110,10 @@ const NFTCard: FunctionComponent<Props> = ({
                 >
                   <p>{artistNameOrAddress}</p>
                   <Image
-                    className="ml-3 h-5 cursor-pointer object-cover"
+                    className="ml-3 -mt-1 h-6 cursor-pointer object-cover rounded-full"
                     src={artistProfilePic}
-                    height={10}
-                    width={30}
+                    height={0}
+                    width={25}
                     alt={""}
                   />
                 </div>
