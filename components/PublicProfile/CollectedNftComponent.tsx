@@ -11,11 +11,13 @@ import Link from "next/link";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
+import MakeOfferModal from "./MakeOfferModal";
 const { BigNumber } = require("ethers");
 
 type Props = {};
 
 const CollectedNftComponent = (props: Props) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [listing, setListing] = useState<any>(null);
   // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
   const router = useRouter();
@@ -59,7 +61,14 @@ const CollectedNftComponent = (props: Props) => {
     }
   }, []);
   console.log(listing);
-
+  // Modal Place Bid
+  const isModalOpen = () => {
+    setModalOpen(true);
+  };
+  const isModalClosed = () => {
+    setModalOpen(false);
+  };
+  // Make Offer Function
   const makeOffer = async () => {
     console.log("make offer");
   };
@@ -126,7 +135,7 @@ const CollectedNftComponent = (props: Props) => {
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
                       <div className=" flex font-bold text-green uppercase">
-                        <button onClick={makeOffer}>Make Offer</button>
+                        <button onClick={isModalOpen}>Make Offer</button>
                       </div>
                       <div className="flex grow"></div>
                     </div>
@@ -168,6 +177,12 @@ const CollectedNftComponent = (props: Props) => {
             </div>
           </div>
         </div>
+        <MakeOfferModal
+          listing={listing}
+          isModalClosed={isModalClosed}
+          modalOpen={modalOpen}
+          makeOffer={makeOffer}
+        />
       </>
     );
   }

@@ -49,6 +49,7 @@ const PublicProfileComponent = ({ user, collectedNfts, listedNfts }: Props) => {
   //     nftFetch();
   //   }
   // }, [user]);
+  console.log(collectedNfts);
 
   return (
     <div
@@ -140,13 +141,16 @@ const PublicProfileComponent = ({ user, collectedNfts, listedNfts }: Props) => {
               <h3 className="font-bold">COLLECTED</h3>
               {collectedNfts.map(
                 (nft: any, index: React.Key | null | undefined) => (
-                  <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                  <div
+                    className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
+                    key={index}
+                  >
                     <div className="flex  flex-col h-full items-start w-max ">
                       <div
                         className="cursor-pointer"
                         onClick={() => {
                           Router.push({
-                            pathname: `/user/${router.query.slug}/${nft.id}}`,
+                            pathname: `/user/${router.query.slug}/${nft.id}`,
                           });
                         }}
                       >
