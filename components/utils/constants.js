@@ -1,4 +1,4 @@
-export const ContractAddress = "0xb9042a1be42dd74911a7091934d64B4Dfa8EdaA9";
+export const ContractAddress = "0xE8316B71834f3c289E9B88B814D6f50D186F8EFc";
 
 export const ContractAbi = [
   {
@@ -24,7 +24,7 @@ export const ContractAbi = [
   },
   {
     inputs: [],
-    name: "NFTMARKETBase_ListingSold",
+    name: "NFTMARKETBase_ListingOnAuction",
     type: "error",
   },
   {
@@ -204,7 +204,7 @@ export const ContractAbi = [
     ],
     name: "acceptOffer",
     outputs: [],
-    stateMutability: "payable",
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -685,6 +685,67 @@ export const ContractAbi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_owner",
+        type: "address",
+      },
+    ],
+    name: "filterNftByAddress",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "collectionId",
+            type: "uint256",
+          },
+          {
+            internalType: "address payable",
+            name: "seller",
+            type: "address",
+          },
+          {
+            internalType: "address payable",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTime",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "isPrimary",
+            type: "bool",
+          },
+          {
+            internalType: "bool",
+            name: "sold",
+            type: "bool",
+          },
+        ],
+        internalType: "struct NFTMARKETBase.Listing[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
@@ -805,24 +866,6 @@ export const ContractAbi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "price",
-        type: "uint256",
-      },
-    ],
-    name: "reSellToken",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "artist",
         type: "address",
@@ -831,30 +874,6 @@ export const ContractAbi = [
     name: "removeArtist",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "s_bids",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -996,19 +1015,6 @@ export const ContractAbi = [
       },
     ],
     name: "transferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "withdrawBids",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

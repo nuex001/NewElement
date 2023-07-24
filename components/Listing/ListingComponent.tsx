@@ -8,10 +8,10 @@ import Image from "next/image";
 import Link from "next/link";
 import PlaceBidModal from "./PlaceBidModal";
 import EnlargeNFTModal from "./EnlargeNFTModal";
-import { ethers } from "ethers"
+import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
-const { BigNumber } = require('ethers');
+const { BigNumber } = require("ethers");
 
 const ListingComponent: any = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -27,9 +27,7 @@ const ListingComponent: any = () => {
   // De-construct listingId out of the router.query.
   // This means that if the user visits /listing/0 then the listingId will be 0.
   // If the user visits /listing/1 then the listingId will be 1.
-  const { listingId } = router.query as { listingId: string };
-
-
+  const listingId = router.query as { listingId: string };
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
@@ -37,10 +35,16 @@ const ListingComponent: any = () => {
     );
 
     if (listingId) {
-      await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+      await (window as CustomWindow)?.ethereum?.request({
+        method: "eth_requestAccounts",
+      });
       const signer = provider.getSigner();
 
-      const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+      const contract = new ethers.Contract(
+        ContractAddress,
+        ContractAbi,
+        signer
+      );
       const id = Number(listingId);
       const listingTx = await contract.fetchNFT(id);
       // console.log(listingTx)
@@ -52,11 +56,12 @@ const ListingComponent: any = () => {
       console.log(tokenId);
 
       // Subscribe to the 'Bid' event
-      contract.queryFilter(contract.filters.Bid(), fromBlock, toBlock)
+      contract
+        .queryFilter(contract.filters.Bid(), fromBlock, toBlock)
         .then((events) => {
           setBids((prevBids: any) => {
             return events.slice(0, 4).map((event: any) => {
-              if(event.args.listingId == listingId){
+              if (event.args.listingId == listingId) {
                 const { sender, amount } = event?.args;
                 const formattedAmount = Number(amount) / 1e18;
                 return { sender, amount: formattedAmount };
@@ -65,14 +70,13 @@ const ListingComponent: any = () => {
           });
         });
 
-
       setListing(res);
       setloadingListing(false);
       //  setLoadingListings(false);
       //  console.log(res);
       //  setMenuItems(res);
     }
-  }
+  };
   useEffect(() => {
     if (typeof window !== "undefined") {
       fetchlisting();
@@ -105,9 +109,15 @@ const ListingComponent: any = () => {
         );
 
         if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
@@ -130,14 +140,22 @@ const ListingComponent: any = () => {
         );
 
         if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
           // Call the contract method with value
-          const listingTx = await contract.makeOffer(id, { value: valueToSend });
+          const listingTx = await contract.makeOffer(id, {
+            value: valueToSend,
+          });
           isModalClosed();
         }
       }
@@ -155,9 +173,15 @@ const ListingComponent: any = () => {
         );
 
         if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           // const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
           console.log(id);
@@ -181,9 +205,15 @@ const ListingComponent: any = () => {
         );
 
         if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
@@ -206,9 +236,15 @@ const ListingComponent: any = () => {
         );
 
         if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
           const signer = provider.getSigner();
-          const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
           const id = Number(listingId);
           // const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
@@ -297,31 +333,26 @@ const ListingComponent: any = () => {
                           Current <br /> Bid
                         </p>
                         <p className="font-bold text-green">
-                          {listing.Bid}  <br /> ETH
+                          {listing.Bid} <br /> ETH
                         </p>
                       </div>
                     </div>
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
                       <div className=" flex font-bold text-green">
-                        {
-                          listing.timeElapse ?
-                            listing.sold ?
-                              <p className="pr-5">
-                                ENDED</p>
-                              :
-                              <p className="pr-5">
-                                END</p> :
-                            <p className="pr-5">
-                              {
-                                listing.endTime != 0 ?
-                                  listing.endTime
-                                  :
-                                  "place bid"
-                              }
-                            </p>
-                        }
-
+                        {listing.timeElapse ? (
+                          listing.sold ? (
+                            <p className="pr-5">ENDED</p>
+                          ) : (
+                            <p className="pr-5">END</p>
+                          )
+                        ) : (
+                          <p className="pr-5">
+                            {listing.endTime != 0
+                              ? listing.endTime
+                              : "place bid"}
+                          </p>
+                        )}
                       </div>
                       <div className="flex grow"></div>
                     </div>
@@ -332,22 +363,16 @@ const ListingComponent: any = () => {
                     className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                     onClick={isModalOpen}
                   >
-                    {
-                      listing.timeElapse ?
-                        listing.sold ?
-                          "ENDED"
-                          :
-                          "END NOW"
-                        :
-                        "place bid"
-                    }
+                    {listing.timeElapse
+                      ? listing.sold
+                        ? "ENDED"
+                        : "END NOW"
+                      : "place bid"}
                   </button>
                 </div>
               </div>
               <div className="font-ibmPlex bold text-center w-full   mt-10 pb-10 border-b leading-5 text-xs">
-                <p className="md:w-[50vw]">
-                  {listing?.description}
-                </p>
+                <p className="md:w-[50vw]">{listing?.description}</p>
               </div>
               <div className="flex w-full mt-6 mb-10 font-ibmPlex text-xs">
                 <div className="flex flex-1/2 flex-col w-1/2 items-start">
@@ -360,10 +385,12 @@ const ListingComponent: any = () => {
                 </div>
                 <div className="flex-1/2  w-1/2">
                   <p className="text-left mb-2">HISTORY</p>
-                  {
-                    bids.length > 0 &&
+                  {bids.length > 0 &&
                     bids.map((bid: any, key: number) => (
-                      <div className="flex  justify-between text-left mt-2">
+                      <div
+                        className="flex  justify-between text-left mt-2"
+                        key={key}
+                      >
                         <Image
                           src={profile}
                           width={30}
@@ -375,8 +402,10 @@ const ListingComponent: any = () => {
 
                         <>
                           <p className="md:pl-4 w-1/2 md:w-full">
-                            Bid placed by <span className="font-bold">
-                              @{bid?.sender?.slice(0, 6) +
+                            Bid placed by{" "}
+                            <span className="font-bold">
+                              @
+                              {bid?.sender?.slice(0, 6) +
                                 "..." +
                                 bid?.sender?.slice(36, 40)}
                             </span>{" "}
@@ -388,8 +417,7 @@ const ListingComponent: any = () => {
                           </p>
                         </>
                       </div>
-                    ))
-                  }
+                    ))}
                 </div>
               </div>
             </div>

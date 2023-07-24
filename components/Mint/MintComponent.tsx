@@ -94,7 +94,7 @@ const MintComponent = ({ user }: Props) => {
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,
-      collectionId: collection.id > 0 ? collection.id : 0,
+      collectionId: collection?.id >= 0 ? collection.id : 0,
       image: file,
     };
     let collectionData = {
@@ -106,28 +106,8 @@ const MintComponent = ({ user }: Props) => {
     let collectionImage = {
       file,
     };
-    //Upload to IPFS
+    console.log(singleNFTData);
 
-    // if (!isCollection) {
-    //   // Upload single NFT IPFS
-    //   try {
-    //     (uploadUrl = await storage.upload(singleNFTData)),
-    //       (resolvedUrl = await storage.resolveScheme(uploadUrl));
-    //   } catch (e) {
-    //     console.log(e);
-    //     alert("Something went wrong, please try again later.");
-    //   }
-    // } else {
-    //   // Upload collection IPFS
-    //   try {
-    //     (uploadUrl = await storage.upload(collectionData)),
-    //       (resolvedUrl = await storage.resolveScheme(uploadUrl)),
-    //       (imageUploadUrl = await storage.upload(collectionImage));
-    //   } catch (e) {
-    //     console.log(e);
-    //     alert("Something went wrong, please try again later.");
-    //   }
-    // }
     // Deploy contract
     if (isCollection) {
       const tokenUrl = await submitToIpfs(collectionData);
@@ -164,26 +144,6 @@ const MintComponent = ({ user }: Props) => {
 
         // Update user database
         setLoadingToDeploy(false);
-
-        // axios
-        //   .post("/api/addCollection", {
-        //     collectionName: formValuesCollection.title,
-        //     contractAddress,
-        //     collectionLogo: imageUploadUrl,
-        //     address,
-        //   })
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     setAuthedProfile(res.data);
-        //     refreshData();
-        //     isModalOpen();
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //   })
-        //   .finally(() => {
-        //     setLoadingToDeploy(false);
-        //   });
       } catch (e) {
         console.log(e);
         alert("Something went wrong, please try again later.");
