@@ -62,7 +62,7 @@ const NFTCard: FunctionComponent<Props> = ({
   // Random component
   const Completionist = () => <span>Auction Ended</span>;
   const timeLeft = Number(listing.endTime);
-  console.log(timeLeft);
+  // console.log(listing.endTime);
 
   // Renderer callback with condition
   const renderer = ({ hours, minutes, seconds, completed }: any) => {
@@ -73,7 +73,9 @@ const NFTCard: FunctionComponent<Props> = ({
       // Render a countdown
       return (
         <span>
-          Ends In <span className="mr-4" /> {hours}H {minutes}M {seconds}S
+          Ends In <span className="mr-4" /> {hours < 10 ? "0" + hours : hours}H{" "}
+          {minutes < 10 ? "0" + minutes : minutes}M{" "}
+          {seconds < 10 ? "0" + seconds : seconds}S
         </span>
       );
     }
@@ -172,7 +174,7 @@ const NFTCard: FunctionComponent<Props> = ({
                     <>
                       {listing.endTime != 0 || listing.endTime != "" ? (
                         <Countdown
-                          date={Date.now() + timeLeft * 1000}
+                          date={Date.now() + listing.endTime * 1000}
                           renderer={renderer}
                         />
                       ) : (

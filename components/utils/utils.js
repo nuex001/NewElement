@@ -63,7 +63,9 @@ export const submitToIpfs = async (collectionData) => {
 //     return `${hours <= 0 ? `${hours}:` :""}: ${minutes <= 0 ? `${minutes}M:` :""}${seconds <= 0 ? `${seconds}S:` :""}`;
 
 // }
+// const formated = new Date("00:04:10");
 
+// console.log(formated);
 export const fetchListings = async (data) => {
   const { contract, listingTx } = data;
   let mainNfts = [];
@@ -86,9 +88,12 @@ export const fetchListings = async (data) => {
           (difference % (1000 * 60 * 60)) / (1000 * 60)
         );
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        time = `${hours > 1 ? hours + "H," : ""}${
-          minutes > 1 ? minutes + "M," : ""
-        }${seconds > 1 ? seconds : ""}`;
+        time = hours * 3600 + minutes * 60 + seconds;
+        console.log(time);
+        //
+        // `${hours > 1 ? hours + "H," : ""}${
+        //   minutes > 1 ? minutes + "M," : ""
+        // }${seconds > 1 ? seconds : ""}`;
       }
       const id = Number(response.tokenId);
       // console.log(id);
@@ -159,6 +164,7 @@ export const fetchListing = async ({ contract, listingTx }) => {
     time = `${hours > 1 ? hours + "H," : ""}${
       minutes > 1 ? minutes + "M," : ""
     }${seconds > 1 ? seconds : ""}`;
+    console.log(difference);
   }
 
   const tokenUrl = await contract.tokenURI(listingTx.tokenId);

@@ -120,20 +120,20 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                   <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
                     END NOW
                   </h1>
-                  <div className=" flex w-full fontIbm">
-                    <div className=" flex text-left">
+                  <div className=" grid grid-cols-2 md:grid-cols-3 w-full mt-3">
+                    <div className=" lg:flex text-left">
                       {" "}
-                      <p className="pr-6 ">
+                      <p className="pr-6 pb-2 lg:pb-0">
                         Reserve <br /> Price
                       </p>
                       <p className="font-bold ">
                         {listing.price} <br /> ETH
                       </p>
                     </div>
-                    <div className="flex grow"></div>
-                    <div className=" flex text-left ">
+                    <div className="hidden md:flex grow"></div>
+                    <div className=" lg:flex text-left ">
                       {" "}
-                      <p className="pr-6 ">
+                      <p className="pr-6 pb-2 lg:pb-0">
                         Winning <br /> Bid
                       </p>
                       <p className="font-bold text-green">

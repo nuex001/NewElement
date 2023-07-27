@@ -78,7 +78,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
 
       // Convert the balance to Ether units
       const bal = ethers.utils.formatEther(balance);
-      const balanceInEther = Math.round(Number(bal));
+      const balanceInEther = parseFloat(Number(bal).toFixed(3));
 
       setBalance(balanceInEther);
     }
@@ -132,7 +132,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                       ? listing.endTime
                       : "place bid"}
                   </h1>
-                  <div className=" flex w-full fontIbm">
+                  <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
                     <div className=" flex text-left">
                       {" "}
                       <p className="pr-6 ">
@@ -142,7 +142,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         {listing.price} <br /> ETH
                       </p>
                     </div>
-                    <div className="flex grow"></div>
+                    <div className="hidden md:flex grow"></div>
                     <div className=" flex text-left ">
                       {" "}
                       <p className="pr-6 ">
@@ -152,35 +152,33 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         {listing.Bid} <br /> ETH
                       </p>
                     </div>
-                  </div>
 
-                  <div className=" flex mt-3">
-                    <div className=" flex w-full fontIbm">
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green">
-                          Input <br /> Amount
-                        </p>
-                        <input
-                          type="number"
-                          name="bidAmount"
-                          pattern="[0-9]+"
-                          placeholder="0.00  ETH"
-                          onChange={(e) => setBidAmount(e.target.value)}
-                          className="border bg-transparent w-2/5 pl-2 focus:outline-green"
-                        />
-                      </div>
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green ">
-                          Your <br /> Balance
-                        </p>
-                        <p className="font-bold">
-                          {balance} <br /> ETH
-                        </p>
-                      </div>
+                    {/* <div className=" flex w-full fontIbm"> */}
+                    <div className=" flex text-left">
+                      {" "}
+                      <p className="pr-6 font-bold text-green">
+                        Bid <br /> Amount
+                      </p>
+                      <input
+                        type="number"
+                        name="bidAmount"
+                        pattern="[0-9]+"
+                        placeholder="0.00  ETH"
+                        onChange={(e) => setBidAmount(e.target.value)}
+                        className="border bg-transparent w-fit pl-2 focus:outline-green"
+                      />
                     </div>
+                    <div className="hidden md:flex grow"></div>
+                    <div className=" flex text-left">
+                      {" "}
+                      <p className="pr-6 font-bold text-green ">
+                        Your <br /> Balance
+                      </p>
+                      <p className="font-bold">
+                        {balance} <br /> ETH
+                      </p>
+                    </div>
+                    {/* </div> */}
                   </div>
                   {listing.timeElapse ? (
                     <>
@@ -229,7 +227,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                           className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                           onClick={createBidOrOffer}
                         >
-                          Make Bid
+                          Place Bid
                         </button>
                       )}
                     </>

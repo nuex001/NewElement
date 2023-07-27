@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
-import {ethers} from "ethers"
+import { ethers } from "ethers";
 type Props = {
   modalOpen: boolean;
   isModalClosed: () => void;
@@ -19,7 +19,7 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
   bidAmount,
   setBidAmount,
   createBidOrOffer,
-  makeOffer
+  makeOffer,
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +54,9 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
         (window as CustomWindow).ethereum as any
       );
       // Request access to the user's Ethereum accounts (MetaMask, etc.)
-      const accounts = await (window as CustomWindow).ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await (window as CustomWindow).ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
       // Return the first account address
       const address = accounts[0];
@@ -68,9 +70,11 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
 
       setBalance(balanceInEther);
     }
-  }
+  };
 
-  useEffect(() => { getBalance(); }, [])
+  useEffect(() => {
+    getBalance();
+  }, []);
 
   return (
     <div>
@@ -108,7 +112,7 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                   <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
                     place bid
                   </h1>
-                  <div className=" flex w-full fontIbm">
+                  <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
                     <div className=" flex text-left">
                       {" "}
                       <p className="pr-6 ">
@@ -117,84 +121,80 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                       <p className="font-bold ">
                         {listing?.price} <br /> ETH
                       </p>
+                      <div className="flex grow"></div>
+                      <div className=" flex text-left ">
+                        {" "}
+                        <p className="pr-6 ">
+                          Current <br /> Bid
+                        </p>
+                        <p className="font-bold text-green">
+                          {listing?.Bid} <br /> ETH
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex text-left">
+                      {" "}
+                      <p className="pr-6 font-bold text-green">
+                        Offer <br /> Amount
+                      </p>
+                      <input
+                        type="number"
+                        name="bidAmount"
+                        pattern="[0-9]+"
+                        placeholder="0.00  ETH"
+                        onChange={(e) => setBidAmount(e.target.value)}
+                        className="border bg-transparent w-2/5 pl-2 focus:outline-green"
+                      />
                     </div>
                     <div className="flex grow"></div>
-                    <div className=" flex text-left ">
+                    <div className=" flex text-left">
                       {" "}
-                      <p className="pr-6 ">
-                        Current <br /> Bid
+                      <p className="pr-6 font-bold text-green ">
+                        Your <br /> Balance
                       </p>
-                      <p className="font-bold text-green">
-                        {listing?.Bid} <br /> ETH
+                      <p className="font-bold">
+                        1.1 <br /> ETH
                       </p>
                     </div>
                   </div>
 
-                  <div className=" flex mt-3">
-                    <div className=" flex w-full fontIbm">
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green">
-                          Offer <br /> Amount
-                        </p>
-                        <input
-                          type="number"
-                          name="bidAmount"
-                          pattern="[0-9]+"
-                          placeholder="0.00  ETH"
-                          onChange={(e) => setBidAmount(e.target.value)}
-                          className="border bg-transparent w-2/5 pl-2 focus:outline-green"
-                        />
-                      </div>
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green ">
-                          Your <br /> Balance
-                        </p>
-                        <p className="font-bold">
-                          1.1 <br /> ETH
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                {
-                    listing.timeElapse && listing.endTime > 0 ?
-                      <>
-                        {listing.owner == address ?
-                          <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
-                            RESALE
-                          </button>
-                          :
-                          listing.sold ?
-                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
-                              WITHDRAW
-                            </button>
-                            :
-                            <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
-                              END
-                            </button>
-                        }
-                      </>
-                      :
-                      <>
-                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                         onClick={()=>{
-                          createBidOrOffer(listing.id)
+                  {listing.timeElapse && listing.endTime > 0 ? (
+                    <>
+                      {listing.owner == address ? (
+                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          RESALE
+                        </button>
+                      ) : listing.sold ? (
+                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          WITHDRAW
+                        </button>
+                      ) : (
+                        <button className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
+                          END
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                        onClick={() => {
+                          createBidOrOffer(listing.id);
                         }}
-                        >
-                          Make Bid
-                        </button>
-                        <button
-                          onClick={()=>{
-                            makeOffer(listing.id)
-                          }}
-                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  ">
-                          Make Offer
-                        </button>
-                      </>
-                  }
+                      >
+                        Make Bid
+                      </button>
+                      <button
+                        onClick={() => {
+                          makeOffer(listing.id);
+                        }}
+                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                      >
+                        Make Offer
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

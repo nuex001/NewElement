@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { marketplaceContractAddress } from "../../addresses";
 import styles from "../../styles/Home.module.css";
@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
 import EndAuctionModal from "./EndAuctionModal";
+import SuccessfullBidModal from "./SuccessfulBidModal";
 import useAuthedProfile from "../../context/UserContext";
 const { BigNumber } = require("ethers");
 
@@ -24,6 +25,8 @@ const ListingComponent: any = () => {
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);
   const [modalEndOpen, setModalEndOpen] = useState<boolean>(false);
+  const [successfulBidmodalOpen, setSuccessfulBidModal] =
+    useState<boolean>(false);
   const { authedProfile } = useAuthedProfile();
 
   // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
@@ -135,12 +138,14 @@ const ListingComponent: any = () => {
           // Call the contract method with value
           const listingTx = await contract.bid(id, { value: valueToSend });
           await listingTx.wait();
+          isModalClosed();
+          setLoadingBid(false);
+          isSuccessfulBidModalOpen();
         }
       }
     } catch (error) {
       console.error(error);
       alert(error);
-    } finally {
       isModalClosed();
       setLoadingBid(false);
     }
@@ -212,6 +217,7 @@ const ListingComponent: any = () => {
     } finally {
       isModalEndClosed();
       setLoadingBid(false);
+      router.push("/profile");
     }
   }
   async function withBid() {
@@ -299,6 +305,13 @@ const ListingComponent: any = () => {
   const isModalClosedEnlargeNFT = () => {
     setModalOpenEnlargeNFT(false);
   };
+  // Successful Bid Modal
+  const isSuccessfulBidModalOpen = () => {
+    setSuccessfulBidModal(true);
+  };
+  const isSuccessfulBidModalClosed = () => {
+    setSuccessfulBidModal(false);
+  };
   console.log(listing);
 
   if (listing) {
@@ -325,7 +338,7 @@ const ListingComponent: any = () => {
                     className="w-full mb-2 object-contain cursor-pointer"
                     onClick={isModalOpenEnlargeNFT}
                   />{" "}
-                  <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                  <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] mt-3">
                     <div className=" flex ">
                       <div className="">
                         <p>{listing?.title}</p>
@@ -364,7 +377,7 @@ const ListingComponent: any = () => {
                     </div>
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
-                      <div className=" flex font-bold text-green">
+                      <div className=" flex font-bold w-full text-green">
                         {listing.timeElapse ? (
                           listing.sold ? (
                             <p className="pr-5">ENDED</p>
@@ -372,11 +385,14 @@ const ListingComponent: any = () => {
                             <p className="pr-5">ENDED</p>
                           )
                         ) : (
-                          <p className="pr-5">
+                          <button
+                            onClick={isModalOpen}
+                            className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                          >
                             {listing.endTime != 0
                               ? listing.endTime
                               : "place bid"}
-                          </p>
+                          </button>
                         )}
                       </div>
                       <div className="flex grow"></div>
@@ -388,9 +404,7 @@ const ListingComponent: any = () => {
                   <div className="font-ibmPlex w-full md:min-w-1 flex items-center justify-between">
                     <button
                       className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                      onClick={
-                        listing.timeElapse ? isModalEndOpen : isModalOpen
-                      }
+                      onClick={listing.timeElapse && isModalEndOpen}
                     >
                       {listing.timeElapse
                         ? listing.sold
@@ -479,6 +493,10 @@ const ListingComponent: any = () => {
           endBid={endBid}
           resale={resale}
           loadingBid={loadingBid}
+        />
+        <SuccessfullBidModal
+          successfulBidmodalOpen={successfulBidmodalOpen}
+          isSuccessfulBidModalClosed={isSuccessfulBidModalClosed}
         />
       </>
     );

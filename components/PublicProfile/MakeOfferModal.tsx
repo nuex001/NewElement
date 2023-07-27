@@ -161,7 +161,7 @@ const MakeOfferModal: FunctionComponent<Props> = ({
                       : "place bid"}
                   </h1>
 
-                  <div className=" flex mt-3">
+                  <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
                     <div className=" flex w-full fontIbm">
                       <div className=" flex text-left">
                         {" "}
