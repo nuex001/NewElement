@@ -9,6 +9,7 @@ import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";
 import axios from "axios";
 import { get } from "http";
+import Countdown from "react-countdown";
 
 type Props = {
   listing: object | any;
@@ -29,7 +30,7 @@ const NFTCard: FunctionComponent<Props> = ({
     setLoading(true);
     const data = {
       nft: listing,
-      address: "address", //remeber to change this to the normal address
+      address: user.address, //remeber to change this to the normal address
     };
     axios
       .post("/api/saveNft", data)
@@ -56,8 +57,27 @@ const NFTCard: FunctionComponent<Props> = ({
     artistProfilePic = user?.profilePicture ? user.profilePicture : avatar;
   };
   getArtist();
-  console.log(user);
 
+  // Countdown
+  // Random component
+  const Completionist = () => <span>Auction Ended</span>;
+  const timeLeft = Number(listing.endTime);
+  console.log(timeLeft);
+
+  // Renderer callback with condition
+  const renderer = ({ hours, minutes, seconds, completed }: any) => {
+    if (completed) {
+      // Render a complete state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          Ends In <span className="mr-4" /> {hours}H {minutes}M {seconds}S
+        </span>
+      );
+    }
+  };
   return (
     <>
       {listing ? (
@@ -145,19 +165,20 @@ const NFTCard: FunctionComponent<Props> = ({
                 <div className="flex grow"></div>
                 <div className=" flex font-bold text-green">
                   {listing.timeElapse ? (
-                    !listing.sold ? (
-                      <>
-                        <p className="pr-5">END NOW</p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="pr-5">SOLD OUT</p>
-                      </>
-                    )
+                    <>
+                      <p className="pr-5">Auction ended</p>
+                    </>
                   ) : (
-                    <p className="pr-5">
-                      {listing.endTime != 0 ? listing.endTime : "place bid"}
-                    </p>
+                    <>
+                      {listing.endTime != 0 || listing.endTime != "" ? (
+                        <Countdown
+                          date={Date.now() + timeLeft * 1000}
+                          renderer={renderer}
+                        />
+                      ) : (
+                        <p className="pr-5"> place bid</p>
+                      )}
+                    </>
                   )}
                 </div>
                 <div className="flex grow"></div>

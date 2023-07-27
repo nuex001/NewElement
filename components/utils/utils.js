@@ -88,7 +88,7 @@ export const fetchListings = async (data) => {
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
         time = `${hours > 1 ? hours + "H," : ""}${
           minutes > 1 ? minutes + "M," : ""
-        } ${seconds > 1 ? seconds + "S" : ""}`;
+        }${seconds > 1 ? seconds : ""}`;
       }
       const id = Number(response.tokenId);
       // console.log(id);
@@ -101,7 +101,7 @@ export const fetchListings = async (data) => {
         id: Number(response.tokenId),
         title: title,
         image: image,
-        price: Number(response.price),
+        price: Number(response.price) / 1e18,
         Bid: Bid,
         isPrimary: response.isPrimary,
         collectionId: Number(response.collectionId),
@@ -158,7 +158,7 @@ export const fetchListing = async ({ contract, listingTx }) => {
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
     time = `${hours > 1 ? hours + "H," : ""}${
       minutes > 1 ? minutes + "M," : ""
-    } ${seconds > 1 ? seconds + "S" : ""}`;
+    }${seconds > 1 ? seconds : ""}`;
   }
 
   const tokenUrl = await contract.tokenURI(listingTx.tokenId);
@@ -169,7 +169,7 @@ export const fetchListing = async ({ contract, listingTx }) => {
     id: Number(listingTx.tokenId),
     title: title,
     image: image,
-    price: Number(listingTx.price),
+    price: Number(listingTx.price) / 1e18,
     Bid: Bid,
     isPrimary: listingTx.isPrimary,
     collectionId: Number(listingTx.collectionId),

@@ -179,9 +179,8 @@ const MintComponent = ({ user }: Props) => {
         const approveTx = await contract.createListing(
           singleNFTData.collectionId,
           tokenUrl,
-          formValues.reservePrice
+          Web3.utils.toWei(formValues.reservePrice, "ether")
         );
-
         // Wait for the transaction to be mined
         await approveTx.wait();
 

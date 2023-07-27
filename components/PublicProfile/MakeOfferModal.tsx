@@ -2,21 +2,20 @@ import React, { useState, useEffect, FunctionComponent } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { ethers } from "ethers";
+import { ContractAbi, ContractAddress } from "../utils/constants";
 
 type Props = {
   modalOpen: boolean;
   isModalClosed: () => void;
   listing: object | any;
-
-  makeOffer: () => void;
+  listingId: any;
 };
 
 const MakeOfferModal: FunctionComponent<Props> = ({
   modalOpen,
   isModalClosed,
   listing,
-
-  makeOffer,
+  listingId,
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +44,7 @@ const MakeOfferModal: FunctionComponent<Props> = ({
   const [address, setAddress] = useState<string>("");
   const [auth, setAuth] = useState<boolean>(false);
   const [offerAmount, setOfferAmount] = useState<string>("");
+
   const getBalance = async () => {
     if ((window as CustomWindow).ethereum) {
       const provider = new ethers.providers.Web3Provider(
@@ -70,7 +70,8 @@ const MakeOfferModal: FunctionComponent<Props> = ({
 
       // Convert the balance to Ether units
       const bal = ethers.utils.formatEther(balance);
-      const balanceInEther = Math.round(Number(bal));
+
+      const balanceInEther = parseFloat(Number(bal).toFixed(3));
 
       setBalance(balanceInEther);
     }
@@ -79,6 +80,41 @@ const MakeOfferModal: FunctionComponent<Props> = ({
   useEffect(() => {
     getBalance();
   }, []);
+
+  // Make Offer Function
+  const makeOffer = async () => {
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          (window as CustomWindow).ethereum as any
+        );
+
+        if (listingId) {
+          await (window as CustomWindow)?.ethereum?.request({
+            method: "eth_requestAccounts",
+          });
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(
+            ContractAddress,
+            ContractAbi,
+            signer
+          );
+          const id = Number(listingId);
+          const valueToSend = ethers.utils.parseEther(offerAmount); // Example: sending 1 Ether
+
+          // Call the contract method with value
+          const listingTx = await contract.makeOffer(listing.id, {
+            value: valueToSend,
+          });
+          isModalClosed();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  };
 
   return (
     <div>

@@ -26,7 +26,7 @@ const CollectedNftComponent = (props: Props) => {
   // This means that if the user visits /listing/0 then the listingId will be 0.
   // If the user visits /listing/1 then the listingId will be 1.
   const listingId = router.query.collectedNftId;
-  console.log(listingId);
+  // console.log(listingId);
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
@@ -68,10 +68,7 @@ const CollectedNftComponent = (props: Props) => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
-  // Make Offer Function
-  const makeOffer = async () => {
-    console.log("make offer");
-  };
+
   if (listing) {
     return (
       <>
@@ -96,7 +93,7 @@ const CollectedNftComponent = (props: Props) => {
                     className="w-full mb-2 object-contain cursor-pointer"
                   />{" "}
                   <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                    <div className=" flex ">
+                    <div className=" flex mt-4">
                       <div className="">
                         <p>{listing?.title}</p>
                       </div>
@@ -104,7 +101,7 @@ const CollectedNftComponent = (props: Props) => {
                       <div className=" flex text-left">
                         {" "}
                         <p className="pr-6 ">
-                          Reserve <br /> Price
+                          Bought <br /> For
                         </p>
                         <p className="font-bold ">
                           {listing.price} <br /> ETH
@@ -122,7 +119,7 @@ const CollectedNftComponent = (props: Props) => {
                       </div>
 
                       <div className="flex grow"></div>
-                      <div className=" flex text-left">
+                      {/* <div className=" flex text-left">
                         {" "}
                         <p className="pr-6 ">
                           Current <br /> Bid
@@ -130,12 +127,17 @@ const CollectedNftComponent = (props: Props) => {
                         <p className="font-bold text-green">
                           {listing.Bid} <br /> ETH
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
-                      <div className=" flex font-bold text-green uppercase">
-                        <button onClick={isModalOpen}>Make Offer</button>
+                      <div className="w-full flex font-bold text-green uppercase">
+                        <button
+                          className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                          onClick={isModalOpen}
+                        >
+                          Make Offer
+                        </button>
                       </div>
                       <div className="flex grow"></div>
                     </div>
@@ -181,7 +183,7 @@ const CollectedNftComponent = (props: Props) => {
           listing={listing}
           isModalClosed={isModalClosed}
           modalOpen={modalOpen}
-          makeOffer={makeOffer}
+          listingId={listingId}
         />
       </>
     );

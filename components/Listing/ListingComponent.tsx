@@ -11,15 +11,20 @@ import EnlargeNFTModal from "./EnlargeNFTModal";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
+import EndAuctionModal from "./EndAuctionModal";
+import useAuthedProfile from "../../context/UserContext";
 const { BigNumber } = require("ethers");
 
 const ListingComponent: any = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [listing, setListing] = useState<any>(null);
   const [loadingListing, setloadingListing] = useState<boolean>(true);
+  const [loadingBid, setLoadingBid] = useState<boolean>(false);
   const [bids, setBids] = useState<any>([]);
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);
+  const [modalEndOpen, setModalEndOpen] = useState<boolean>(false);
+  const { authedProfile } = useAuthedProfile();
 
   // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
   const router = useRouter();
@@ -27,7 +32,8 @@ const ListingComponent: any = () => {
   // De-construct listingId out of the router.query.
   // This means that if the user visits /listing/0 then the listingId will be 0.
   // If the user visits /listing/1 then the listingId will be 1.
-  const listingId = router.query as { listingId: string };
+  const { listingId } = router.query as { listingId: string };
+  console.log(listingId);
 
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
@@ -39,38 +45,42 @@ const ListingComponent: any = () => {
         method: "eth_requestAccounts",
       });
       const signer = provider.getSigner();
+      try {
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
+        );
+        const id = Number(listingId);
+        const listingTx = await contract.fetchNFT(id);
+        // console.log(listingTx)
+        const res = await fetchListing({ contract, listingTx });
+        // Get the latest block number
+        const toBlock = await provider.getBlockNumber();
+        const fromBlock = 0;
+        const tokenId = BigNumber.from(listingId);
+        // console.log(tokenId);
 
-      const contract = new ethers.Contract(
-        ContractAddress,
-        ContractAbi,
-        signer
-      );
-      const id = Number(listingId);
-      const listingTx = await contract.fetchNFT(id);
-      // console.log(listingTx)
-      const res = await fetchListing({ contract, listingTx });
-      // Get the latest block number
-      const toBlock = await provider.getBlockNumber();
-      const fromBlock = 0;
-      const tokenId = BigNumber.from(listingId);
-      console.log(tokenId);
-
-      // Subscribe to the 'Bid' event
-      contract
-        .queryFilter(contract.filters.Bid(), fromBlock, toBlock)
-        .then((events) => {
-          setBids((prevBids: any) => {
-            return events.slice(0, 4).map((event: any) => {
-              if (event.args.listingId == listingId) {
-                const { sender, amount } = event?.args;
-                const formattedAmount = Number(amount) / 1e18;
-                return { sender, amount: formattedAmount };
-              }
+        // Subscribe to the 'Bid' event
+        contract
+          .queryFilter(contract.filters.Bid(), fromBlock, toBlock)
+          .then((events) => {
+            setBids((prevBids: any) => {
+              return events.slice(0, 4).map((event: any) => {
+                if (event.args.listingId == listingId) {
+                  const { sender, amount } = event?.args;
+                  const formattedAmount = Number(amount) / 1e18;
+                  return { sender, amount: formattedAmount };
+                }
+              });
             });
           });
-        });
 
-      setListing(res);
+        setListing(res);
+      } catch (error) {
+        console.error(error);
+        alert(error);
+      }
       setloadingListing(false);
       //  setLoadingListings(false);
       //  console.log(res);
@@ -101,6 +111,7 @@ const ListingComponent: any = () => {
   }
 
   async function createBidOrOffer() {
+    setLoadingBid(true);
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
@@ -123,48 +134,52 @@ const ListingComponent: any = () => {
 
           // Call the contract method with value
           const listingTx = await contract.bid(id, { value: valueToSend });
-          isModalClosed();
+          await listingTx.wait();
         }
       }
     } catch (error) {
       console.error(error);
       alert(error);
+    } finally {
+      isModalClosed();
+      setLoadingBid(false);
     }
   }
-  async function makeOffer() {
-    try {
-      // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
-        );
+  // async function makeOffer() {
+  //   try {
+  //     // bidAmount // The offer amount the user entered
+  //     if (typeof window !== "undefined") {
+  //       const provider = new ethers.providers.Web3Provider(
+  //         (window as CustomWindow).ethereum as any
+  //       );
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+  //       if (listingId) {
+  //         await (window as CustomWindow)?.ethereum?.request({
+  //           method: "eth_requestAccounts",
+  //         });
+  //         const signer = provider.getSigner();
+  //         const contract = new ethers.Contract(
+  //           ContractAddress,
+  //           ContractAbi,
+  //           signer
+  //         );
+  //         const id = Number(listingId);
+  //         const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
-          // Call the contract method with value
-          const listingTx = await contract.makeOffer(id, {
-            value: valueToSend,
-          });
-          isModalClosed();
-        }
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
+  //         // Call the contract method with value
+  //         const listingTx = await contract.makeOffer(id, {
+  //           value: valueToSend,
+  //         });
+  //         isModalClosed();
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error);
+  //   }
+  // }
   async function endBid() {
+    setLoadingBid(true);
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
@@ -188,12 +203,15 @@ const ListingComponent: any = () => {
 
           // Call the contract method with value
           const listingTx = await contract.end(id);
-          isModalClosed();
+          await listingTx.wait();
         }
       }
     } catch (error) {
       console.error(error);
       alert(error);
+    } finally {
+      isModalEndClosed();
+      setLoadingBid(false);
     }
   }
   async function withBid() {
@@ -267,7 +285,13 @@ const ListingComponent: any = () => {
   const isModalClosed = () => {
     setModalOpen(false);
   };
-
+  // Modal End Auction
+  const isModalEndOpen = () => {
+    setModalEndOpen(true);
+  };
+  const isModalEndClosed = () => {
+    setModalEndOpen(false);
+  };
   // Modal Enlarge NFT
   const isModalOpenEnlargeNFT = () => {
     setModalOpenEnlargeNFT(true);
@@ -275,6 +299,7 @@ const ListingComponent: any = () => {
   const isModalClosedEnlargeNFT = () => {
     setModalOpenEnlargeNFT(false);
   };
+  console.log(listing);
 
   if (listing) {
     return (
@@ -344,7 +369,7 @@ const ListingComponent: any = () => {
                           listing.sold ? (
                             <p className="pr-5">ENDED</p>
                           ) : (
-                            <p className="pr-5">END</p>
+                            <p className="pr-5">ENDED</p>
                           )
                         ) : (
                           <p className="pr-5">
@@ -358,18 +383,23 @@ const ListingComponent: any = () => {
                     </div>
                   </div>
                 </div>
-                <div className="font-ibmPlex w-full md:min-w-1 flex items-center justify-between">
-                  <button
-                    className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                    onClick={isModalOpen}
-                  >
-                    {listing.timeElapse
-                      ? listing.sold
-                        ? "ENDED"
-                        : "END NOW"
-                      : "place bid"}
-                  </button>
-                </div>
+                {listing.timeElapse &&
+                listing.seller == authedProfile?.address ? (
+                  <div className="font-ibmPlex w-full md:min-w-1 flex items-center justify-between">
+                    <button
+                      className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                      onClick={
+                        listing.timeElapse ? isModalEndOpen : isModalOpen
+                      }
+                    >
+                      {listing.timeElapse
+                        ? listing.sold
+                          ? "ENDED"
+                          : "END NOW 1"
+                        : "place bid"}
+                    </button>
+                  </div>
+                ) : null}
               </div>
               <div className="font-ibmPlex bold text-center w-full   mt-10 pb-10 border-b leading-5 text-xs">
                 <p className="md:w-[50vw]">{listing?.description}</p>
@@ -385,8 +415,8 @@ const ListingComponent: any = () => {
                 </div>
                 <div className="flex-1/2  w-1/2">
                   <p className="text-left mb-2">HISTORY</p>
-                  {bids.length > 0 &&
-                    bids.map((bid: any, key: number) => (
+                  {bids.length && bids[0] != undefined ? (
+                    bids?.map((bid: any, key: number) => (
                       <div
                         className="flex  justify-between text-left mt-2"
                         key={key}
@@ -417,7 +447,10 @@ const ListingComponent: any = () => {
                           </p>
                         </>
                       </div>
-                    ))}
+                    ))
+                  ) : (
+                    <p className="text-left mt-2">No bids yet</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -430,15 +463,22 @@ const ListingComponent: any = () => {
           isModalClosed={isModalClosed}
           modalOpen={modalOpen}
           createBidOrOffer={createBidOrOffer}
-          makeOffer={makeOffer}
-          endBid={endBid}
           withBid={withBid}
           resale={resale}
+          loadingBid={loadingBid}
         />
         <EnlargeNFTModal
           isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}
           modalOpenEnlargeNFT={modalOpenEnlargeNFT}
           listing={listing}
+        />
+        <EndAuctionModal
+          listing={listing}
+          isModalEndClosed={isModalEndClosed}
+          modalEndOpen={modalEndOpen}
+          endBid={endBid}
+          resale={resale}
+          loadingBid={loadingBid}
         />
       </>
     );

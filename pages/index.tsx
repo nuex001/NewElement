@@ -15,45 +15,45 @@ import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../components/utils/constants";
 import { fetchListings } from "../components/utils/utils";
 
-const Home: NextPage = ({ user, users }: any) => {
+const Home: NextPage = ({ user, users, listings }: any) => {
   const [isCollection, setIsCollection] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [listings, setListings] = useState<any>([]);
-  const [loadingListings, setLoadingListings] = useState(true);
+  // const [listings, setListings] = useState<any>([]);
+  const [loadingListings, setLoadingListings] = useState(false);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
-  console.log(users);
+  // console.log(listings);
 
-  const fetchlisting = async () => {
-    if (typeof window.ethereum !== "undefined") {
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
-      );
+  // const fetchlisting = async () => {
+  //   if (typeof window.ethereum !== "undefined") {
+  //     const provider = new ethers.providers.Web3Provider(
+  //       window.ethereum as any
+  //     );
 
-      await window?.ethereum?.request({ method: "eth_requestAccounts" });
-      const signer = provider.getSigner();
+  //     await window?.ethereum?.request({ method: "eth_requestAccounts" });
+  //     const signer = provider.getSigner();
 
-      const contract = new ethers.Contract(
-        ContractAddress,
-        ContractAbi,
-        signer
-      );
+  //     const contract = new ethers.Contract(
+  //       ContractAddress,
+  //       ContractAbi,
+  //       signer
+  //     );
 
-      const listingTx = await contract.fetchListingItem();
-      // console.log(listingTx)
-      const res = await fetchListings({ contract, listingTx });
-      setListings(res);
-      setLoadingListings(false);
-      console.log(res);
-    }
-    //  setMenuItems(res);
-  };
+  //     const listingTx = await contract.fetchListingItem();
+  //     // console.log(listingTx)
+  //     const res = await fetchListings({ contract, listingTx });
+  //     setListings(res);
+  //     setLoadingListings(false);
+  //     console.log(res);
+  //   }
+  //   //  setMenuItems(res);
+  // };
   useEffect(() => {
     if (user) {
       setAuthedProfile(user);
     }
-    if (typeof window !== "undefined") {
-      fetchlisting();
-    }
+    // if (typeof window !== "undefined") {
+    //   fetchlisting();
+    // }
   }, [user]);
 
   return (
@@ -147,7 +147,29 @@ export const getServerSideProps = async ({ req, res }: any) => {
   let user = JSON.parse(JSON.stringify(json));
   const jsonUsers = await Users.find({});
   let users = JSON.parse(JSON.stringify(jsonUsers));
-  return { props: { user, users } };
+
+  // NFT fetch
+  const nftFetch = async () => {
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_APP_INFURA_ID
+    );
+
+    const contract = new ethers.Contract(
+      ContractAddress,
+      ContractAbi,
+      provider
+    );
+
+    const listingTx = await contract.fetchListingItem();
+
+    const res = await fetchListings({ contract, listingTx });
+    // console.log(res);
+
+    return res;
+  };
+  let listings = await nftFetch();
+
+  return { props: { user, users, listings } };
 };
 
 export default Home;

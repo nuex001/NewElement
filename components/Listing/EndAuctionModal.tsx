@@ -5,25 +5,21 @@ import { ethers } from "ethers";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 
 type Props = {
-  modalOpen: boolean;
-  isModalClosed: () => void;
+  modalEndOpen: boolean;
+  isModalEndClosed: () => void;
   listing: object | any;
-  bidAmount: string;
-  setBidAmount: (bidAmount: string) => void;
-  createBidOrOffer: () => void;
-  withBid: () => void;
+
+  endBid: () => void;
   resale: () => void;
   loadingBid: boolean;
 };
 
 const PlaceBidModal: FunctionComponent<Props> = ({
-  modalOpen,
-  isModalClosed,
+  modalEndOpen,
+  isModalEndClosed,
   listing,
-  bidAmount,
-  setBidAmount,
-  createBidOrOffer,
-  withBid,
+
+  endBid,
   resale,
   loadingBid,
 }) => {
@@ -93,8 +89,8 @@ const PlaceBidModal: FunctionComponent<Props> = ({
       {" "}
       <Modal
         style={customStyles}
-        isOpen={modalOpen}
-        onRequestClose={isModalClosed}
+        isOpen={modalEndOpen}
+        onRequestClose={isModalEndClosed}
         ariaHideApp={false}
       >
         <>
@@ -122,15 +118,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
 
                 <div className="flex flex-col w-full font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                   <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
-                    {listing.timeElapse
-                      ? listing.sold
-                        ? auth
-                          ? "RESALE"
-                          : "ENDED"
-                        : "END NOW"
-                      : listing.endTime != 0
-                      ? listing.endTime
-                      : "place bid"}
+                    END NOW
                   </h1>
                   <div className=" flex w-full fontIbm">
                     <div className=" flex text-left">
@@ -146,7 +134,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                     <div className=" flex text-left ">
                       {" "}
                       <p className="pr-6 ">
-                        Current <br /> Bid
+                        Winning <br /> Bid
                       </p>
                       <p className="font-bold text-green">
                         {listing.Bid} <br /> ETH
@@ -154,7 +142,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                     </div>
                   </div>
 
-                  <div className=" flex mt-3">
+                  {/* <div className=" flex mt-3">
                     <div className=" flex w-full fontIbm">
                       <div className=" flex text-left">
                         {" "}
@@ -181,42 +169,9 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {listing.timeElapse ? (
                     <>
-                      {auth && listing.sold ? (
-                        <button
-                          onClick={resale}
-                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                        >
-                          RESALE
-                        </button>
-                      ) : listing.sold ? (
-                        <button
-                          onClick={withBid}
-                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                        >
-                          WITHDRAW
-                        </button>
-                      ) : (
-                        <button
-                          // onClick={endBid}
-                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                        >
-                          END
-                        </button>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {!listing.isPrimary && (
-                        <button
-                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                          onClick={withBid}
-                        >
-                          Withdraw Bid
-                        </button>
-                      )}
                       {loadingBid ? (
                         <div className="mt-6">
                           <ButtonSpinner />
@@ -226,14 +181,14 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         </div>
                       ) : (
                         <button
+                          onClick={endBid}
                           className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                          onClick={createBidOrOffer}
                         >
-                          Make Bid
+                          END
                         </button>
                       )}
                     </>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
