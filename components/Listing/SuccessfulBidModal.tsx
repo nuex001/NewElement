@@ -47,7 +47,7 @@ const SuccessfulBidModa: FunctionComponent<Props> = ({
               <div className=" flex w-full fontIbm">
                 <div className=" flex text-left">
                   {" "}
-                  <p className="pr-6 text-green">Successfull Bid!</p>
+                  <p className="pr-6 text-green">Successful Bid!</p>
                 </div>
               </div>
               <button
