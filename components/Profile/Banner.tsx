@@ -70,7 +70,7 @@ const Banner = ({
         htmlFor="input-banner"
         onClick={handleOpenCropperBanner}
       >
-        <Image
+        {/* <Image
           src={
             authedProfile.bannerPicture != ""
               ? banner
@@ -80,6 +80,11 @@ const Banner = ({
           height={200}
           alt="banner"
           className="h-[12vh] md:h-[14vh]  object-cover  overflow-hidden z-0 border border-transparent hover:border-green"
+        /> */}
+        <img
+          src={authedProfile?.banner}
+          alt="banner"
+          className="w-[1600px] h-[200px]  object-cover  overflow-hidden z-0 border border-transparent hover:border-green"
         />
         <input
           id="input-banner"
