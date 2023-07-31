@@ -1,14 +1,11 @@
-import { useEffect, useState, FunctionComponent, use } from "react";
+import { useState, FunctionComponent } from "react";
 import Router from "next/router";
 import Image from "next/image";
-import { Interface } from "ethers/lib/utils";
-import Link from "next/link";
-import profile from "../assets/PROFILE.png";
-import ribbon from "../assets/ribbon.png";
-import send from "../assets/send.png";
-import axios from "axios";
-import { get } from "http";
 import Countdown from "react-countdown";
+import ribbon from "../public/ribbon.png";
+import send from "../public/send.png";
+import axios from "axios";
+
 import {
   getArtist,
   artistNameOrAddress,
