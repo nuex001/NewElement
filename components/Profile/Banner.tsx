@@ -72,8 +72,7 @@ const Banner = ({
       >
         <Image
           src={
-            authedProfile.bannerPicture == "" ||
-            authedProfile.bannerPicture == null
+            !authedProfile.bannerPicture == ""
               ? banner
               : authedProfile?.bannerPicture
           }
