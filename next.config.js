@@ -16,7 +16,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**.ipfs.cf-ipfs.com",
+        hostname: "**",
       },
     ],
     // domains: [
