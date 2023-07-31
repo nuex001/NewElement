@@ -16,14 +16,14 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "**.ipfs.cf-ipfs.com",
       },
     ],
-    domains: [
-      "gateway.ipfscdn.io",
-      "ipfs-2.thirdwebcdn.com",
-      "ipfs.cf-ipfs.com",
-    ],
+    // domains: [
+    //   "gateway.ipfscdn.io",
+    //   "ipfs-2.thirdwebcdn.com",
+    //   "ipfs.cf-ipfs.com",
+    // ],
   },
   eslint: {
     ignoreDuringBuilds: true,
