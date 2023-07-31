@@ -19,11 +19,7 @@ const nextConfig = {
         hostname: "**",
       },
     ],
-    // domains: [
-    //   "gateway.ipfscdn.io",
-    //   "ipfs-2.thirdwebcdn.com",
-    //   "ipfs.cf-ipfs.com",
-    // ],
+    domains: ["*.ipfs.cf-ipfs.com"],
   },
   eslint: {
     ignoreDuringBuilds: true,
