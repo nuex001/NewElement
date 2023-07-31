@@ -4,12 +4,17 @@ import Image from "next/image";
 import { Interface } from "ethers/lib/utils";
 import Link from "next/link";
 import profile from "../assets/PROFILE.png";
-import avatar from "../assets/avatar.gif";
 import ribbon from "../assets/ribbon.png";
 import send from "../assets/send.png";
 import axios from "axios";
 import { get } from "http";
 import Countdown from "react-countdown";
+import {
+  getArtist,
+  artistNameOrAddress,
+  artistProfilePic,
+  user,
+} from "../lib/functions";
 
 type Props = {
   listing: object | any;
@@ -25,6 +30,7 @@ const NFTCard: FunctionComponent<Props> = ({
 }) => {
   const [isListed, setIsListed] = useState(false);
   const [price, setPrice] = useState(0);
+  getArtist(users, listing);
 
   const handleSaveToProfile = () => {
     setLoading(true);
@@ -43,20 +49,6 @@ const NFTCard: FunctionComponent<Props> = ({
     setLoading(false);
   };
   console.log(listing);
-  let artistNameOrAddress;
-  let artistProfilePic: any;
-  let user: any;
-  const getArtist = () => {
-    user = users.find((user: any) => user.address === listing.seller);
-    artistNameOrAddress = user
-      ? user.username
-      : listing.seller
-          .slice(0, 3)
-          .concat("...")
-          .concat(listing.seller.slice(-4));
-    artistProfilePic = user?.profilePicture ? user.profilePicture : avatar;
-  };
-  getArtist();
 
   // Countdown
   // Random component
@@ -92,7 +84,7 @@ const NFTCard: FunctionComponent<Props> = ({
                   pathname: `/listing/${listing.id}`,
                 });
               }}
-              className=" overflow-hidden h-full flex min-h-[370px] max-h-[450px]  xl:max-h-[580px] justify-center items-center mb-3"
+              className=" overflow-hidden h-full flex min-h-[370px] max-h-[450px]  xl:max-h-[580px] justify-center items-center"
             >
               <Image
                 src={listing?.image}
@@ -104,8 +96,8 @@ const NFTCard: FunctionComponent<Props> = ({
             </div>
 
             <div className="flex flex-col font-ibmPlex mb-16 uppercase text-xs text-[#e4e8eb] ">
-              <div className=" flex ">
-                <div className="">
+              <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
+                <div className="text-left">
                   <p>{listing?.title}</p>
                 </div>
                 <div className="flex grow"></div>
@@ -118,19 +110,16 @@ const NFTCard: FunctionComponent<Props> = ({
                     {listing?.price} <br /> ETH
                   </p>
                 </div>
-              </div>
 
-              <div className=" flex mt-3">
-                BY @
                 <div
                   onClick={() => {
                     Router.push({
                       pathname: `user/${user?._id}`,
                     });
                   }}
-                  className="font-bold flex cursor-pointer"
+                  className="font-bold flex cursor-pointer mt-3"
                 >
-                  <p>{artistNameOrAddress}</p>
+                  <p> BY @{artistNameOrAddress}</p>
                   <Image
                     className="ml-3 -mt-1 h-6 cursor-pointer object-cover rounded-full"
                     src={artistProfilePic}

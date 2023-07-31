@@ -3,12 +3,14 @@ import Modal from "react-modal";
 import Image from "next/image";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
+import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 
 type Props = {
   modalOpen: boolean;
   isModalClosed: () => void;
   listing: object | any;
   listingId: any;
+  isSuccessfullOfferModalOpen: () => void;
 };
 
 const MakeOfferModal: FunctionComponent<Props> = ({
@@ -16,9 +18,10 @@ const MakeOfferModal: FunctionComponent<Props> = ({
   isModalClosed,
   listing,
   listingId,
+  isSuccessfullOfferModalOpen,
 }) => {
   // const [isOpenModal, setIsOpenModal] = useState(true);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const customStyles = {
     overlay: {
@@ -83,6 +86,7 @@ const MakeOfferModal: FunctionComponent<Props> = ({
 
   // Make Offer Function
   const makeOffer = async () => {
+    setIsLoading(true);
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
@@ -107,12 +111,18 @@ const MakeOfferModal: FunctionComponent<Props> = ({
           const listingTx = await contract.makeOffer(listing.id, {
             value: valueToSend,
           });
+          await listingTx.wait();
+          setIsLoading(false);
           isModalClosed();
+          isSuccessfullOfferModalOpen();
         }
       }
     } catch (error) {
       console.error(error);
       alert(error);
+    } finally {
+      setIsLoading(false);
+      isModalClosed();
     }
   };
 
@@ -162,39 +172,46 @@ const MakeOfferModal: FunctionComponent<Props> = ({
                   </h1>
 
                   <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
-                    <div className=" flex w-full fontIbm">
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green">
-                          Input <br /> Amount
-                        </p>
-                        <input
-                          type="number"
-                          name="bidAmount"
-                          pattern="[0-9]+"
-                          placeholder="0.00  ETH"
-                          onChange={(e) => setOfferAmount(e.target.value)}
-                          className="border bg-transparent w-2/5 pl-2 focus:outline-green"
-                        />
-                      </div>
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left">
-                        {" "}
-                        <p className="pr-6 font-bold text-green ">
-                          Your <br /> Balance
-                        </p>
-                        <p className="font-bold">
-                          {balance} <br /> ETH
-                        </p>
-                      </div>
+                    <div className=" flex text-left">
+                      {" "}
+                      <p className="pr-6 font-bold text-green">
+                        Offer <br /> Amount
+                      </p>
+                      <input
+                        type="number"
+                        name="bidAmount"
+                        pattern="[0-9]+"
+                        placeholder="0.00  ETH"
+                        onChange={(e) => setOfferAmount(e.target.value)}
+                        className="border bg-transparent  pl-2 focus:outline-green"
+                      />
+                    </div>
+                    <div className="flex grow"></div>
+                    <div className=" flex text-left">
+                      {" "}
+                      <p className="pr-6 font-bold text-green ">
+                        Your <br /> Balance
+                      </p>
+                      <p className="font-bold">
+                        {balance} <br /> ETH
+                      </p>
                     </div>
                   </div>
-                  <button
-                    onClick={makeOffer}
-                    className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                  >
-                    Make Offer
-                  </button>
+                  {isLoading ? (
+                    <div className="mt-6">
+                      <ButtonSpinner />
+                      <p className="font-ibmPlex text-xs  tracking-normal mt-3">
+                        Processing...
+                      </p>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={makeOffer}
+                      className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                    >
+                      Make Offer
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

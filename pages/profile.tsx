@@ -13,9 +13,16 @@ type Props = {
   collectedNfts: any[];
   listedNfts: any[];
   soldNfts: any[];
+  offers: any;
 };
 
-const Profile = ({ user, collectedNfts, listedNfts, soldNfts }: Props) => {
+const Profile = ({
+  user,
+  collectedNfts,
+  listedNfts,
+  soldNfts,
+  offers,
+}: Props) => {
   // const { setAuthedProfile, authedProfile } = useAuthedProfile();
   // React.useEffect(() => {
   //   setAuthedProfile(user);
@@ -26,16 +33,22 @@ const Profile = ({ user, collectedNfts, listedNfts, soldNfts }: Props) => {
       collectedNfts={collectedNfts}
       listedNfts={listedNfts}
       soldNfts={soldNfts}
+      offers={offers}
     />
   );
 };
 export const getServerSideProps = async ({ req, res }: any) => {
   let auth = getCookie("auth", { req, res });
   await connectDB();
+
   const json = await Users.findOne({ address: auth });
   let user = JSON.parse(JSON.stringify(json));
   // console.log(user);
 
+  let listedNfts: any[] = [];
+  let collectedNfts: any[] = [];
+  let soldNfts: any[] = [];
+  let offers = [] as any;
   // NFT Fetch
   const nftFetch = async () => {
     const provider = new ethers.providers.JsonRpcProvider(
@@ -53,26 +66,80 @@ export const getServerSideProps = async ({ req, res }: any) => {
     const res = await fetchListings({ contract, listingTx });
     // console.log(res);
 
-    return res;
+    if (res) {
+      res.forEach((nft: any, index: number) => {
+        if (nft.seller === nft.owner) {
+          collectedNfts.push(nft);
+        } else {
+          listedNfts.push(nft);
+        }
+      });
+      res.forEach((nft: any, index: number) => {
+        if (nft.sold) {
+          soldNfts.push(nft);
+        }
+      });
+    }
+
+    await Promise.all(
+      collectedNfts.map(async (nft: any, index: number) => {
+        const offersTx = await contract.getAllOffersForNFT(nft.id);
+        const bidder = offersTx.map((offer: any) => {
+          return offer.bidder;
+        });
+        const amount = offersTx.map((offer: any) => {
+          return Number(offer.amount) / 1e18;
+        });
+        // Function to merge the two arrays into an array of objects with bidder and amount properties
+        function mergeArraysIntoObjects(arr1: any, arr2: any) {
+          const mergedArray = arr1.map((bidder: any, index: any) => ({
+            nftId: nft.id,
+            bidder,
+            amount: arr2[index],
+          }));
+          return mergedArray;
+        }
+
+        // Call the function to get the merged array of objects
+        const offersArray = mergeArraysIntoObjects(bidder, amount);
+
+        // Function to transform an array of objects into an array of combinedObjects
+        function combineObjectsArray(objectsArray: any) {
+          const combinedObjectsArray = [] as any;
+
+          const groupedObjects = {} as any;
+
+          objectsArray.forEach((obj: any) => {
+            const nftId = obj.nftId;
+            if (!groupedObjects[nftId]) {
+              groupedObjects[nftId] = [];
+            }
+            groupedObjects[nftId].push({
+              bidder: obj.bidder,
+              amount: obj.amount,
+            });
+          });
+
+          for (const nftId in groupedObjects) {
+            combinedObjectsArray.push({
+              nftId: parseInt(nftId),
+              bids: groupedObjects[nftId],
+            });
+          }
+
+          return combinedObjectsArray;
+        }
+
+        // Call the function to get the array of combinedObjects
+        const combinedObjectsArray = combineObjectsArray(offersArray);
+        console.log(combinedObjectsArray);
+        offers.push(combinedObjectsArray);
+      })
+    );
   };
-  let userNfts = await nftFetch();
-  let listedNfts: any[] = [];
-  let collectedNfts: any[] = [];
-  let soldNfts: any[] = [];
-  if (userNfts) {
-    userNfts.forEach((nft: any, index: number) => {
-      if (nft.seller === nft.owner) {
-        collectedNfts.push(nft);
-      } else {
-        listedNfts.push(nft);
-      }
-    });
-    userNfts.forEach((nft: any, index: number) => {
-      if (nft.sold) {
-        soldNfts.push(nft);
-      }
-    });
-  }
+  console.log(offers);
+
+  await nftFetch();
 
   if (!auth) {
     return {
@@ -88,6 +155,7 @@ export const getServerSideProps = async ({ req, res }: any) => {
         listedNfts: listedNfts || null,
         collectedNfts: collectedNfts || null,
         soldNfts: soldNfts || null,
+        offers: offers || null,
       },
     };
   }

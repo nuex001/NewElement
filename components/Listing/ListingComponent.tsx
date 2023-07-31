@@ -1,7 +1,5 @@
-import type { NextPage } from "next";
 import { Router, useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { marketplaceContractAddress } from "../../addresses";
 import styles from "../../styles/Home.module.css";
 import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
@@ -14,14 +12,20 @@ import { fetchListing } from "../utils/utils";
 import EndAuctionModal from "./EndAuctionModal";
 import SuccessfullBidModal from "./SuccessfulBidModal";
 import useAuthedProfile from "../../context/UserContext";
+import {
+  getArtist,
+  artistNameOrAddress,
+  artistProfilePic,
+  user,
+} from "../../lib/functions";
 const { BigNumber } = require("ethers");
 
-const ListingComponent: any = () => {
+const ListingComponent: any = ({ users, listing, bids }: any) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [listing, setListing] = useState<any>(null);
+  // const [listing, setListing] = useState<any>(null);
   const [loadingListing, setloadingListing] = useState<boolean>(true);
   const [loadingBid, setLoadingBid] = useState<boolean>(false);
-  const [bids, setBids] = useState<any>([]);
+  // const [bids, setBids] = useState<any>([]);
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);
   const [modalEndOpen, setModalEndOpen] = useState<boolean>(false);
@@ -36,70 +40,69 @@ const ListingComponent: any = () => {
   // This means that if the user visits /listing/0 then the listingId will be 0.
   // If the user visits /listing/1 then the listingId will be 1.
   const { listingId } = router.query as { listingId: string };
-  console.log(listingId);
+  console.log(listing);
 
-  const fetchlisting = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as CustomWindow).ethereum as any
-    );
+  // const fetchlisting = async () => {
+  //   const provider = new ethers.providers.Web3Provider(
+  //     (window as CustomWindow).ethereum as any
+  //   );
 
-    if (listingId) {
-      await (window as CustomWindow)?.ethereum?.request({
-        method: "eth_requestAccounts",
-      });
-      const signer = provider.getSigner();
-      try {
-        const contract = new ethers.Contract(
-          ContractAddress,
-          ContractAbi,
-          signer
-        );
-        const id = Number(listingId);
-        const listingTx = await contract.fetchNFT(id);
-        // console.log(listingTx)
-        const res = await fetchListing({ contract, listingTx });
-        // Get the latest block number
-        const toBlock = await provider.getBlockNumber();
-        const fromBlock = 0;
-        const tokenId = BigNumber.from(listingId);
-        // console.log(tokenId);
+  //   if (listingId) {
+  //     await (window as CustomWindow)?.ethereum?.request({
+  //       method: "eth_requestAccounts",
+  //     });
+  //     const signer = provider.getSigner();
+  //     try {
+  //       const contract = new ethers.Contract(
+  //         ContractAddress,
+  //         ContractAbi,
+  //         signer
+  //       );
 
-        // Subscribe to the 'Bid' event
-        contract
-          .queryFilter(contract.filters.Bid(), fromBlock, toBlock)
-          .then((events) => {
-            setBids((prevBids: any) => {
-              return events.slice(0, 4).map((event: any) => {
-                if (event.args.listingId == listingId) {
-                  const { sender, amount } = event?.args;
-                  const formattedAmount = Number(amount) / 1e18;
-                  return { sender, amount: formattedAmount };
-                }
-              });
-            });
-          });
+  //       // // Get the latest block number
+  //       // const toBlock = await provider.getBlockNumber();
+  //       // const fromBlock = 0;
+  //       // const tokenId = BigNumber.from(listingId);
+  //       // // console.log(tokenId);
 
-        setListing(res);
-      } catch (error) {
-        console.error(error);
-        alert(error);
-      }
-      setloadingListing(false);
-      //  setLoadingListings(false);
-      //  console.log(res);
-      //  setMenuItems(res);
-    }
-  };
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      fetchlisting();
-    }
-  }, []);
+  //       // // Subscribe to the 'Bid' event
+  //       // contract
+  //       //   .queryFilter(contract.filters.Bid(), fromBlock, toBlock)
+  //       //   .then((events) => {
+  //       //     setBids((prevBids: any) => {
+  //       //       return events.slice(0, 4).map((event: any) => {
+  //       //         if (event.args.listingId == listingId) {
+  //       //           const { sender, amount } = event?.args;
+  //       //           const formattedAmount = Number(amount) / 1e18;
+  //       //           return { sender, amount: formattedAmount };
+  //       //         }
+  //       //       });
+  //       //     });
+  //       //   });
+
+  //       // setListing(res);
+  //     } catch (error) {
+  //       console.error(error);
+  //       alert(error);
+  //     }
+  //     // setloadingListing(false);
+  //     //  setLoadingListings(false);
+  //     //  console.log(res);
+  //     //  setMenuItems(res);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     fetchlisting();
+  //   }
+  // }, []);
+  getArtist(users, listing);
+  console.log(bids);
 
   // Store the bid amount the user entered into the bidding textbox
   const [bidAmount, setBidAmount] = useState<string>("");
 
-  if (loadingListing) {
+  if (!loadingListing) {
     return (
       <div className={`font-ibmPlex ${styles.loadingOrError}`}>Loading...</div>
     );
@@ -339,8 +342,8 @@ const ListingComponent: any = () => {
                     onClick={isModalOpenEnlargeNFT}
                   />{" "}
                   <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] mt-3">
-                    <div className=" flex ">
-                      <div className="">
+                    <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
+                      <div className="text-left">
                         <p>{listing?.title}</p>
                       </div>
                       <div className="flex grow"></div>
@@ -353,15 +356,23 @@ const ListingComponent: any = () => {
                           {listing.price} <br /> ETH
                         </p>
                       </div>
-                    </div>
 
-                    <div className=" flex mt-3">
-                      <div className="font-bold flex">
-                        <b>
-                          {/* {listing.seller?.slice(0, 6) +
-                            "..." +
-                            listing.seller?.slice(36, 40)} */}
-                        </b>
+                      <div
+                        onClick={() => {
+                          router.push({
+                            pathname: `/user/${user?._id}`,
+                          });
+                        }}
+                        className="font-bold flex cursor-pointer mt-3"
+                      >
+                        <p> BY @{artistNameOrAddress}</p>
+                        <Image
+                          className="ml-3 -mt-1 h-6 cursor-pointer object-cover rounded-full"
+                          src={artistProfilePic}
+                          height={0}
+                          width={25}
+                          alt={""}
+                        />
                       </div>
 
                       <div className="flex grow"></div>
@@ -432,21 +443,21 @@ const ListingComponent: any = () => {
                   {bids.length && bids[0] != undefined ? (
                     bids?.map((bid: any, key: number) => (
                       <div
-                        className="flex  justify-between text-left mt-2"
+                        className="grid grid-cols-8  justify-between text-left mt-2"
                         key={key}
                       >
-                        <Image
-                          src={profile}
-                          width={30}
-                          height={10}
-                          alt="profile picture"
-                          className="hidden md:block h-fit"
-                          key={key}
-                        />
+                        <div className="col-span-5 flex">
+                          <Image
+                            src={profile}
+                            width={30}
+                            height={10}
+                            alt="profile picture"
+                            className="hidden md:block h-fit"
+                            key={key}
+                          />
 
-                        <>
                           <p className="md:pl-4 w-1/2 md:w-full">
-                            Bid placed by{" "}
+                            Bid by{" "}
                             <span className="font-bold">
                               @
                               {bid?.sender?.slice(0, 6) +
@@ -455,11 +466,11 @@ const ListingComponent: any = () => {
                             </span>{" "}
                             {/* <br /> Jan 15, 2023 at 7.31pm */}
                           </p>
-                          <div className="flex flex-grow"></div>
-                          <p className="font-bold text-green">
-                            {bid?.amount} <br /> ETH
-                          </p>
-                        </>
+                        </div>
+                        <div className="flex flex-grow col-span-2"></div>
+                        <p className="font-bold text-green">
+                          {bid?.amount} <br /> ETH
+                        </p>
                       </div>
                     ))
                   ) : (

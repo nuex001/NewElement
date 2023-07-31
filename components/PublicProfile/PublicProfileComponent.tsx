@@ -24,30 +24,6 @@ const PublicProfileComponent = ({ user, collectedNfts, listedNfts }: Props) => {
   const router = useRouter();
   // console.log(user);
 
-  // const nftFetch = async () => {
-  //   const provider = new ethers.providers.Web3Provider(
-  //     (window as CustomWindow).ethereum as any
-  //   );
-
-  //   await (window as CustomWindow)?.ethereum?.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   const signer = provider.getSigner();
-  //   const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
-
-  //   const listingTx = await contract.filterNftByAddress(user?.address);
-
-  //   const res = await fetchListings({ contract, listingTx });
-
-  //   setUserNfts(res);
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     nftFetch();
-  //   }
-  // }, [user]);
-
   return (
     <div
       className={`flex flex-col w-full max-w-[1590px] px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${

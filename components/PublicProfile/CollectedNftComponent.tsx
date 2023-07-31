@@ -12,12 +12,15 @@ import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListing } from "../utils/utils";
 import MakeOfferModal from "./MakeOfferModal";
+import SuccessfulOfferdModal from "./SuccesfulOfferModal";
 const { BigNumber } = require("ethers");
 
 type Props = {};
 
 const CollectedNftComponent = (props: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [successfulOfferModalOpen, setSuccessfulOfferModalOpen] =
+    useState<boolean>(false);
   const [listing, setListing] = useState<any>(null);
   // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
   const router = useRouter();
@@ -61,12 +64,20 @@ const CollectedNftComponent = (props: Props) => {
     }
   }, []);
   console.log(listing);
-  // Modal Place Bid
+  // Modal Make Offer
   const isModalOpen = () => {
     setModalOpen(true);
   };
   const isModalClosed = () => {
     setModalOpen(false);
+  };
+
+  // Modal Successful Offer
+  const isSuccessfullOfferModalOpen = () => {
+    setSuccessfulOfferModalOpen(true);
+  };
+  const isSuccessfullOfferModalClosed = () => {
+    setSuccessfulOfferModalOpen(false);
   };
 
   if (listing) {
@@ -184,6 +195,11 @@ const CollectedNftComponent = (props: Props) => {
           isModalClosed={isModalClosed}
           modalOpen={modalOpen}
           listingId={listingId}
+          isSuccessfullOfferModalOpen={isSuccessfullOfferModalOpen}
+        />
+        <SuccessfulOfferdModal
+          successfulOfferModalOpen={successfulOfferModalOpen}
+          isSuccessfulOfferModalClosed={isSuccessfullOfferModalClosed}
         />
       </>
     );

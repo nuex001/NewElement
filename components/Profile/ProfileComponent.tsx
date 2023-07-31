@@ -17,6 +17,7 @@ import Router from "next/router";
 import router from "next/router";
 import AdminLoginButton from "./AdminLoginButton";
 import Banner from "./Banner";
+import AcceptOfferModal from "./AcceptOfferModal";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 
@@ -31,14 +32,23 @@ const ProfileComponent = ({
   collectedNfts,
   listedNfts,
   soldNfts,
+  offers,
 }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [loadingOffer, setLoadingOffer] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalNftIndex, setModalNftIndex] = useState<number>(0);
+  const isModalClosed = () => {
+    setModalOpen(false);
+  };
+  const isModalOpen = (index: number) => {
+    setModalNftIndex(index);
+    setModalOpen(true);
+  };
 
   const { setAuthedProfile } = useAuthedProfile();
   let { isArtist } = authedProfile;
-
-  console.log(authedProfile);
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -72,7 +82,10 @@ const ProfileComponent = ({
     if (image == picture) {
       const uploadUrl = await upload({
         data: [file],
-        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+        options: {
+          uploadWithGatewayUrl: true,
+          uploadWithoutDirectory: true,
+        },
       });
 
       if (uploadUrl) {
@@ -93,7 +106,10 @@ const ProfileComponent = ({
     } else if (image == bannerPicture) {
       const bannerUploadUrl = await upload({
         data: [file],
-        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+        options: {
+          uploadWithGatewayUrl: true,
+          uploadWithoutDirectory: true,
+        },
       });
 
       if (bannerUploadUrl) {
@@ -147,309 +163,275 @@ const ProfileComponent = ({
     });
   };
 
-  const accept = async () => {
-    // try {
-    //   // bidAmount // The offer amount the user entered
-    //   if (typeof window !== "undefined") {
-    //     const provider = new ethers.providers.Web3Provider(
-    //       (window as CustomWindow).ethereum as any
-    //     );
-    //     await (window as CustomWindow)?.ethereum?.request({
-    //       method: "eth_requestAccounts",
-    //     });
-    //     const signer = provider.getSigner();
-    //     const contract = new ethers.Contract(
-    //       ContractAddress,
-    //       ContractAbi,
-    //       signer
-    //     );
-    //     const id = Number(1);
-    //     // Call the contract method with value
-    //     const listingTx = await contract.acceptOffer(1, authedProfile.address);
-    //     // isModalClosed();
-    //     console.log(listingTx);
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   alert(error);
-    // }
+  const accept = async (nftId: number, highestBidder: any) => {
+    setLoadingOffer(true);
+    try {
+      // bidAmount // The offer amount the user entered
+      if (typeof window !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(
+          (window as CustomWindow).ethereum as any
+        );
+        await (window as CustomWindow)?.ethereum?.request({
+          method: "eth_requestAccounts",
+        });
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
+        );
+        // Call the contract method with value
+        const listingTx = await contract.acceptOffer(
+          nftId,
+          highestBidder /* address of the highest bidder */
+        );
+        console.log("listingTx", listingTx);
+        await listingTx.wait();
+
+        setLoadingOffer(false);
+        isModalClosed();
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error);
+      setLoadingOffer(false);
+    }
+  };
+
+  const hasOfferForNft = (nftId: any) => {
+    let hasOffer = false;
+    offers.forEach((offer: any) => {
+      offer.forEach((nftInfo: any) => {
+        if (nftInfo.nftId === nftId) {
+          hasOffer = true;
+        }
+      });
+    });
+    return hasOffer;
   };
 
   return (
-    <div
-      className={`flex flex-col w-full max-w-[1590px]  px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${
-        loading && `cursor-progress`
-      }`}
-    >
-      <div className="flex flex-col w-full overflow-hidden font-ibmPlex ">
-        <Banner
-          authedProfile={authedProfile}
-          setBannerPicture={setBannerPicture}
-          bannerPicture={bannerPicture}
-          handleFileChange={handleFileChange}
-          setEditor={setEditor}
-          setFile={setFile}
-          uploadToIpfs={uploadToIpfs}
-        />
-        <div className="flex w-full -mt-4">
-          <label
-            className="cursor-pointer"
-            htmlFor="input-profile"
-            onClick={handleOpenCropper}
-          >
-            <Image
-              className="border border-green rounded-full hover:brightness-125 bg-black z-10 object-center object-cover aspect-square"
-              src={
-                authedProfile
-                  ? authedProfile?.profilePicture !== ""
-                    ? authedProfile?.profilePicture
-                    : avatar
-                  : avatar
-              }
-              width={70}
-              height={70}
-              alt="profile"
-            />
-          </label>
-          {isArtist ? (
-            <>
+    <>
+      <div
+        className={`flex flex-col w-full max-w-[1590px]  px-4 md:px-3 lg:px-6 mt-20 md:mt-24  bg-black overflow-hidden ${
+          loading && `cursor-progress`
+        }`}
+      >
+        <div className="flex flex-col w-full overflow-hidden font-ibmPlex ">
+          <Banner
+            authedProfile={authedProfile}
+            setBannerPicture={setBannerPicture}
+            bannerPicture={bannerPicture}
+            handleFileChange={handleFileChange}
+            setEditor={setEditor}
+            setFile={setFile}
+            uploadToIpfs={uploadToIpfs}
+          />
+          <div className="flex w-full -mt-4">
+            <label
+              className="cursor-pointer"
+              htmlFor="input-profile"
+              onClick={handleOpenCropper}
+            >
               <Image
-                className="ml-4 mb-1 h-5 self-center"
-                src={star}
-                width={20}
-                height={10}
-                alt="star"
+                className="border border-green rounded-full hover:brightness-125 bg-black z-10 object-center object-cover aspect-square"
+                src={
+                  authedProfile
+                    ? authedProfile?.profilePicture !== ""
+                      ? authedProfile?.profilePicture
+                      : avatar
+                    : avatar
+                }
+                width={70}
+                height={70}
+                alt="profile"
               />
-              <p className="text-xs pl-1 font-bold tracking-wider self-center">
-                ARTIST
-              </p>{" "}
-            </>
-          ) : null}
-        </div>
-        <div className="w-fit border border-green flex flex-col align-center">
-          {picture.cropperOpen && (
-            <div className="flex flex-col items-center">
-              <input
-                id="input-profile"
-                className="text-xs hidden"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {picture.img && (
-                <>
-                  <AvatarEditor
-                    ref={setEditorRef}
-                    image={picture.img}
-                    width={200}
-                    height={200}
-                    border={50}
-                    borderRadius={100}
-                    color={[1, 1, 1, 0.5]} // RGBA
-                    rotate={0}
-                    scale={1}
-                  />
-
-                  <div className="flex w-full justify-around">
-                    <button
-                      className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                      onClick={handleSave}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className=" text-green font-xxCompressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                      onClick={handleCancel}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col w-full mt-4 text-left text-xs">
-          {/* Username */}
-          <Username
-            authedProfile={authedProfile}
-            loading={loading}
-            setLoading={setLoading}
-          />
-          <Bio
-            authedProfile={authedProfile}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        </div>
-        {authedProfile?.admin ? (
-          <AdminLoginButton authedProfile={authedProfile} />
-        ) : null}
-        {isArtist ? ( // if artist
-          <div className="flex  flex-col-reverse md:flex-col">
-            <div className="flex md:mt-5 h-full flex-wrap">
-              <div className="flex flex-col mr-10 w-16">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
-                  {listedNfts?.length}
-                </h1>
-                <p className="text-xs">
-                  TOTAL
-                  <br /> LISTED
-                </p>
-              </div>
-              <div className="flex flex-col mr-10 w-16">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                  0
-                </h1>
-                <p className="text-xs">
-                  TOTAL
-                  <br /> SOLD
-                </p>
-              </div>
-              <div className="flex grow md:hidden"></div>
-
-              <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                  0.0
-                </h1>
-                <p className="text-xs">
-                  PROFIT
-                  <br /> IN ETH
-                </p>
-              </div>
-              <div className="basis-full h-0"></div>
-              <div className="flex flex-col mr-10 w-16">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                  {collectedNfts?.length}
-                </h1>
-
-                <p className="text-xs">
-                  TOTAL
-                  <br /> COLLECTED
-                </p>
-              </div>
-              <div className="flex flex-col mr-10 w-16">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                  0
-                </h1>
-                <p className="text-xs">
-                  TOTAL
-                  <br /> FLIPPED
-                </p>
-              </div>
-              <div className="flex grow md:hidden"></div>
-              <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
-                <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                  0.0
-                </h1>
-                <p className="text-xs">
-                  P/L
-                  <br /> IN ETH
-                </p>
-              </div>
-            </div>
-            <div className="flex overflow-hidden md:w-[60%]">
-              <Link
-                href="/profile/mint"
-                className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
-              >
-                LIST NEW
-              </Link>
-            </div>{" "}
+            </label>
+            {isArtist ? (
+              <>
+                <Image
+                  className="ml-4 mb-1 h-5 self-center"
+                  src={star}
+                  width={20}
+                  height={10}
+                  alt="star"
+                />
+                <p className="text-xs pl-1 font-bold tracking-wider self-center">
+                  ARTIST
+                </p>{" "}
+              </>
+            ) : null}
           </div>
-        ) : null}
-        <div className="flex flex-col font-ibmPlex mt-10 md:mt-4 text-left">
-          {isArtist ? (
-            <>
-              <h3 className="font-bold">LISTED</h3>
-              <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
-                {/* Listed  */}
-                {listedNfts.length ? (
-                  listedNfts.map(
-                    (nft: any, index: React.Key | null | undefined) => (
-                      <div
-                        className="flex md: flex-col h-full items-start w-max "
-                        key={index}
+          <div className="w-fit border border-green flex flex-col align-center">
+            {picture.cropperOpen && (
+              <div className="flex flex-col items-center">
+                <input
+                  id="input-profile"
+                  className="text-xs hidden"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {picture.img && (
+                  <>
+                    <AvatarEditor
+                      ref={setEditorRef}
+                      image={picture.img}
+                      width={200}
+                      height={200}
+                      border={50}
+                      borderRadius={100}
+                      color={[1, 1, 1, 0.5]} // RGBA
+                      rotate={0}
+                      scale={1}
+                    />
+
+                    <div className="flex w-full justify-around">
+                      <button
+                        className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
+                        onClick={handleSave}
                       >
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => {
-                            Router.push({
-                              pathname: `/listing/${nft.id}`,
-                            });
-                          }}
-                        >
-                          <Image
-                            src={nft.image}
-                            alt="nft7"
-                            width={150}
-                            height={200}
-                            className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                          />{" "}
-                        </div>
-                        <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                          <div className=" flex ">
-                            <div className=" flex w-full">
-                              {" "}
-                              <p className="pr-6 ">
-                                Reserve NOt
-                                <br /> met
-                              </p>
-                              <div className="flex grow"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  )
-                ) : (
-                  <p className="text-red-600 text-xs">
-                    You currently have no listed items
-                  </p>
+                        Save
+                      </button>
+                      <button
+                        className=" text-green font-xxCompressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
-              {/* SOLD */}
-              <div className="flex flex-col">
-                <h3 className="font-bold">SOLD</h3>
+            )}
+          </div>
+          <div className="flex flex-col w-full mt-4 text-left text-xs">
+            {/* Username */}
+            <Username
+              authedProfile={authedProfile}
+              loading={loading}
+              setLoading={setLoading}
+            />
+            <Bio
+              authedProfile={authedProfile}
+              loading={loading}
+              setLoading={setLoading}
+            />
+          </div>
+          {authedProfile?.admin ? (
+            <AdminLoginButton authedProfile={authedProfile} />
+          ) : null}
+          {isArtist ? ( // if artist
+            <div className="flex  flex-col-reverse md:flex-col">
+              <div className="flex md:mt-5 h-full flex-wrap">
+                <div className="flex flex-col mr-10 w-16">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
+                    {listedNfts?.length}
+                  </h1>
+                  <p className="text-xs">
+                    TOTAL
+                    <br /> LISTED
+                  </p>
+                </div>
+                <div className="flex flex-col mr-10 w-16">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                    0
+                  </h1>
+                  <p className="text-xs">
+                    TOTAL
+                    <br /> SOLD
+                  </p>
+                </div>
+                <div className="flex grow md:hidden"></div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                  {/* nft 1 */}
-                  {soldNfts.length ? (
-                    soldNfts?.map(
+                <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                    0.0
+                  </h1>
+                  <p className="text-xs">
+                    PROFIT
+                    <br /> IN ETH
+                  </p>
+                </div>
+                <div className="basis-full h-0"></div>
+                <div className="flex flex-col mr-10 w-16">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                    {collectedNfts?.length}
+                  </h1>
+
+                  <p className="text-xs">
+                    TOTAL
+                    <br /> COLLECTED
+                  </p>
+                </div>
+                <div className="flex flex-col mr-10 w-16">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                    0
+                  </h1>
+                  <p className="text-xs">
+                    TOTAL
+                    <br /> FLIPPED
+                  </p>
+                </div>
+                <div className="flex grow md:hidden"></div>
+                <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
+                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                    0.0
+                  </h1>
+                  <p className="text-xs">
+                    P/L
+                    <br /> IN ETH
+                  </p>
+                </div>
+              </div>
+              <div className="flex overflow-hidden md:w-[60%]">
+                <Link
+                  href="/profile/mint"
+                  className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
+                >
+                  LIST NEW
+                </Link>
+              </div>{" "}
+            </div>
+          ) : null}
+          <div className="flex flex-col font-ibmPlex mt-10 md:mt-4 text-left">
+            {isArtist ? (
+              <>
+                <h3 className="font-bold">LISTED</h3>
+                <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
+                  {/* Listed  */}
+                  {listedNfts.length ? (
+                    listedNfts.map(
                       (nft: any, index: React.Key | null | undefined) => (
                         <div
-                          className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
+                          className="flex md: flex-col h-full items-start w-max "
                           key={index}
                         >
-                          <div className="flex  flex-col h-full items-start w-auto ">
-                            <div
-                              className="cursor-pointer"
-                              // onClick={() => {
-                              //   Router.push({
-                              //     pathname: `/user/${router.query.slug}/${nft.id}`,
-                              //   });
-                              // }}
-                            >
-                              <Image
-                                src={nft.image}
-                                alt="nft7"
-                                width={150}
-                                height={200}
-                                className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                              />{" "}
-                            </div>
-                            <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                              <div className=" flex ">
-                                <div className=" flex w-full">
-                                  {" "}
-                                  <p className="pr-6 ">
-                                    Sold <br /> For
-                                  </p>
-                                  <div className="flex grow"></div>
-                                  <p className="font-bold text-green">
-                                    {nft.price} <br /> ETH
-                                  </p>
-                                </div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => {
+                              Router.push({
+                                pathname: `/listing/${nft.id}`,
+                              });
+                            }}
+                          >
+                            <Image
+                              src={nft.image}
+                              alt="nft7"
+                              width={150}
+                              height={200}
+                              className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                            />{" "}
+                          </div>
+                          <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                            <div className=" flex ">
+                              <div className=" flex w-full">
+                                {" "}
+                                <p className="pr-6 ">
+                                  Reserve NOt
+                                  <br /> met
+                                </p>
+                                <div className="flex grow"></div>
                               </div>
                             </div>
                           </div>
@@ -458,20 +440,73 @@ const ProfileComponent = ({
                     )
                   ) : (
                     <p className="text-red-600 text-xs">
-                      You currently have no saved items
+                      You currently have no listed items
                     </p>
                   )}
                 </div>
-              </div>
-              {/* COLLECTION */}
-              <div className="flex flex-col">
-                <h3 className="font-bold">COLLECTION</h3>
+                {/* SOLD */}
+                <div className="flex flex-col">
+                  <h3 className="font-bold">SOLD</h3>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                  {/* nft 1 */}
-                  {collectedNfts.length ? (
-                    collectedNfts.map(
-                      (nft: any, index: React.Key | null | undefined) => (
+                  <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                    {/* nft 1 */}
+                    {soldNfts.length ? (
+                      soldNfts?.map(
+                        (nft: any, index: React.Key | null | undefined) => (
+                          <div
+                            className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
+                            key={index}
+                          >
+                            <div className="flex  flex-col h-full items-start w-auto ">
+                              <div
+                                className="cursor-pointer"
+                                // onClick={() => {
+                                //   Router.push({
+                                //     pathname: `/user/${router.query.slug}/${nft.id}`,
+                                //   });
+                                // }}
+                              >
+                                <Image
+                                  src={nft.image}
+                                  alt="nft7"
+                                  width={150}
+                                  height={200}
+                                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                                />{" "}
+                              </div>
+                              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                                <div className=" flex ">
+                                  <div className=" flex w-full">
+                                    {" "}
+                                    <p className="pr-6 ">
+                                      Sold <br /> For
+                                    </p>
+                                    <div className="flex grow"></div>
+                                    <p className="font-bold text-green">
+                                      {nft.price} <br /> ETH
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      )
+                    ) : (
+                      <p className="text-red-600 text-xs">
+                        You currently have no saved items
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {/* COLLECTION */}
+                <div className="flex flex-col">
+                  <h3 className="font-bold">COLLECTION</h3>
+
+                  <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                    {/* nft 1 */}
+                    {collectedNfts.length ? (
+                      collectedNfts.map((nft: any, index: number) => (
                         <div
                           className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
                           key={index}
@@ -502,100 +537,116 @@ const ProfileComponent = ({
                                   </p>
                                   <div className="flex grow"></div>
                                   <p className="font-bold text-green">
-                                    1.1 <br /> ETH
+                                    {nft.price} <br /> ETH
                                   </p>
                                 </div>
                               </div>
-                              <button onClick={accept}>Accept Offer</button>
+                              {hasOfferForNft(nft.id) ? (
+                                <button
+                                  className="text-green font-compressed uppercase  tracking-[4px] w-[100%] my-2 bg-white bg-opacity-0 hover:bg-opacity-20 font-semibold text-xl"
+                                  onClick={() => isModalOpen(index)}
+                                >
+                                  New offer
+                                </button>
+                              ) : null}
                             </div>
                           </div>
                         </div>
-                      )
-                    )
-                  ) : (
-                    <p className="text-red-600 text-xs">
-                      You currently have no collected items
-                    </p>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : null}
-          {/* SAVED */}
-
-          <div className="flex flex-col">
-            <h3 className="font-bold">SAVED</h3>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-              {authedProfile?.savedNfts.length ? (
-                authedProfile?.savedNfts.map((nft: any) => (
-                  <div
-                    key={nft.id}
-                    className="flex  flex-col h-full items-start w-max "
-                  >
-                    <div
-                      onClick={() => {
-                        Router.push({
-                          pathname: `/listing/${nft.id}`,
-                        });
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <Image
-                        src={nft.image}
-                        alt="nft7"
-                        width={150}
-                        height={200}
-                        className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                      />{" "}
-                    </div>
-                    <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                      <div className=" flex ">
-                        <div className=" flex w-full">
-                          {" "}
-                          <p className="pr-6 ">
-                            Reserve <br /> Price
-                          </p>
-                          <div className="flex grow"></div>
-                          <p className="font-bold ">
-                            1.1 <br /> ETH
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className=" flex mt-3  ">
-                        <div className=" flex w-full">
-                          {" "}
-                          <p className="pr-6  ">
-                            Current <br /> Bid
-                          </p>
-                          <div className="flex grow"></div>
-                          <p className="font-bold text-green">
-                            2.5 <br /> ETH
-                          </p>
-                        </div>
-                      </div>
-                      <div className=" flex mt-3">
-                        <div className="flex grow"></div>
-                        <div className=" flex font-bold text-green">
-                          {" "}
-                          <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
-                        </div>
-                        <div className="flex grow"></div>
-                      </div>
-                    </div>
+                      ))
+                    ) : (
+                      <p className="text-red-600 text-xs">
+                        You currently have no collected items
+                      </p>
+                    )}
                   </div>
-                ))
-              ) : (
-                <p className="text-red-600 text-xs">
-                  You currently have no saved items
-                </p>
-              )}
+                </div>
+              </>
+            ) : null}
+            {/* SAVED */}
+
+            <div className="flex flex-col">
+              <h3 className="font-bold">SAVED</h3>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                {authedProfile?.savedNfts.length ? (
+                  authedProfile?.savedNfts.map((nft: any) => (
+                    <div
+                      key={nft.id}
+                      className="flex  flex-col h-full items-start w-max "
+                    >
+                      <div
+                        onClick={() => {
+                          Router.push({
+                            pathname: `/listing/${nft.id}`,
+                          });
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Image
+                          src={nft.image}
+                          alt="nft7"
+                          width={150}
+                          height={200}
+                          className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                        />{" "}
+                      </div>
+                      <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                        <div className=" flex ">
+                          <div className=" flex w-full">
+                            {" "}
+                            <p className="pr-6 ">
+                              Reserve <br /> Price
+                            </p>
+                            <div className="flex grow"></div>
+                            <p className="font-bold ">
+                              1.1 <br /> ETH
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className=" flex mt-3  ">
+                          <div className=" flex w-full">
+                            {" "}
+                            <p className="pr-6  ">
+                              Current <br /> Bid
+                            </p>
+                            <div className="flex grow"></div>
+                            <p className="font-bold text-green">
+                              2.5 <br /> ETH
+                            </p>
+                          </div>
+                        </div>
+                        <div className=" flex mt-3">
+                          <div className="flex grow"></div>
+                          <div className=" flex font-bold text-green">
+                            {" "}
+                            <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
+                          </div>
+                          <div className="flex grow"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-red-600 text-xs">
+                    You currently have no saved items
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <AcceptOfferModal
+        modalOpen={modalOpen}
+        isModalClosed={isModalClosed}
+        collectedNfts={collectedNfts}
+        accept={accept}
+        nftModalIndex={modalNftIndex}
+        offers={offers}
+        loadingOffer={loadingOffer}
+      />
+    </>
   );
 };
 

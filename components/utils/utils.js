@@ -88,8 +88,9 @@ export const fetchListings = async (data) => {
           (difference % (1000 * 60 * 60)) / (1000 * 60)
         );
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        time = hours * 3600 + minutes * 60 + seconds;
-        console.log(time);
+        const sumUp = hours * 3600 + minutes * 60 + seconds;
+        time = sumUp > 0 ? sumUp : "";
+        // console.log(time);
         //
         // `${hours > 1 ? hours + "H," : ""}${
         //   minutes > 1 ? minutes + "M," : ""
