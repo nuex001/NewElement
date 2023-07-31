@@ -203,6 +203,8 @@ const CollectedNftComponent = (props: Props) => {
         />
       </>
     );
+  } else {
+    return null;
   }
 };
 export default CollectedNftComponent;
