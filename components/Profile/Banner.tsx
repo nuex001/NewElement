@@ -61,7 +61,7 @@ const Banner = ({
       cropperOpen: true,
     });
   };
-  // console.log(authedProfile.bannerPicture);
+  console.log(authedProfile.bannerPicture);
 
   return (
     <>
@@ -72,7 +72,8 @@ const Banner = ({
       >
         <Image
           src={
-            authedProfile.bannerPicture == ""
+            authedProfile.bannerPicture == "" ||
+            authedProfile.bannerPicture == null
               ? banner
               : authedProfile?.bannerPicture
           }
