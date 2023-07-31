@@ -22,12 +22,12 @@ const Banner = ({
   setEditor,
   bannerPicture,
   uploadToIpfs,
-}: // setFile,
-Props) => {
+  setFile,
+}: Props) => {
   const [images, setImages] = useState<any>([]);
   const [id, setId] = useState<any>("");
   const [imageUrl, setImageUrl] = useState<any>("");
-  const [file, setFile] = useState<any>(null);
+  // const [file, setFile] = useState<any>(null);
   // IPFS upload infura
   // const handleUpload = async (fileArray: any) => {
   //   // event.preventDefault();
