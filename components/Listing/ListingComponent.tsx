@@ -153,39 +153,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
       setLoadingBid(false);
     }
   }
-  // async function makeOffer() {
-  //   try {
-  //     // bidAmount // The offer amount the user entered
-  //     if (typeof window !== "undefined") {
-  //       const provider = new ethers.providers.Web3Provider(
-  //         (window as CustomWindow).ethereum as any
-  //       );
 
-  //       if (listingId) {
-  //         await (window as CustomWindow)?.ethereum?.request({
-  //           method: "eth_requestAccounts",
-  //         });
-  //         const signer = provider.getSigner();
-  //         const contract = new ethers.Contract(
-  //           ContractAddress,
-  //           ContractAbi,
-  //           signer
-  //         );
-  //         const id = Number(listingId);
-  //         const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
-
-  //         // Call the contract method with value
-  //         const listingTx = await contract.makeOffer(id, {
-  //           value: valueToSend,
-  //         });
-  //         isModalClosed();
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert(error);
-  //   }
-  // }
   async function endBid() {
     setLoadingBid(true);
     try {
@@ -400,9 +368,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                             onClick={isModalOpen}
                             className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                           >
-                            {listing.endTime != 0
-                              ? listing.endTime
-                              : "place bid"}
+                            place bid
                           </button>
                         )}
                       </div>
@@ -420,7 +386,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                       {listing.timeElapse
                         ? listing.sold
                           ? "ENDED"
-                          : "END NOW 1"
+                          : "END NOW"
                         : "place bid"}
                     </button>
                   </div>
@@ -447,16 +413,16 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                         key={key}
                       >
                         <div className="col-span-5 flex">
-                          <Image
+                          {/* <Image
                             src={profile}
                             width={30}
                             height={10}
                             alt="profile picture"
                             className="hidden md:block h-fit"
                             key={key}
-                          />
+                          /> */}
 
-                          <p className="md:pl-4 w-1/2 md:w-full">
+                          <p className=" w-1/2 md:w-full">
                             Bid by{" "}
                             <span className="font-bold">
                               @
