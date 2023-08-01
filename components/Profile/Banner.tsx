@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import AvatarEditor from "react-avatar-editor";
 import banner from "../../assets/banner.png";
-import ipfs from "../utils/Ipfs";
 import axios from "axios";
-import UploadComponent from "./UploadComponent";
 
 type Props = {
   authedProfile: any;
@@ -30,66 +28,41 @@ const Banner = ({
   // const [file, setFile] = useState<any>(null);
   // IPFS upload infura
   // const handleUpload = async (fileArray: any) => {
-  //   // event.preventDefault();
+  //   const { cid } = await ipfs.add(file);
 
-  //   // const formData = new FormData(event.target);
-  //   // const files = formData.getAll("images");
-  //   // const fileArray = Array.from(files);
-  //   // // console.log();
-  //   if ((fileArray.length < 4 && fileArray.length > 1) || id !== "") {
-  //     const uploadedImages = await Promise.all(
-  //       fileArray.map(async (file: any) => {
-  //         const { cid } = await ipfs.add(file);
-  //         return cid.toString();
-  //       })
-  //     );
-  //     setImages(uploadedImages);
-
-  //     const enteredId = formData.get("texts");
-  //     setId(enteredId);
-
-  //     const data = {
-  //       images: uploadedImages,
-  //       Id: enteredId,
-  //     };
-
-  //     const { cid } = await ipfs.add(JSON.stringify(data));
-  //     readIPFSContent(cid.toString());
-  //     console.log("CID:", cid.toString());
-  //   } else {
-  //     console.log("Please Fill all inputs");
-  //   }
+  //   // readIPFSContent(cid.toString());
+  //   console.log("CID:", cid.toString());
   // };
 
-  // async function readIPFSContent(hash: any) {
-  //   try {
-  //     // Fetch the content from IPFS
-  //     const response = await axios.get(`https://ipfs.io/ipfs/${hash}`);
-  //     if (response.data.length > !1) {
-  //       throw new Error("Failed to fetch IPFS content");
-  //     }
-  //     const hashedImages = response.data.images;
-  //     console.log(hashedImages);
-  //     console.log(response.data.Id);
-  //     let UnhashedImages = [];
-  //     if (hashedImages.length > 1) {
-  //       console.log(hashedImages.length > 1);
-  //       for (let i = 0; i < hashedImages.length; i++) {
-  //         const url = `https://ipfs.io/ipfs/${hashedImages[i]}`;
-  //         setImageUrl(url);
-  //         UnhashedImages.push(url);
-  //       }
+  async function readIPFSContent(hash: any) {
+    try {
+      // Fetch the content from IPFS
+      const response = await axios.get(`https://ipfs.io/ipfs/${hash}`);
+      if (response.data.length > !1) {
+        throw new Error("Failed to fetch IPFS content");
+      }
+      const hashedImages = response.data.images;
+      console.log(hashedImages);
+      console.log(response.data.Id);
+      let UnhashedImages = [];
+      if (hashedImages.length > 1) {
+        console.log(hashedImages.length > 1);
+        for (let i = 0; i < hashedImages.length; i++) {
+          const url = `https://ipfs.io/ipfs/${hashedImages[i]}`;
+          setImageUrl(url);
+          UnhashedImages.push(url);
+        }
 
-  //       console.log(UnhashedImages);
-  //     }
-  //     // const content = await response.data.images.text();
+        console.log(UnhashedImages);
+      }
+      // const content = await response.data.images.text();
 
-  //     // Do something with the content
-  //     // console.log(content);
-  //   } catch (error) {
-  //     console.error("Error reading IPFS content:", error);
-  //   }
-  // }
+      // Do something with the content
+      // console.log(content);
+    } catch (error) {
+      console.error("Error reading IPFS content:", error);
+    }
+  }
 
   // Banner image upload
   const handleCancelBanner = () => {
@@ -109,7 +82,7 @@ const Banner = ({
       cropperOpen: false,
       croppedImg: croppedImg,
     });
-
+    // handleUpload(file);
     uploadToIpfs(bannerPicture);
   };
 
@@ -131,7 +104,7 @@ const Banner = ({
       cropperOpen: true,
     });
   };
-  console.log(authedProfile.bannerPicture);
+  // console.log(authedProfile.bannerPicture);
 
   return (
     <>

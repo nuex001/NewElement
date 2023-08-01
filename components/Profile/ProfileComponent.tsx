@@ -7,8 +7,6 @@ import avatar from "../../assets/avatar.gif";
 import star from "../../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
 import { useAuthedProfile } from "../../context/UserContext";
-import nft1 from "../../assets/nft-1.jpeg";
-import nft2 from "../../assets/nft-2.jpeg";
 import Link from "next/link";
 import axios from "axios";
 import Username from "./Username";
@@ -20,6 +18,7 @@ import Banner from "./Banner";
 import AcceptOfferModal from "./AcceptOfferModal";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
+import ipfs from "../utils/Ipfs";
 
 type Props = {
   cropperOpen: boolean;
@@ -60,7 +59,7 @@ const ProfileComponent = ({
     img: null,
     croppedImg: banner,
   });
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<any>(null);
 
   const { mutateAsync: upload } = useStorageUpload();
 
@@ -80,19 +79,14 @@ const ProfileComponent = ({
   const uploadToIpfs = async (image: any) => {
     setLoading(true);
     if (image == picture) {
-      const uploadUrl = await upload({
-        data: [file],
-        options: {
-          uploadWithGatewayUrl: true,
-          uploadWithoutDirectory: true,
-        },
-      });
+      const { cid } = await ipfs.add(file);
+      const uploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
 
       if (uploadUrl) {
         axios
           .post("/api/updateProfile", {
             address: authedProfile.address,
-            imgUrl: uploadUrl[0],
+            imgUrl: uploadUrl,
           })
           .then((response) => {
             setAuthedProfile(response.data);
@@ -104,19 +98,14 @@ const ProfileComponent = ({
           .finally(() => setLoading(false));
       }
     } else if (image == bannerPicture) {
-      const bannerUploadUrl = await upload({
-        data: [file],
-        options: {
-          uploadWithGatewayUrl: true,
-          uploadWithoutDirectory: true,
-        },
-      });
+      const { cid } = await ipfs.add(file);
+      const bannerUploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
 
       if (bannerUploadUrl) {
         axios
           .post("/api/updateProfile", {
             address: authedProfile.address,
-            bannerImgUrl: bannerUploadUrl[0],
+            bannerImgUrl: bannerUploadUrl,
           })
           .then((response) => {
             setAuthedProfile(response.data);
@@ -209,6 +198,8 @@ const ProfileComponent = ({
     });
     return hasOffer;
   };
+  // console.log(authedProfile);
+  // console.log(collectedNfts);
 
   return (
     <>
@@ -305,6 +296,7 @@ const ProfileComponent = ({
               </div>
             )}
           </div>
+          {/* <UploadComponent /> */}
           <div className="flex flex-col w-full mt-4 text-left text-xs">
             {/* Username */}
             <Username
@@ -335,7 +327,7 @@ const ProfileComponent = ({
                 </div>
                 <div className="flex flex-col mr-10 w-16">
                   <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    0
+                    {soldNfts?.length}
                   </h1>
                   <p className="text-xs">
                     TOTAL

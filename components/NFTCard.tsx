@@ -25,15 +25,13 @@ const NFTCard: FunctionComponent<Props> = ({
   users,
   index,
 }) => {
-  const [isListed, setIsListed] = useState(false);
-  const [price, setPrice] = useState(0);
   getArtist(users, listing);
 
   const handleSaveToProfile = () => {
     setLoading(true);
     const data = {
       nft: listing,
-      address: user.address, //remeber to change this to the normal address
+      address: user.address,
     };
     axios
       .post("/api/saveNft", data)
