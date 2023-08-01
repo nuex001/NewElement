@@ -2,6 +2,7 @@ import React, { useState, useEffect, FunctionComponent } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { ethers } from "ethers";
+import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 type Props = {
   modalOpen: boolean;
   isModalClosed: () => void;
@@ -9,7 +10,7 @@ type Props = {
   bidAmount: string;
   setBidAmount: (bidAmount: string) => void;
   createBidOrOffer: (listingId: number) => void;
-  makeOffer: (listingId: number) => void;
+  loadingBid: boolean;
 };
 
 const CollPlaceBidModal: FunctionComponent<Props> = ({
@@ -19,13 +20,8 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
   bidAmount,
   setBidAmount,
   createBidOrOffer,
-  makeOffer,
+  loadingBid,
 }) => {
-  // const [isOpenModal, setIsOpenModal] = useState(true);
-  // const [isLoading, setIsLoading] = useState(false);
-  // useEffect(()=>{
-  //   console.log(listing)
-  // },[])
   const customStyles = {
     overlay: {
       backgroundColor: "rgb(25, 25, 25, 0.85)",
@@ -66,7 +62,7 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
 
       // Convert the balance to Ether units
       const bal = ethers.utils.formatEther(balance);
-      const balanceInEther = Math.round(Number(bal));
+      const balanceInEther = parseFloat(Number(bal).toFixed(2));
 
       setBalance(balanceInEther);
     }
@@ -112,28 +108,31 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                   <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
                     place bid
                   </h1>
-                  <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
-                    <div className=" flex text-left">
+                  <div className=" grid grid-cols-4 sm:grid-cols-5 gap-6 w-full mt-3">
+                    <div className="flex text-left  col-span-2">
                       {" "}
-                      <p className="pr-6 ">
+                      <p className="pr-4">
                         Reserve <br /> Price
                       </p>
                       <p className="font-bold ">
                         {listing?.price} <br /> ETH
                       </p>
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left ">
-                        {" "}
-                        <p className="pr-6 ">
-                          Current <br /> Bid
-                        </p>
-                        <p className="font-bold text-green">
-                          {listing?.Bid} <br /> ETH
-                        </p>
-                      </div>
+                    </div>
+                    <div className="hidden sm:flex grow"></div>
+                    <div className=" flex text-left justify-end">
+                      {" "}
+                      <p className=" ">
+                        Current <br /> Bid
+                      </p>
+                    </div>
+                    <div className=" flex text-left justify-end">
+                      <p className="font-bold text-green">
+                        {listing.Bid == 0 ? listing.Bid + ".00" : listing.Bid}{" "}
+                        <br /> ETH
+                      </p>
                     </div>
 
-                    <div className="mt-3 flex text-left">
+                    <div className="flex text-left col-span-2">
                       {" "}
                       <p className="pr-6 font-bold text-green">
                         Offer <br /> Amount
@@ -144,17 +143,19 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                         pattern="[0-9]+"
                         placeholder="0.00  ETH"
                         onChange={(e) => setBidAmount(e.target.value)}
-                        className="border bg-transparent w-2/5 pl-2 focus:outline-green"
+                        className="border bg-transparent w-full pl-2 focus:outline-green"
                       />
                     </div>
-                    <div className="flex grow"></div>
-                    <div className=" flex text-left">
+                    <div className="hidden sm:flex grow"></div>
+                    <div className=" flex text-left justify-end">
                       {" "}
-                      <p className="pr-6 font-bold text-green ">
+                      <p className=" font-bold text-green ">
                         Your <br /> Balance
                       </p>
+                    </div>
+                    <div className=" flex text-left justify-end">
                       <p className="font-bold">
-                        1.1 <br /> ETH
+                        {balance} <br /> ETH
                       </p>
                     </div>
                   </div>
@@ -177,22 +178,23 @@ const CollPlaceBidModal: FunctionComponent<Props> = ({
                     </>
                   ) : (
                     <>
-                      <button
-                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                        onClick={() => {
-                          createBidOrOffer(listing.id);
-                        }}
-                      >
-                        Make Bid
-                      </button>
-                      <button
-                        onClick={() => {
-                          makeOffer(listing.id);
-                        }}
-                        className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
-                      >
-                        Make Offer
-                      </button>
+                      {loadingBid ? (
+                        <div className="mt-6">
+                          <ButtonSpinner />
+                          <p className="font-ibmPlex text-xs  tracking-normal mt-3">
+                            Processing...
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
+                          onClick={() => {
+                            createBidOrOffer(listing.id);
+                          }}
+                        >
+                          Place Bid
+                        </button>
+                      )}
                     </>
                   )}
                 </div>

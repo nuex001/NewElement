@@ -310,16 +310,18 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                     onClick={isModalOpenEnlargeNFT}
                   />{" "}
                   <div className="flex flex-col font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] mt-3">
-                    <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
-                      <div className="text-left">
+                    <div className=" grid grid-cols-4 sm:grid-cols-5 gap-6 w-full mt-3">
+                      <div className="text-left col-span-2">
                         <p>{listing?.title}</p>
                       </div>
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left">
+                      <div className="hidden sm:flex grow"></div>
+                      <div className=" flex text-left justify-end">
                         {" "}
-                        <p className="pr-6 ">
+                        <p className="">
                           Reserve <br /> Price
                         </p>
+                      </div>
+                      <div className=" flex text-left justify-end">
                         <p className="font-bold ">
                           {listing.price} <br /> ETH
                         </p>
@@ -331,7 +333,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                             pathname: `/user/${user?._id}`,
                           });
                         }}
-                        className="font-bold flex cursor-pointer mt-3"
+                        className="font-bold text-left flex cursor-pointer  mt-3 col-span-2"
                       >
                         <p> BY @{artistNameOrAddress}</p>
                         <Image
@@ -343,14 +345,17 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                         />
                       </div>
 
-                      <div className="flex grow"></div>
-                      <div className=" flex text-left">
+                      <div className="hidden sm:flex grow"></div>
+                      <div className=" flex text-left justify-end">
                         {" "}
-                        <p className="pr-6 ">
+                        <p className="">
                           Current <br /> Bid
                         </p>
+                      </div>
+                      <div className=" flex text-left justify-end">
                         <p className="font-bold text-green">
-                          {listing.Bid} <br /> ETH
+                          {listing.Bid == 0 ? listing.Bid + ".00" : listing.Bid}{" "}
+                          <br /> ETH
                         </p>
                       </div>
                     </div>

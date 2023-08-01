@@ -108,7 +108,7 @@ const MintComponent = ({ user }: Props) => {
     };
     console.log(singleNFTData);
 
-    // Deploy contract
+    // Deploy Collection Contract
     if (isCollection) {
       const tokenUrl = await submitToIpfs(collectionData);
       const provider = new ethers.providers.Web3Provider(
@@ -140,16 +140,17 @@ const MintComponent = ({ user }: Props) => {
         );
 
         const collectionCreated = await collectionCreatedTx.wait();
-        // console.log(collectionCreated);
+        console.log(collectionCreated);
 
         // Update user database
         setLoadingToDeploy(false);
+        isModalOpen();
       } catch (e) {
         console.log(e);
         alert("Something went wrong, please try again later.");
       }
     } else {
-      // Mint NFT Contract
+      // Mint Single NFT Contract
       const tokenUrl = await submitToIpfs(singleNFTData);
       const provider = new ethers.providers.Web3Provider(
         (window as CustomWindow).ethereum as any

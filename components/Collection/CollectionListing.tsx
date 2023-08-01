@@ -9,7 +9,7 @@ import styles from "../../styles/Home.module.css";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchListings, fetCollection } from "../utils/utils";
-
+import SuccessfulBidModal from "../Listing/SuccessfulBidModal";
 import Link from "next/link";
 import CollectionListingCard from "./CollectionListingCard";
 import CollPlaceBidModal from "./CollPlaceBidModal";
@@ -25,7 +25,9 @@ const CollectionListing = (props: Props) => {
     useState<boolean>(false);
   const [bidAmount, setBidAmount] = useState<string>("");
   // Hooks to detect user is on the right network and switch them if they are not
-
+  const [loadingBid, setLoadingBid] = useState<boolean>(false);
+  const [successfulBidmodalOpen, setSuccessfulBidModal] =
+    useState<boolean>(false);
   const [listing, setListing] = useState<any>(null);
   const [listings, setListings] = useState<any>(null);
   const [bidListing, setBidListing] = useState<any>(null);
@@ -34,6 +36,7 @@ const CollectionListing = (props: Props) => {
   const { collectionId } = router.query as { collectionId: string };
 
   async function createBidOrOffer(listingId: any) {
+    setLoadingBid(true);
     try {
       // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
@@ -56,48 +59,54 @@ const CollectionListing = (props: Props) => {
 
           // Call the contract method with value
           const listingTx = await contract.bid(id, { value: valueToSend });
+          await listingTx.wait();
+
           isModalClosed();
+          setLoadingBid(false);
+          isSuccessfulBidModalOpen();
         }
       }
     } catch (error) {
       console.error(error);
       alert(error);
+      isModalClosed();
+      setLoadingBid(false);
     }
   }
 
-  async function makeOffer(listingId: any) {
-    try {
-      // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
-        );
+  // async function makeOffer(listingId: any) {
+  //   try {
+  //     // bidAmount // The offer amount the user entered
+  //     if (typeof window !== "undefined") {
+  //       const provider = new ethers.providers.Web3Provider(
+  //         (window as CustomWindow).ethereum as any
+  //       );
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+  //       if (listingId) {
+  //         await (window as CustomWindow)?.ethereum?.request({
+  //           method: "eth_requestAccounts",
+  //         });
+  //         const signer = provider.getSigner();
+  //         const contract = new ethers.Contract(
+  //           ContractAddress,
+  //           ContractAbi,
+  //           signer
+  //         );
+  //         const id = Number(listingId);
+  //         const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
-          // Call the contract method with value
-          const listingTx = await contract.makeOffer(id, {
-            value: valueToSend,
-          });
-          isModalClosed();
-        }
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error);
-    }
-  }
+  //         // Call the contract method with value
+  //         const listingTx = await contract.makeOffer(id, {
+  //           value: valueToSend,
+  //         });
+  //         isModalClosed();
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert(error);
+  //   }
+  // }
 
   const isModalOpen = () => {
     setModalOpen(true);
@@ -155,6 +164,14 @@ const CollectionListing = (props: Props) => {
     }
   }, []);
   console.log(listing);
+
+  // Successful Bid Modal
+  const isSuccessfulBidModalOpen = () => {
+    setSuccessfulBidModal(true);
+  };
+  const isSuccessfulBidModalClosed = () => {
+    setSuccessfulBidModal(false);
+  };
 
   return (
     <>
@@ -262,18 +279,23 @@ const CollectionListing = (props: Props) => {
         </div>
       </div>
       <CollPlaceBidModal
+        loadingBid={loadingBid}
         bidAmount={bidAmount}
         setBidAmount={setBidAmount}
         listing={bidListing}
         isModalClosed={isModalClosed}
         modalOpen={modalOpen}
         createBidOrOffer={createBidOrOffer}
-        makeOffer={makeOffer}
+        // makeOffer={makeOffer}
       />
       <CollEnlargeNFTModal
         isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}
         modalOpenEnlargeNFT={modalOpenEnlargeNFT}
         listing={bidListing}
+      />
+      <SuccessfulBidModal
+        successfulBidmodalOpen={successfulBidmodalOpen}
+        isSuccessfulBidModalClosed={isSuccessfulBidModalClosed}
       />
     </>
   );

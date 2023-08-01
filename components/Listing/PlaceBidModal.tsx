@@ -78,7 +78,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
 
       // Convert the balance to Ether units
       const bal = ethers.utils.formatEther(balance);
-      const balanceInEther = parseFloat(Number(bal).toFixed(3));
+      const balanceInEther = parseFloat(Number(bal).toFixed(2));
 
       setBalance(balanceInEther);
     }
@@ -132,29 +132,31 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                       ? listing.endTime
                       : "place bid"}
                   </h1>
-                  <div className=" grid grid-cols-2 md:grid-cols-3 gap-6 w-full mt-3">
-                    <div className=" flex text-left">
+                  <div className=" grid grid-cols-4 sm:grid-cols-5 gap-6 w-full mt-3">
+                    <div className="flex text-left col-span-2">
                       {" "}
-                      <p className="pr-6 ">
+                      <p className="pr-4">
                         Reserve <br /> Price
                       </p>
                       <p className="font-bold ">
                         {listing.price} <br /> ETH
                       </p>
                     </div>
-                    <div className="hidden md:flex grow"></div>
-                    <div className=" flex text-left ">
+                    <div className="hidden sm:flex grow"></div>
+                    <div className=" flex text-left justify-end">
                       {" "}
-                      <p className="pr-6 ">
+                      <p className=" ">
                         Current <br /> Bid
                       </p>
+                    </div>
+                    <div className=" flex text-left justify-end">
                       <p className="font-bold text-green">
-                        {listing.Bid} <br /> ETH
+                        {listing.Bid == 0 ? listing.Bid + ".00" : listing.Bid}{" "}
+                        <br /> ETH
                       </p>
                     </div>
 
-                    {/* <div className=" flex w-full fontIbm"> */}
-                    <div className=" flex text-left">
+                    <div className="flex text-left col-span-2">
                       {" "}
                       <p className="pr-6 font-bold text-green">
                         Bid <br /> Amount
@@ -165,20 +167,21 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                         pattern="[0-9]+"
                         placeholder="0.00  ETH"
                         onChange={(e) => setBidAmount(e.target.value)}
-                        className="border bg-transparent w-fit pl-2 focus:outline-green"
+                        className="border bg-transparent w-full pl-2 focus:outline-green"
                       />
                     </div>
-                    <div className="hidden md:flex grow"></div>
-                    <div className=" flex text-left">
+                    <div className="hidden sm:flex grow"></div>
+                    <div className=" flex text-left justify-end">
                       {" "}
-                      <p className="pr-6 font-bold text-green ">
+                      <p className="font-bold text-green ">
                         Your <br /> Balance
                       </p>
+                    </div>
+                    <div className=" flex text-left justify-end">
                       <p className="font-bold">
                         {balance} <br /> ETH
                       </p>
                     </div>
-                    {/* </div> */}
                   </div>
                   {listing.timeElapse ? (
                     <>
