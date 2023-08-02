@@ -44,104 +44,117 @@ const Profile = ({
     />
   );
 };
-export const getServerSideProps = async ({ req, res }: any) => {
+const getUserData = async ({ req, res }: any) => {
   let auth = getCookie("auth", { req, res });
   await connectDB();
 
+  if (!auth) {
+    return {
+      notFound: true,
+    };
+  }
+
   const json = await Users.findOne({ address: auth });
-  let user = JSON.parse(JSON.stringify(json));
+  const user = JSON.parse(JSON.stringify(json));
   const jsonUsers = await Users.find({});
-  let users = JSON.parse(JSON.stringify(jsonUsers));
+  const users = JSON.parse(JSON.stringify(jsonUsers));
 
-  // NFT Fetch
-  const nftFetch = async (userAddress: any) => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      process.env.NEXT_APP_INFURA_ID
-    );
+  return { user, users };
+};
+const nftFetch = async (userAddress: any) => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    process.env.NEXT_APP_INFURA_ID
+  );
 
-    const contract = new ethers.Contract(
-      ContractAddress,
-      ContractAbi,
-      provider
-    );
+  const contract = new ethers.Contract(ContractAddress, ContractAbi, provider);
 
-    try {
-      const listingTx = await contract.filterNftByAddress(userAddress);
-      const res = await fetchListings({ contract, listingTx });
+  try {
+    const listingTx = await contract.filterNftByAddress(userAddress);
+    const res = await fetchListings({ contract, listingTx });
 
-      const collectedNfts = [] as any;
-      const listedNfts = [] as any;
-      const soldNfts = [] as any;
-      const offers = [] as any;
-      const listings = [] as any;
+    const collectedNfts = [] as any;
+    const listedNfts = [] as any;
+    const soldNfts = [] as any;
+    const offers = [] as any;
+    const listings = [] as any;
 
-      if (Array.isArray(res)) {
-        res.forEach((nft) => {
-          if (nft.seller === nft.owner) {
-            collectedNfts.push(nft);
-          } else {
-            listedNfts.push(nft);
+    if (Array.isArray(res)) {
+      res.forEach((nft) => {
+        if (nft.seller === nft.owner) {
+          collectedNfts.push(nft);
+        } else {
+          listedNfts.push(nft);
+        }
+
+        if (nft.sold) {
+          soldNfts.push(nft);
+        }
+      });
+
+      await Promise.all(
+        collectedNfts.map(async (nft: any) => {
+          const offersTx = await contract.getAllOffersForNFT(nft.id);
+          const bidder = offersTx.map((offer: any) => offer.bidder);
+          const amount = offersTx.map(
+            (offer: any) => Number(offer.amount) / 1e18
+          );
+
+          const offersArray = bidder.map((bidder: any, index: any) => ({
+            nftId: nft.id,
+            bidder,
+            amount: amount[index],
+          }));
+
+          const combinedObjectsArray = [];
+
+          const groupedObjects = offersArray.reduce(
+            (grouped: any, offer: any) => {
+              const { nftId, bidder, amount } = offer;
+              if (!grouped[nftId]) {
+                grouped[nftId] = [];
+              }
+              grouped[nftId].push({ bidder, amount });
+              return grouped;
+            },
+            {}
+          );
+
+          for (const nftId in groupedObjects) {
+            combinedObjectsArray.push({
+              nftId: parseInt(nftId),
+              bids: groupedObjects[nftId],
+            });
           }
 
-          if (nft.sold) {
-            soldNfts.push(nft);
-          }
-        });
-
-        await Promise.all(
-          collectedNfts.map(async (nft: any) => {
-            const offersTx = await contract.getAllOffersForNFT(nft.id);
-            const bidder = offersTx.map((offer: any) => offer.bidder);
-            const amount = offersTx.map(
-              (offer: any) => Number(offer.amount) / 1e18
-            );
-
-            const offersArray = bidder.map((bidder: any, index: any) => ({
-              nftId: nft.id,
-              bidder,
-              amount: amount[index],
-            }));
-
-            const combinedObjectsArray = [];
-
-            const groupedObjects = offersArray.reduce(
-              (grouped: any, offer: any) => {
-                const { nftId, bidder, amount } = offer;
-                if (!grouped[nftId]) {
-                  grouped[nftId] = [];
-                }
-                grouped[nftId].push({ bidder, amount });
-                return grouped;
-              },
-              {}
-            );
-
-            for (const nftId in groupedObjects) {
-              combinedObjectsArray.push({
-                nftId: parseInt(nftId),
-                bids: groupedObjects[nftId],
-              });
-            }
-
-            offers.push(combinedObjectsArray);
-          })
-        );
-        listings.push(res);
-        return {
-          collectedNfts,
-          listedNfts,
-          soldNfts,
-          offers,
-          listings,
-        };
-      } else {
-        throw new Error("Failed to fetch NFT data");
-      }
-    } catch (error) {
-      console.error("Error fetching NFT data:", error);
-      return null;
+          offers.push(combinedObjectsArray);
+        })
+      );
+      listings.push(res);
+      return {
+        collectedNfts,
+        listedNfts,
+        soldNfts,
+        offers,
+        listings,
+      };
+    } else {
+      throw new Error("Failed to fetch NFT data");
     }
-  };
+  } catch (error) {
+    console.error("Error fetching NFT data:", error);
+    return null;
+  }
+};
+export const getServerSideProps = async ({ req, res }: any) => {
+  const { user, users } = await getUserData({ req, res });
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const result = await nftFetch(user?.address);
 
@@ -152,26 +165,18 @@ export const getServerSideProps = async ({ req, res }: any) => {
   }
 
   const { collectedNfts, listedNfts, soldNfts, offers, listings } = result;
-  if (!auth) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  } else {
-    return {
-      props: {
-        user,
-        users,
-        listedNfts: listedNfts || null,
-        collectedNfts: collectedNfts || null,
-        soldNfts: soldNfts || null,
-        offers: offers || null,
-        listings,
-      },
-    };
-  }
+
+  return {
+    props: {
+      user,
+      users,
+      listedNfts: listedNfts || null,
+      collectedNfts: collectedNfts || null,
+      soldNfts: soldNfts || null,
+      offers: offers || null,
+      listings,
+    },
+  };
 };
 
 export default Profile;

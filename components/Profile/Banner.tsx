@@ -22,48 +22,6 @@ const Banner = ({
   uploadToIpfs,
   setFile,
 }: Props) => {
-  const [images, setImages] = useState<any>([]);
-  const [id, setId] = useState<any>("");
-  const [imageUrl, setImageUrl] = useState<any>("");
-  // const [file, setFile] = useState<any>(null);
-  // IPFS upload infura
-  // const handleUpload = async (fileArray: any) => {
-  //   const { cid } = await ipfs.add(file);
-
-  //   // readIPFSContent(cid.toString());
-  //   console.log("CID:", cid.toString());
-  // };
-
-  async function readIPFSContent(hash: any) {
-    try {
-      // Fetch the content from IPFS
-      const response = await axios.get(`https://ipfs.io/ipfs/${hash}`);
-      if (response.data.length > !1) {
-        throw new Error("Failed to fetch IPFS content");
-      }
-      const hashedImages = response.data.images;
-      console.log(hashedImages);
-      console.log(response.data.Id);
-      let UnhashedImages = [];
-      if (hashedImages.length > 1) {
-        console.log(hashedImages.length > 1);
-        for (let i = 0; i < hashedImages.length; i++) {
-          const url = `https://ipfs.io/ipfs/${hashedImages[i]}`;
-          setImageUrl(url);
-          UnhashedImages.push(url);
-        }
-
-        console.log(UnhashedImages);
-      }
-      // const content = await response.data.images.text();
-
-      // Do something with the content
-      // console.log(content);
-    } catch (error) {
-      console.error("Error reading IPFS content:", error);
-    }
-  }
-
   // Banner image upload
   const handleCancelBanner = () => {
     setBannerPicture({
@@ -104,7 +62,6 @@ const Banner = ({
       cropperOpen: true,
     });
   };
-  // console.log(authedProfile.bannerPicture);
 
   return (
     <>

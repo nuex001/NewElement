@@ -2,9 +2,6 @@ import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
-import avatar from "../../assets/avatar.gif";
-import star from "../../assets/Star-PNG-Images.png";
-import AvatarEditor from "react-avatar-editor";
 import useAuthedProfile from "../../context/UserContext";
 import Link from "next/link";
 import axios from "axios";
@@ -19,6 +16,7 @@ import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import ipfs from "../utils/Ipfs";
 import SavedNfts from "./SavedNfts";
+import ProfileImage from "./ProfileImage";
 
 type Props = {
   cropperOpen: boolean;
@@ -51,44 +49,44 @@ const ProfileComponent = ({
     setLoading(false);
   };
 
-  useEffect(() => {
-    const { savedNfts } = authedProfile;
-    function findObjectsNotInBoth(arr1: any, arr2: any) {
-      const idsArr1 = arr1.map((obj: any) => obj.title);
-      const idsArr2 = arr2.map((obj: any) => obj.title);
+  // useEffect(() => {
+  //   const { savedNfts } = authedProfile;
+  //   function findObjectsNotInBoth(arr1: any, arr2: any) {
+  //     const idsArr1 = arr1.map((obj: any) => obj.title);
+  //     const idsArr2 = arr2.map((obj: any) => obj.title);
 
-      // const idsNotInArr1 = idsArr2.filter(
-      //   (title: any) => !idsArr1.includes(title)
-      // );
+  //     // const idsNotInArr1 = idsArr2.filter(
+  //     //   (title: any) => !idsArr1.includes(title)
+  //     // );
 
-      const idsNotInArr2 = idsArr1.filter(
-        (title: any) => !idsArr2.includes(title)
-      );
+  //     const idsNotInArr2 = idsArr1.filter(
+  //       (title: any) => !idsArr2.includes(title)
+  //     );
 
-      const objectsNotInArr2 = arr1.filter((obj: any) =>
-        idsNotInArr2.includes(obj.title)
-      );
+  //     const objectsNotInArr2 = arr1.filter((obj: any) =>
+  //       idsNotInArr2.includes(obj.title)
+  //     );
 
-      return objectsNotInArr2;
-    }
-    const objectsNotInBoth = findObjectsNotInBoth(savedNfts, listings);
-    if (objectsNotInBoth.length) {
-      // console.log(objectsNotInBoth);
+  //     return objectsNotInArr2;
+  //   }
+  //   const objectsNotInBoth = findObjectsNotInBoth(savedNfts, listings);
+  //   if (objectsNotInBoth.length) {
+  //     // console.log(objectsNotInBoth);
 
-      const data = {
-        nft: objectsNotInBoth[0],
-        address: authedProfile.address,
-      };
-      axios
-        .put("/api/saveNft", data)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+  //     const data = {
+  //       nft: objectsNotInBoth[0],
+  //       address: authedProfile.address,
+  //     };
+  //     axios
+  //       .put("/api/saveNft", data)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, []);
   const deleteSavedNft = (nft: any) => {
     const data = {
       nft: nft,
@@ -112,72 +110,6 @@ const ProfileComponent = ({
   });
   const [file, setFile] = useState<any>(null);
 
-  const handleCancel = () => {
-    setPicture({
-      ...picture,
-      cropperOpen: false,
-    });
-  };
-  const setEditorRef = (editor: any) => setEditor(editor);
-
-  const uploadToIpfs = async (image: any) => {
-    setLoading(true);
-    if (image == picture) {
-      const { cid } = await ipfs.add(file);
-      const uploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
-
-      if (uploadUrl) {
-        axios
-          .post("/api/updateProfile", {
-            address: authedProfile.address,
-            imgUrl: uploadUrl,
-          })
-          .then(async (response) => {
-            setAuthedProfile(response.data);
-            // refreshData();
-          })
-          .catch((err: any) => {
-            console.log(err);
-          })
-          .finally(() => setLoading(false));
-      }
-    } else if (image == bannerPicture) {
-      const { cid } = await ipfs.add(file);
-      const bannerUploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
-
-      if (bannerUploadUrl) {
-        axios
-          .post("/api/updateProfile", {
-            address: authedProfile.address,
-            bannerImgUrl: bannerUploadUrl,
-          })
-          .then((response) => {
-            setAuthedProfile(response.data);
-            // refreshData();
-          })
-          .catch((err: any) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
-    }
-  };
-
-  const handleSave = (e: any) => {
-    const croppedImg = picture.img;
-
-    setPicture({
-      ...picture,
-      img: null,
-      cropperOpen: false,
-      croppedImg: croppedImg,
-    });
-
-    uploadToIpfs(picture);
-  };
-
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     if (file) {
@@ -196,6 +128,51 @@ const ProfileComponent = ({
 
       cropperOpen: true,
     });
+  };
+
+  const uploadToIpfs = async (image: any) => {
+    setLoading(true);
+    if (image == picture) {
+      const { cid } = await ipfs.add(file);
+      const uploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
+
+      if (uploadUrl) {
+        axios
+          .post("/api/updateProfile", {
+            address: authedProfile.address,
+            imgUrl: uploadUrl,
+          })
+          .then(async (response) => {
+            setAuthedProfile(response.data);
+            refreshData();
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+          .finally(() => setLoading(false));
+      }
+    } else if (image == bannerPicture) {
+      const { cid } = await ipfs.add(file);
+      const bannerUploadUrl = `https://ipfs.io/ipfs/${cid.toString()}`;
+
+      if (bannerUploadUrl) {
+        axios
+          .post("/api/updateProfile", {
+            address: authedProfile.address,
+            bannerImgUrl: bannerUploadUrl,
+          })
+          .then((response) => {
+            setAuthedProfile(response.data);
+            refreshData();
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    }
   };
 
   const isModalClosed = () => {
@@ -267,84 +244,17 @@ const ProfileComponent = ({
             setFile={setFile}
             uploadToIpfs={uploadToIpfs}
           />
-          <div className="flex w-full -mt-4">
-            <label
-              className="cursor-pointer"
-              htmlFor="input-profile"
-              onClick={handleOpenCropper}
-            >
-              <Image
-                className="border border-green rounded-full hover:brightness-125 bg-black z-10 object-center object-cover aspect-square"
-                src={
-                  authedProfile
-                    ? authedProfile?.profilePicture !== ""
-                      ? authedProfile?.profilePicture
-                      : avatar
-                    : avatar
-                }
-                width={70}
-                height={70}
-                alt="profile"
-              />
-            </label>
-            {isArtist ? (
-              <>
-                <Image
-                  className="ml-4 mb-1 h-5 w-auto self-center"
-                  src={star}
-                  width={20}
-                  height={10}
-                  alt="star"
-                />
-                <p className="text-xs pl-1 font-bold tracking-wider self-center">
-                  ARTIST
-                </p>{" "}
-              </>
-            ) : null}
-          </div>
-          <div className="w-fit border border-green flex flex-col align-center">
-            {picture.cropperOpen && (
-              <div className="flex flex-col items-center">
-                <input
-                  id="input-profile"
-                  className="text-xs hidden"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                {picture.img && (
-                  <>
-                    <AvatarEditor
-                      ref={setEditorRef}
-                      image={picture.img}
-                      width={200}
-                      height={200}
-                      border={50}
-                      borderRadius={100}
-                      color={[1, 1, 1, 0.5]} // RGBA
-                      rotate={0}
-                      scale={1}
-                    />
-
-                    <div className="flex w-full justify-around">
-                      <button
-                        className=" text-green font-compressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                        onClick={handleSave}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className=" text-green font-xxCompressed uppercase border border-green tracking-[6px] w-[40%] my-2 bg-white bg-opacity-20 hover:bg-opacity-40 font-semibold "
-                        onClick={handleCancel}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
+          <ProfileImage
+            authedProfile={authedProfile}
+            picture={picture}
+            setPicture={setPicture}
+            handleFileChange={handleFileChange}
+            setEditor={setEditor}
+            setFile={setFile}
+            uploadToIpfs={uploadToIpfs}
+            handleOpenCropper={handleOpenCropper}
+            isArtist={isArtist}
+          />
           {/* <UploadComponent /> */}
           <div className="flex flex-col w-full mt-4 text-left text-xs">
             {/* Username */}
