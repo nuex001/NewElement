@@ -1,15 +1,10 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import banner from "../../assets/banner.png";
-import profile from "../../assets/profile-2.png";
-import star from "../../assets/Star-PNG-Images.png";
+
+import star from "../../assets/star.png";
 import { useAuthedProfile } from "../../context/UserContext";
-import nft1 from "../../assets/nft-1.jpeg";
-import nft2 from "../../assets/nft-2.jpeg";
-import Link from "next/link";
-import { ContractAbi, ContractAddress } from "../utils/constants";
-import { ethers } from "ethers";
-import { fetchListings } from "../utils/utils";
+
 import Router, { useRouter } from "next/router";
 
 type Props = {

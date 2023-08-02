@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import Modal from "react-modal";
 import { useRouter } from "next/router";
 
