@@ -42,6 +42,7 @@ const ProfileComponent = ({
   const [modalNftIndex, setModalNftIndex] = useState<number>(0);
 
   const { setAuthedProfile } = useAuthedProfile();
+
   let { isArtist } = authedProfile;
 
   // Rehydrate data from server
@@ -71,7 +72,7 @@ const ProfileComponent = ({
       return objectsNotInArr2;
     }
     const objectsNotInBoth = findObjectsNotInBoth(savedNfts, listings);
-    if (objectsNotInBoth.length > 0) {
+    if (objectsNotInBoth.length) {
       // console.log(objectsNotInBoth);
 
       const data = {
@@ -133,7 +134,7 @@ const ProfileComponent = ({
           })
           .then(async (response) => {
             setAuthedProfile(response.data);
-            refreshData();
+            // refreshData();
           })
           .catch((err: any) => {
             console.log(err);
@@ -152,7 +153,7 @@ const ProfileComponent = ({
           })
           .then((response) => {
             setAuthedProfile(response.data);
-            refreshData();
+            // refreshData();
           })
           .catch((err: any) => {
             console.log(err);
