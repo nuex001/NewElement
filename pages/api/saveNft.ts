@@ -12,18 +12,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!data) {
       return res.status(400).send({ message: "Bad request" });
     }
-    const { address, nft} = req.body;
+    const { address, nft } = req.body;
 
     if (nft) {
       await Users.findOneAndUpdate(
         { address },
-          {
-         $addToSet: {
-          savedNfts: nft
+        {
+          $addToSet: {
+            savedNfts: nft,
+          },
         },
-      },
 
-       {  new: true }
+        { new: true }
       )
         .then((response) => {
           res.status(200).send(response);
@@ -33,6 +33,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           console.log("Saving failed.", err);
         });
     }
+  } else if (req.method === "PUT") {
+    const data = req.body;
+    if (!data) {
+      return res.status(400).send({ message: "Bad request" });
+    }
+    const { address, nft } = req.body;
+    
+    await Users.findOneAndUpdate(
+      { address },
+      { $pull: { savedNfts: nft}  },
+      { new: true }
+    )
+      .then((response) => {
+        if (!response) {
+          return res.status(404).send({ message: "User not found" });
+        }
+        res.status(200).send(response);
+      })
+
+      .catch((err: any) => {
+        res.status(400).send({ message: "User request failed" });
+      });
   } else {
     console.log("Wrong method");
   }

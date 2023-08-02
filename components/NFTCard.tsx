@@ -43,7 +43,7 @@ const NFTCard: FunctionComponent<Props> = ({
       });
     setLoading(false);
   };
-  console.log(listing);
+  // console.log(listing);
 
   // Countdown
   // Random component

@@ -10,30 +10,37 @@ import { fetchListings } from "../components/utils/utils";
 
 type Props = {
   user: any;
+  users: any;
   collectedNfts: any[];
   listedNfts: any[];
   soldNfts: any[];
   offers: any;
+  listings: any;
 };
 
 const Profile = ({
   user,
+  users,
   collectedNfts,
   listedNfts,
   soldNfts,
   offers,
+  listings,
 }: Props) => {
-  // const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  // React.useEffect(() => {
-  //   setAuthedProfile(user);
-  // }, [user]);
+  const { setAuthedProfile, authedProfile } = useAuthedProfile();
+  React.useEffect(() => {
+    setAuthedProfile(user);
+  }, [user]);
+
   return (
     <ProfileComponent
-      authedProfile={user}
+      authedProfile={authedProfile}
       collectedNfts={collectedNfts}
       listedNfts={listedNfts}
       soldNfts={soldNfts}
       offers={offers}
+      users={users}
+      listings={listings}
     />
   );
 };
@@ -43,12 +50,14 @@ export const getServerSideProps = async ({ req, res }: any) => {
 
   const json = await Users.findOne({ address: auth });
   let user = JSON.parse(JSON.stringify(json));
-  // console.log(user);
+  const jsonUsers = await Users.find({});
+  let users = JSON.parse(JSON.stringify(jsonUsers));
 
   let listedNfts: any[] = [];
   let collectedNfts: any[] = [];
   let soldNfts: any[] = [];
   let offers = [] as any;
+  let listings = [] as any;
   // NFT Fetch
   const nftFetch = async () => {
     const provider = new ethers.providers.JsonRpcProvider(
@@ -64,7 +73,10 @@ export const getServerSideProps = async ({ req, res }: any) => {
     const listingTx = await contract.filterNftByAddress(user?.address);
 
     const res = await fetchListings({ contract, listingTx });
-    // console.log(res);
+
+    const listingsTx = await contract.fetchListingItem();
+
+    listings = await fetchListings({ contract, listingTx });
 
     if (res) {
       res.forEach((nft: any, index: number) => {
@@ -132,12 +144,10 @@ export const getServerSideProps = async ({ req, res }: any) => {
 
         // Call the function to get the array of combinedObjects
         const combinedObjectsArray = combineObjectsArray(offersArray);
-        console.log(combinedObjectsArray);
         offers.push(combinedObjectsArray);
       })
     );
   };
-  console.log(offers);
 
   await nftFetch();
 
@@ -152,10 +162,12 @@ export const getServerSideProps = async ({ req, res }: any) => {
     return {
       props: {
         user,
+        users,
         listedNfts: listedNfts || null,
         collectedNfts: collectedNfts || null,
         soldNfts: soldNfts || null,
         offers: offers || null,
+        listings: listings || null,
       },
     };
   }

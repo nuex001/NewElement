@@ -23,30 +23,6 @@ const Home: NextPage = ({ user, users, listings }: any) => {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
   // console.log(listings);
 
-  // const fetchlisting = async () => {
-  //   if (typeof window.ethereum !== "undefined") {
-  //     const provider = new ethers.providers.Web3Provider(
-  //       window.ethereum as any
-  //     );
-
-  //     await window?.ethereum?.request({ method: "eth_requestAccounts" });
-  //     const signer = provider.getSigner();
-
-  //     const contract = new ethers.Contract(
-  //       ContractAddress,
-  //       ContractAbi,
-  //       signer
-  //     );
-
-  //     const listingTx = await contract.fetchListingItem();
-  //     // console.log(listingTx)
-  //     const res = await fetchListings({ contract, listingTx });
-  //     setListings(res);
-  //     setLoadingListings(false);
-  //     console.log(res);
-  //   }
-  //   //  setMenuItems(res);
-  // };
   useEffect(() => {
     if (user) {
       setAuthedProfile(user);

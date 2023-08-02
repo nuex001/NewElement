@@ -1,12 +1,11 @@
 import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
-import { useStorageUpload } from "@thirdweb-dev/react";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
 import avatar from "../../assets/avatar.gif";
 import star from "../../assets/Star-PNG-Images.png";
 import AvatarEditor from "react-avatar-editor";
-import { useAuthedProfile } from "../../context/UserContext";
+import useAuthedProfile from "../../context/UserContext";
 import Link from "next/link";
 import axios from "axios";
 import Username from "./Username";
@@ -19,6 +18,7 @@ import AcceptOfferModal from "./AcceptOfferModal";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import ipfs from "../utils/Ipfs";
+import SavedNfts from "./SavedNfts";
 
 type Props = {
   cropperOpen: boolean;
@@ -32,22 +32,72 @@ const ProfileComponent = ({
   listedNfts,
   soldNfts,
   offers,
+  users,
+  listings,
 }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [loadingOffer, setLoadingOffer] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNftIndex, setModalNftIndex] = useState<number>(0);
-  const isModalClosed = () => {
-    setModalOpen(false);
-  };
-  const isModalOpen = (index: number) => {
-    setModalNftIndex(index);
-    setModalOpen(true);
-  };
 
   const { setAuthedProfile } = useAuthedProfile();
   let { isArtist } = authedProfile;
+
+  // Rehydrate data from server
+  const refreshData = () => {
+    router.replace(router.asPath);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const { savedNfts } = authedProfile;
+    function findObjectsNotInBoth(arr1: any, arr2: any) {
+      const idsArr1 = arr1.map((obj: any) => obj.title);
+      const idsArr2 = arr2.map((obj: any) => obj.title);
+
+      // const idsNotInArr1 = idsArr2.filter(
+      //   (title: any) => !idsArr1.includes(title)
+      // );
+
+      const idsNotInArr2 = idsArr1.filter(
+        (title: any) => !idsArr2.includes(title)
+      );
+
+      const objectsNotInArr2 = arr1.filter((obj: any) =>
+        idsNotInArr2.includes(obj.title)
+      );
+
+      return objectsNotInArr2;
+    }
+    const objectsNotInBoth = findObjectsNotInBoth(savedNfts, listings);
+    if (objectsNotInBoth.length > 0) {
+      // console.log(objectsNotInBoth);
+
+      const data = {
+        nft: objectsNotInBoth[0],
+        address: authedProfile.address,
+      };
+      axios
+        .put("/api/saveNft", data)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+  const deleteSavedNft = (nft: any) => {
+    const data = {
+      nft: nft,
+      address: authedProfile.address,
+    };
+    axios.put("/api/saveNft", data).then((res) => {
+      console.log(res.data);
+      setAuthedProfile(res.data);
+    });
+  };
 
   const [picture, setPicture] = useState<Props>({
     cropperOpen: false,
@@ -61,8 +111,6 @@ const ProfileComponent = ({
   });
   const [file, setFile] = useState<any>(null);
 
-  const { mutateAsync: upload } = useStorageUpload();
-
   const handleCancel = () => {
     setPicture({
       ...picture,
@@ -70,11 +118,6 @@ const ProfileComponent = ({
     });
   };
   const setEditorRef = (editor: any) => setEditor(editor);
-
-  // Rehydrate data from server
-  const refreshData = () => {
-    router.replace(router.asPath);
-  };
 
   const uploadToIpfs = async (image: any) => {
     setLoading(true);
@@ -88,7 +131,7 @@ const ProfileComponent = ({
             address: authedProfile.address,
             imgUrl: uploadUrl,
           })
-          .then((response) => {
+          .then(async (response) => {
             setAuthedProfile(response.data);
             refreshData();
           })
@@ -114,7 +157,9 @@ const ProfileComponent = ({
           .catch((err: any) => {
             console.log(err);
           })
-          .finally(() => setLoading(false));
+          .finally(() => {
+            setLoading(false);
+          });
       }
     }
   };
@@ -152,10 +197,17 @@ const ProfileComponent = ({
     });
   };
 
+  const isModalClosed = () => {
+    setModalOpen(false);
+  };
+  const isModalOpen = (index: number) => {
+    setModalNftIndex(index);
+    setModalOpen(true);
+  };
+
   const accept = async (nftId: number, highestBidder: any) => {
     setLoadingOffer(true);
     try {
-      // bidAmount // The offer amount the user entered
       if (typeof window !== "undefined") {
         const provider = new ethers.providers.Web3Provider(
           (window as CustomWindow).ethereum as any
@@ -170,10 +222,7 @@ const ProfileComponent = ({
           signer
         );
         // Call the contract method with value
-        const listingTx = await contract.acceptOffer(
-          nftId,
-          highestBidder /* address of the highest bidder */
-        );
+        const listingTx = await contract.acceptOffer(nftId, highestBidder);
         console.log("listingTx", listingTx);
         await listingTx.wait();
 
@@ -198,8 +247,7 @@ const ProfileComponent = ({
     });
     return hasOffer;
   };
-  // console.log(authedProfile);
-  // console.log(collectedNfts);
+  console.log(authedProfile?.savedNfts);
 
   return (
     <>
@@ -241,7 +289,7 @@ const ProfileComponent = ({
             {isArtist ? (
               <>
                 <Image
-                  className="ml-4 mb-1 h-5 self-center"
+                  className="ml-4 mb-1 h-5 w-auto self-center"
                   src={star}
                   width={20}
                   height={10}
@@ -566,57 +614,11 @@ const ProfileComponent = ({
                       key={nft.id}
                       className="flex  flex-col h-full items-start w-max "
                     >
-                      <div
-                        onClick={() => {
-                          Router.push({
-                            pathname: `/listing/${nft.id}`,
-                          });
-                        }}
-                        className="cursor-pointer"
-                      >
-                        <Image
-                          src={nft.image}
-                          alt="nft7"
-                          width={150}
-                          height={200}
-                          className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                        />{" "}
-                      </div>
-                      <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                        <div className=" flex ">
-                          <div className=" flex w-full">
-                            {" "}
-                            <p className="pr-6 ">
-                              Reserve <br /> Price
-                            </p>
-                            <div className="flex grow"></div>
-                            <p className="font-bold ">
-                              1.1 <br /> ETH
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className=" flex mt-3  ">
-                          <div className=" flex w-full">
-                            {" "}
-                            <p className="pr-6  ">
-                              Current <br /> Bid
-                            </p>
-                            <div className="flex grow"></div>
-                            <p className="font-bold text-green">
-                              2.5 <br /> ETH
-                            </p>
-                          </div>
-                        </div>
-                        <div className=" flex mt-3">
-                          <div className="flex grow"></div>
-                          <div className=" flex font-bold text-green">
-                            {" "}
-                            <p className="pr-5">ENDS IN</p> <p> 10H 22M 09S</p>
-                          </div>
-                          <div className="flex grow"></div>
-                        </div>
-                      </div>
+                      <SavedNfts
+                        nft={nft}
+                        users={users}
+                        deleteSavedNft={deleteSavedNft}
+                      />
                     </div>
                   ))
                 ) : (
