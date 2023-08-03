@@ -2,7 +2,7 @@ import Image, { StaticImageData } from "next/image";
 import React, { useEffect, useState } from "react";
 import banner from "../../assets/banner.png";
 import profile from "../../assets/profile-2.png";
-import useAuthedProfile from "../../context/UserContext";
+import { useAuthedProfile } from "../../context/UserContext";
 import Link from "next/link";
 import axios from "axios";
 import Username from "./Username";
@@ -12,11 +12,14 @@ import router from "next/router";
 import AdminLoginButton from "./AdminLoginButton";
 import Banner from "./Banner";
 import AcceptOfferModal from "./AcceptOfferModal";
+import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import ipfs from "../utils/Ipfs";
 import SavedNfts from "./SavedNfts";
 import ProfileImage from "./ProfileImage";
+import NFTCardSkeleton from "../LoadingSkeletons/NFTCardSkeleton";
+import { list } from "@material-tailwind/react";
 
 type Props = {
   cropperOpen: boolean;
@@ -25,21 +28,22 @@ type Props = {
 };
 
 const ProfileComponent = ({
-  authedProfile,
+  user,
   collectedNfts,
   listedNfts,
   soldNfts,
   offers,
   users,
   listings,
+  isLoading,
 }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [loadingOffer, setLoadingOffer] = React.useState<boolean>(false);
   const [editor, setEditor] = React.useState<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNftIndex, setModalNftIndex] = useState<number>(0);
-
-  const { setAuthedProfile } = useAuthedProfile();
+  const [authedProfile, setAuthedProfile] = useState<any>(user);
+  // const { setAuthedProfile } = useAuthedProfile();
 
   let { isArtist } = authedProfile;
 
@@ -49,44 +53,52 @@ const ProfileComponent = ({
     setLoading(false);
   };
 
-  // useEffect(() => {
-  //   const { savedNfts } = authedProfile;
-  //   function findObjectsNotInBoth(arr1: any, arr2: any) {
-  //     const idsArr1 = arr1.map((obj: any) => obj.title);
-  //     const idsArr2 = arr2.map((obj: any) => obj.title);
+  useEffect(() => {
+    const { savedNfts } = authedProfile;
+    function findObjectsNotInBoth(arr1: any, arr2: any): void {
+      const idsArr1 = arr1.map((obj: any) => obj.title);
+      const idsArr2 = arr2.map((obj: any) => obj.title);
 
-  //     // const idsNotInArr1 = idsArr2.filter(
-  //     //   (title: any) => !idsArr1.includes(title)
-  //     // );
+      // const idsNotInArr1 = idsArr2.filter(
+      //   (title: any) => !idsArr1.includes(title)
+      // );
 
-  //     const idsNotInArr2 = idsArr1.filter(
-  //       (title: any) => !idsArr2.includes(title)
-  //     );
+      const idsNotInArr2 = idsArr1.filter(
+        (title: any) => !idsArr2.includes(title)
+      );
 
-  //     const objectsNotInArr2 = arr1.filter((obj: any) =>
-  //       idsNotInArr2.includes(obj.title)
-  //     );
+      const objectsNotInArr2 = arr1.filter((obj: any) =>
+        idsNotInArr2.includes(obj.title)
+      );
 
-  //     return objectsNotInArr2;
-  //   }
-  //   const objectsNotInBoth = findObjectsNotInBoth(savedNfts, listings);
-  //   if (objectsNotInBoth.length) {
-  //     // console.log(objectsNotInBoth);
+      return objectsNotInArr2;
+    }
+    if (isLoading) {
+      return;
+    } else {
+      const objectsNotInBoth: any = findObjectsNotInBoth(savedNfts, listings);
+      if (objectsNotInBoth.length) {
+        // console.log(objectsNotInBoth);
 
-  //     const data = {
-  //       nft: objectsNotInBoth[0],
-  //       address: authedProfile.address,
-  //     };
-  //     axios
-  //       .put("/api/saveNft", data)
-  //       .then((res) => {
-  //         console.log(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, []);
+        const data = {
+          nft: objectsNotInBoth[0],
+          address: authedProfile.address,
+        };
+        console.log(data.nft);
+        console.log(listings);
+        console.log(savedNfts);
+
+        axios
+          .put("/api/saveNft", data)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }, [isLoading]);
   const deleteSavedNft = (nft: any) => {
     const data = {
       nft: nft,
@@ -95,6 +107,7 @@ const ProfileComponent = ({
     axios.put("/api/saveNft", data).then((res) => {
       console.log(res.data);
       setAuthedProfile(res.data);
+      // refreshData();
     });
   };
 
@@ -225,7 +238,6 @@ const ProfileComponent = ({
     });
     return hasOffer;
   };
-  console.log(authedProfile?.savedNfts);
 
   return (
     <>
@@ -273,137 +285,218 @@ const ProfileComponent = ({
             <AdminLoginButton authedProfile={authedProfile} />
           ) : null}
           {isArtist ? ( // if artist
-            <div className="flex  flex-col-reverse md:flex-col">
-              <div className="flex md:mt-5 h-full flex-wrap">
-                <div className="flex flex-col mr-10 w-16">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
-                    {listedNfts?.length}
-                  </h1>
-                  <p className="text-xs">
-                    TOTAL
-                    <br /> LISTED
-                  </p>
-                </div>
-                <div className="flex flex-col mr-10 w-16">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    {soldNfts?.length}
-                  </h1>
-                  <p className="text-xs">
-                    TOTAL
-                    <br /> SOLD
-                  </p>
-                </div>
-                <div className="flex grow md:hidden"></div>
-
-                <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    0.0
-                  </h1>
-                  <p className="text-xs">
-                    PROFIT
-                    <br /> IN ETH
-                  </p>
-                </div>
-                <div className="basis-full h-0"></div>
-                <div className="flex flex-col mr-10 w-16">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    {collectedNfts?.length}
-                  </h1>
-
-                  <p className="text-xs">
-                    TOTAL
-                    <br /> COLLECTED
-                  </p>
-                </div>
-                <div className="flex flex-col mr-10 w-16">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    0
-                  </h1>
-                  <p className="text-xs">
-                    TOTAL
-                    <br /> FLIPPED
-                  </p>
-                </div>
-                <div className="flex grow md:hidden"></div>
-                <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
-                  <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
-                    0.0
-                  </h1>
-                  <p className="text-xs">
-                    P/L
-                    <br /> IN ETH
-                  </p>
-                </div>
-              </div>
-              <div className="flex overflow-hidden md:w-[60%]">
-                <Link
-                  href="/profile/mint"
-                  className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
-                >
-                  LIST NEW
-                </Link>
-              </div>{" "}
-            </div>
-          ) : null}
-          <div className="flex flex-col font-ibmPlex mt-10 md:mt-4 text-left">
-            {isArtist ? (
+            isLoading ? (
               <>
-                <h3 className="font-bold">LISTED</h3>
-                <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
-                  {/* Listed  */}
-                  {listedNfts.length ? (
-                    listedNfts.map(
-                      (nft: any, index: React.Key | null | undefined) => (
-                        <div
-                          className="flex md: flex-col h-full items-start w-max "
-                          key={index}
-                        >
+                <div className="flex  flex-col-reverse md:flex-col">
+                  <div className="flex md:mt-5 h-full flex-wrap">
+                    <ButtonSpinner />
+                  </div>
+                </div>
+                <div className="flex overflow-hidden md:w-[60%]">
+                  <Link
+                    href="/profile/mint"
+                    className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
+                  >
+                    LIST NEW
+                  </Link>
+                </div>{" "}
+              </>
+            ) : (
+              <div className="flex  flex-col-reverse md:flex-col">
+                <div className="flex md:mt-5 h-full flex-wrap">
+                  <div className="flex flex-col mr-10 w-16">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl  lg:text-9xl text-center">
+                      {listedNfts?.length}
+                    </h1>
+                    <p className="text-xs">
+                      TOTAL
+                      <br /> LISTED
+                    </p>
+                  </div>
+                  <div className="flex flex-col mr-10 w-16">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                      {soldNfts?.length}
+                    </h1>
+                    <p className="text-xs">
+                      TOTAL
+                      <br /> SOLD
+                    </p>
+                  </div>
+                  <div className="flex grow md:hidden"></div>
+
+                  <div className="flex flex-col items-end md:items-center mr-2 md:mr-10 w-16">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                      0.0
+                    </h1>
+                    <p className="text-xs">
+                      PROFIT
+                      <br /> IN ETH
+                    </p>
+                  </div>
+                  <div className="basis-full h-0"></div>
+                  <div className="flex flex-col mr-10 w-16">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                      {collectedNfts?.length}
+                    </h1>
+
+                    <p className="text-xs">
+                      TOTAL
+                      <br /> COLLECTED
+                    </p>
+                  </div>
+                  <div className="flex flex-col mr-10 w-16">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                      0
+                    </h1>
+                    <p className="text-xs">
+                      TOTAL
+                      <br /> FLIPPED
+                    </p>
+                  </div>
+                  <div className="flex grow md:hidden"></div>
+                  <div className="flex flex-col mr-2 md:mr-10 w-16 items-end md:items-center">
+                    <h1 className="text-green font-xxCompressed -mb-2 text-8xl lg:text-9xl text-center">
+                      0.0
+                    </h1>
+                    <p className="text-xs">
+                      P/L
+                      <br /> IN ETH
+                    </p>
+                  </div>
+                </div>
+                <div className="flex overflow-hidden md:w-[60%]">
+                  <Link
+                    href="/profile/mint"
+                    className=" text-green font-xCompressed w-full  font-bold border border-green tracking-[10px] md:tracking-[12px] lg:w-[40%] mt-8 mb-5 md:my-10 bg-white bg-opacity-20 hover:bg-opacity-40 py-1 lg:py-[1.2vh] text-2xl  "
+                  >
+                    LIST NEW
+                  </Link>
+                </div>{" "}
+              </div>
+            )
+          ) : null}
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:mx-5 mb-10">
+              <NFTCardSkeleton />
+
+              <NFTCardSkeleton />
+
+              <NFTCardSkeleton />
+            </div>
+          ) : (
+            <div className="flex flex-col font-ibmPlex mt-10 md:mt-4 text-left">
+              {isArtist ? (
+                <>
+                  <h3 className="font-bold">LISTED</h3>
+                  <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
+                    {/* Listed  */}
+                    {listedNfts.length ? (
+                      listedNfts.map(
+                        (nft: any, index: React.Key | null | undefined) => (
                           <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                              Router.push({
-                                pathname: `/listing/${nft.id}`,
-                              });
-                            }}
+                            className="flex md: flex-col h-full items-start w-max "
+                            key={index}
                           >
-                            <Image
-                              src={nft.image}
-                              alt="nft7"
-                              width={150}
-                              height={200}
-                              className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                            />{" "}
-                          </div>
-                          <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                            <div className=" flex ">
-                              <div className=" flex w-full">
-                                {" "}
-                                <p className="pr-6 ">
-                                  Reserve NOt
-                                  <br /> met
-                                </p>
-                                <div className="flex grow"></div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => {
+                                Router.push({
+                                  pathname: `/listing/${nft.id}`,
+                                });
+                              }}
+                            >
+                              <Image
+                                src={nft.image}
+                                alt="nft7"
+                                width={150}
+                                height={200}
+                                className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                              />{" "}
+                            </div>
+                            <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                              <div className=" flex ">
+                                <div className=" flex w-full">
+                                  {" "}
+                                  <p className="pr-6 ">
+                                    Reserve NOt
+                                    <br /> met
+                                  </p>
+                                  <div className="flex grow"></div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        )
                       )
-                    )
-                  ) : (
-                    <p className="text-red-600 text-xs">
-                      You currently have no listed items
-                    </p>
-                  )}
-                </div>
-                {/* SOLD */}
-                <div className="flex flex-col">
-                  <h3 className="font-bold">SOLD</h3>
+                    ) : (
+                      <p className="text-red-600 text-xs">
+                        You currently have no listed items
+                      </p>
+                    )}
+                  </div>
+                  {/* SOLD */}
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">SOLD</h3>
 
-                  <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                    {/* nft 1 */}
-                    {soldNfts.length ? (
-                      soldNfts?.map(
-                        (nft: any, index: React.Key | null | undefined) => (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                      {/* nft 1 */}
+                      {soldNfts.length ? (
+                        soldNfts?.map(
+                          (nft: any, index: React.Key | null | undefined) => (
+                            <div
+                              className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
+                              key={index}
+                            >
+                              <div className="flex  flex-col h-full items-start w-auto ">
+                                <div
+                                  className="cursor-pointer"
+                                  // onClick={() => {
+                                  //   Router.push({
+                                  //     pathname: `/user/${router.query.slug}/${nft.id}`,
+                                  //   });
+                                  // }}
+                                >
+                                  <Image
+                                    src={nft.image}
+                                    alt="nft7"
+                                    width={150}
+                                    height={200}
+                                    className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                                  />{" "}
+                                </div>
+                                <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                                  <div className=" flex ">
+                                    <div className=" flex w-full">
+                                      {" "}
+                                      <p className="pr-6 ">
+                                        Sold <br /> For
+                                      </p>
+                                      <div className="flex grow"></div>
+                                      <p className="font-bold text-green">
+                                        {nft.price} <br /> ETH
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        )
+                      ) : (
+                        <p className="text-red-600 text-xs">
+                          You currently have no saved items
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {/* COLLECTION */}
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">COLLECTION</h3>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                      {/* nft 1 */}
+                      {collectedNfts.length ? (
+                        collectedNfts.map((nft: any, index: number) => (
                           <div
                             className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
                             key={index}
@@ -430,7 +523,7 @@ const ProfileComponent = ({
                                   <div className=" flex w-full">
                                     {" "}
                                     <p className="pr-6 ">
-                                      Sold <br /> For
+                                      Bought <br /> For
                                     </p>
                                     <div className="flex grow"></div>
                                     <p className="font-bold text-green">
@@ -438,119 +531,68 @@ const ProfileComponent = ({
                                     </p>
                                   </div>
                                 </div>
+                                {hasOfferForNft(nft.id) ? (
+                                  <button
+                                    className="text-green font-compressed uppercase  tracking-[4px] w-[100%] my-2 bg-white bg-opacity-0 hover:bg-opacity-20 font-semibold text-xl"
+                                    onClick={() => isModalOpen(index)}
+                                  >
+                                    New offer
+                                  </button>
+                                ) : null}
                               </div>
                             </div>
                           </div>
-                        )
-                      )
-                    ) : (
-                      <p className="text-red-600 text-xs">
-                        You currently have no saved items
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {/* COLLECTION */}
-                <div className="flex flex-col">
-                  <h3 className="font-bold">COLLECTION</h3>
-
-                  <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                    {/* nft 1 */}
-                    {collectedNfts.length ? (
-                      collectedNfts.map((nft: any, index: number) => (
-                        <div
-                          className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
-                          key={index}
-                        >
-                          <div className="flex  flex-col h-full items-start w-auto ">
-                            <div
-                              className="cursor-pointer"
-                              // onClick={() => {
-                              //   Router.push({
-                              //     pathname: `/user/${router.query.slug}/${nft.id}`,
-                              //   });
-                              // }}
-                            >
-                              <Image
-                                src={nft.image}
-                                alt="nft7"
-                                width={150}
-                                height={200}
-                                className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                              />{" "}
-                            </div>
-                            <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                              <div className=" flex ">
-                                <div className=" flex w-full">
-                                  {" "}
-                                  <p className="pr-6 ">
-                                    Bought <br /> For
-                                  </p>
-                                  <div className="flex grow"></div>
-                                  <p className="font-bold text-green">
-                                    {nft.price} <br /> ETH
-                                  </p>
-                                </div>
-                              </div>
-                              {hasOfferForNft(nft.id) ? (
-                                <button
-                                  className="text-green font-compressed uppercase  tracking-[4px] w-[100%] my-2 bg-white bg-opacity-0 hover:bg-opacity-20 font-semibold text-xl"
-                                  onClick={() => isModalOpen(index)}
-                                >
-                                  New offer
-                                </button>
-                              ) : null}
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-red-600 text-xs">
-                        You currently have no collected items
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </>
-            ) : null}
-            {/* SAVED */}
-
-            <div className="flex flex-col">
-              <h3 className="font-bold">SAVED</h3>
-
-              <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                {authedProfile?.savedNfts.length ? (
-                  authedProfile?.savedNfts.map((nft: any) => (
-                    <div
-                      key={nft.id}
-                      className="flex  flex-col h-full items-start w-max "
-                    >
-                      <SavedNfts
-                        nft={nft}
-                        users={users}
-                        deleteSavedNft={deleteSavedNft}
-                      />
+                        ))
+                      ) : (
+                        <p className="text-red-600 text-xs">
+                          You currently have no collected items
+                        </p>
+                      )}
                     </div>
-                  ))
-                ) : (
-                  <p className="text-red-600 text-xs">
-                    You currently have no saved items
-                  </p>
-                )}
+                  </div>
+                </>
+              ) : null}
+              {/* SAVED */}
+
+              <div className="flex flex-col">
+                <h3 className="font-bold">SAVED</h3>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                  {authedProfile?.savedNfts.length ? (
+                    authedProfile?.savedNfts.map((nft: any) => (
+                      <div
+                        key={nft.id}
+                        className="flex  flex-col h-full items-start w-max "
+                      >
+                        <SavedNfts
+                          nft={nft}
+                          users={users}
+                          deleteSavedNft={deleteSavedNft}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-red-600 text-xs">
+                      You currently have no saved items
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      <AcceptOfferModal
-        modalOpen={modalOpen}
-        isModalClosed={isModalClosed}
-        collectedNfts={collectedNfts}
-        accept={accept}
-        nftModalIndex={modalNftIndex}
-        offers={offers}
-        loadingOffer={loadingOffer}
-      />
+      {isLoading ? null : (
+        <AcceptOfferModal
+          modalOpen={modalOpen}
+          isModalClosed={isModalClosed}
+          collectedNfts={collectedNfts}
+          accept={accept}
+          nftModalIndex={modalNftIndex}
+          offers={offers}
+          loadingOffer={loadingOffer}
+        />
+      )}
     </>
   );
 };

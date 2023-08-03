@@ -48,9 +48,7 @@ const SingleNFT = ({
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
 
     const collectionTx = await contract.fetchMyCollections();
-    console.log(collectionTx);
     const res = await fetCollectiontitle(collectionTx);
-    console.log(res);
     setMenuItems(res);
   };
   useEffect(() => {

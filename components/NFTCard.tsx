@@ -10,7 +10,7 @@ import {
   getArtist,
   artistNameOrAddress,
   artistProfilePic,
-  user,
+  owner,
 } from "../lib/functions";
 
 type Props = {
@@ -18,12 +18,14 @@ type Props = {
   setLoading: Function;
   users: object | any;
   index: number;
+  user: any;
 };
 const NFTCard: FunctionComponent<Props> = ({
   listing,
   setLoading,
   users,
   index,
+  user,
 }) => {
   getArtist(users, listing);
 
@@ -43,13 +45,11 @@ const NFTCard: FunctionComponent<Props> = ({
       });
     setLoading(false);
   };
-  // console.log(listing);
-
+  const { _id } = owner;
   // Countdown
-  // Random component
+
   const Completionist = () => <span>Auction Ended</span>;
   const timeLeft = Number(listing.endTime);
-  // console.log(listing.endTime);
 
   // Renderer callback with condition
   const renderer = ({ hours, minutes, seconds, completed }: any) => {
@@ -113,7 +113,7 @@ const NFTCard: FunctionComponent<Props> = ({
                 <div
                   onClick={() => {
                     Router.push({
-                      pathname: `user/${user?._id}`,
+                      pathname: `user/${_id}`,
                     });
                   }}
                   className="font-bold text-left flex cursor-pointer  mt-3 col-span-2"
@@ -144,7 +144,7 @@ const NFTCard: FunctionComponent<Props> = ({
               <div className=" flex mt-3">
                 <button
                   onClick={handleSaveToProfile}
-                  className="font-bold flex"
+                  className=" text-white outline-none  shadow-lg transform active:scale-y-75 transition-transform flex"
                 >
                   <Image
                     className=" h-5"

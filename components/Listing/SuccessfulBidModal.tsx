@@ -55,7 +55,7 @@ const SuccessfulBidModa: FunctionComponent<Props> = ({
                   router.push("/");
                 }}
                 type="submit"
-                className="bg-blue whitespace-nowrap text-green fontCompress font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[2vw]  z-2 text-2xl  "
+                className="bg-blue flex justify-center whitespace-nowrap text-green fontCompress font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[2vw]  z-2 text-2xl  "
               >
                 Back To Marketplace
               </button>

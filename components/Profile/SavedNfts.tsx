@@ -27,24 +27,25 @@ const SavedNfts = ({ nft, users, deleteSavedNft }: any) => {
           height={200}
           className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover "
         />{" "}
-        <button onClick={() => deleteSavedNft(nft)} className="">
-          <button className="absolute -top-6 -right-6 border-green border rounded-full p-2 hover:brightness-75 font-ibmPlex  bg-green  font-semibold text-black   hover:border-transparent transition-all duration-200 ease-in">
-            <svg
-              className="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+        <button
+          onClick={() => deleteSavedNft(nft)}
+          className="absolute -top-6 -right-6 border-green border rounded-full p-2 hover:brightness-50 font-ibmPlex  bg-green  font-semibold text-black   hover:border-transparent transition-all duration-100 ease-in"
+        >
+          <svg
+            className="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </button>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 w-full items-stretch gap-4 mb-10 mt-4">
@@ -72,13 +73,13 @@ const SavedNfts = ({ nft, users, deleteSavedNft }: any) => {
           className="mr-4 text-left flex cursor-pointer  mt-3 col-span-2"
         >
           <p> BY @{artistNameOrAddress}</p>
-          <Image
+          {/* <Image
             className=" -mt-1 h-6 w-8 cursor-pointer  object-cover rounded-full"
             src={artistProfilePic}
             height={0}
             width={30}
             alt={""}
-          />
+          /> */}
         </div>
         {/* <div className="hidden sm:flex grow"></div> */}
         <div className=" flex text-left justify-end">

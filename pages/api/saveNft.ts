@@ -13,7 +13,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ message: "Bad request" });
     }
     const { address, nft } = req.body;
-
+    const existingNft = await Users.findOne({
+      address,
+      savedNfts: { $elemMatch: nft },
+    });
+    if (existingNft) {
+      return res.status(400).send({ message: "NFT already saved" });
+    }
     if (nft) {
       await Users.findOneAndUpdate(
         { address },
@@ -39,6 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ message: "Bad request" });
     }
     const { address, nft } = req.body;
+    // console.log(nft);
     
     await Users.findOneAndUpdate(
       { address },

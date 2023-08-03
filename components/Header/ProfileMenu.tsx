@@ -24,6 +24,7 @@ export default function ProfileMenu() {
         console.log(err);
       });
   };
+  // console.log(authedProfile);
 
   const connectWallet = async () => {
     try {

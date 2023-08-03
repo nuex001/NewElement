@@ -23,22 +23,26 @@ export const AuthedProfileProvider = ({ children }: Props) => {
     setAuthedProfile,
   };
 
-  // const [address, setAddress] = useState<number>(0);
-  // const getAdrress = async () => {
-  //   if (typeof window !== "undefined") {
-  //     const provider = new ethers.providers.Web3Provider(
-  //       (window as CustomWindow).ethereum as any
-  //     );
-  //     // Request access to the user's Ethereum accounts (MetaMask, etc.)
-  //     const accounts = await (window as CustomWindow).ethereum.request({ method: 'eth_requestAccounts' });
+  const [address, setAddress] = useState<number>(0);
+  const getAdrress = async () => {
+    if (typeof window !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(
+        (window as CustomWindow).ethereum as any
+      );
+      // Request access to the user's Ethereum accounts (MetaMask, etc.)
+      const accounts = await (window as CustomWindow).ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
-  //     // Return the first account address
-  //     const address = accounts[0];
-  //     setAddress(address);
-  //   }
-  // }
+      // Return the first account address
+      const address = accounts[0];
+      setAddress(address);
+    }
+  };
 
-  // useEffect(() => { getAdrress(); }, [])
+  useEffect(() => {
+    getAdrress();
+  }, []);
   return (
     <AuthedProfileContext.Provider value={value}>
       {children}

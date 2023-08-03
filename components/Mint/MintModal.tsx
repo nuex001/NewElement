@@ -52,7 +52,7 @@ const MintModal: FunctionComponent<Props> = ({ modalOpen, isModalClosed }) => {
                   router.push("/profile");
                 }}
                 type="submit"
-                className="bg-blue whitespace-nowrap text-green fontCompress font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[2vw] md:px-[6vw] z-2 text-2xl  "
+                className="bg-blue whitespace-nowrap flex justify-center text-green fontCompress font-xCompressed border border-green w-full uppercase tracking-[8px] mt-3 bg-white bg-opacity-20 hover:bg-opacity-40 py-[1.2vh] px-[2vw] md:px-[6vw] z-2 text-2xl  "
               >
                 Back To Profile
               </button>

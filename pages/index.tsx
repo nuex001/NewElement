@@ -1,10 +1,7 @@
 import type { NextPage } from "next";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { marketplaceContractAddress } from "../addresses";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuthedProfile } from "../context/UserContext";
-
 import NFTCard from "../components/NFTCard";
 import NFTCardSkeleton from "../components/LoadingSkeletons/NFTCardSkeleton";
 import CollectionMarketPage from "../components/Collection/CollectionMarketPage";
@@ -18,7 +15,6 @@ import { fetchListings } from "../components/utils/utils";
 const Home: NextPage = ({ user, users, listings }: any) => {
   const [isCollection, setIsCollection] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [listings, setListings] = useState<any>([]);
   const [loadingListings, setLoadingListings] = useState(false);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
   // console.log(listings);
@@ -31,6 +27,7 @@ const Home: NextPage = ({ user, users, listings }: any) => {
     //   fetchlisting();
     // }
   }, [user]);
+  console.log(authedProfile);
 
   return (
     <>
@@ -97,6 +94,7 @@ const Home: NextPage = ({ user, users, listings }: any) => {
                               setLoading={setLoading}
                               users={users}
                               index={index}
+                              user={user}
                             />
                           </>
                         </motion.div>
