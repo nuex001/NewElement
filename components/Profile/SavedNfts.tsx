@@ -5,7 +5,7 @@ import {
   getArtist,
   artistNameOrAddress,
   artistProfilePic,
-  user,
+  owner,
 } from "../../lib/functions";
 
 type Props = {};
@@ -67,7 +67,7 @@ const SavedNfts = ({ nft, users, deleteSavedNft }: any) => {
         <div
           onClick={() => {
             Router.push({
-              pathname: `user/${user?._id}`,
+              pathname: `user/${owner?._id}`,
             });
           }}
           className="mr-4 text-left flex cursor-pointer  mt-3 col-span-2"
