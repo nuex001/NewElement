@@ -16,7 +16,7 @@ import {
   getArtist,
   artistNameOrAddress,
   artistProfilePic,
-  user,
+  owner,
 } from "../../lib/functions";
 const { BigNumber } = require("ethers");
 
@@ -330,7 +330,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                       <div
                         onClick={() => {
                           router.push({
-                            pathname: `/user/${user?._id}`,
+                            pathname: `/user/${owner?._id}`,
                           });
                         }}
                         className="font-bold text-left flex cursor-pointer  mt-3 col-span-2"
