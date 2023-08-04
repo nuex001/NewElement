@@ -87,10 +87,7 @@ const MintComponent = ({ user }: Props) => {
 
   const mint = async () => {
     setLoading(true);
-    let uploadUrl;
-    let resolvedUrl;
-    let imageUploadUrl;
-    let contractAddress;
+
     let singleNFTData = {
       name: formValues.title,
       description: formValues.description,

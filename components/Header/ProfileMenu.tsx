@@ -24,7 +24,6 @@ export default function ProfileMenu() {
         console.log(err);
       });
   };
-  // console.log(authedProfile);
 
   const connectWallet = async () => {
     try {
@@ -38,12 +37,6 @@ export default function ProfileMenu() {
         console.log("Account address:", accountAddress);
         setAddress(accountAddress);
 
-        // const web3 = await new Web3(window.ethereum);
-        // const accounts = await web3.eth.getAccounts();
-
-        // setAddress(accountAddress);
-        // console.log('Account address:', accountAddress);
-        //
         const userData = {
           address: accountAddress,
         };
@@ -56,35 +49,23 @@ export default function ProfileMenu() {
     // Get the account address
   };
   const checkIfConnected = () => {
-    if (typeof window !== "undefined") {
-      if (window.localStorage.getItem("tw:provider:connectors")) {
+    axios.get("/api/signIn").then((res) => {
+      let auth = res.data.auth;
+
+      if (auth) {
         connectWallet();
+      } else {
+        console.log("not authed");
       }
-    }
+    });
   };
-
-  // const connectWalletAndUser = () => {
-  //   if (!address) return;
-  //   (async () => {
-  //     const userData = {
-  //       address,
-  //     };
-
-  //     axios
-  //       .post("/api/signIn", userData)
-  //       .then((res) => {
-  //         console.log(res);
-  //         setAuthedProfile(res.data.user);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   })();
-  // };
+  useEffect(() => {
+    checkIfConnected();
+  }, []);
 
   const disconnectWalletAndUser = async () => {
     if (typeof window !== "undefined") {
-      if (window.localStorage.getItem("tw:provider:connectors")) {
+      if (address) {
         const web3 = new Web3(window.ethereum);
         if (
           typeof web3 !== "undefined" &&
@@ -92,31 +73,42 @@ export default function ProfileMenu() {
         ) {
           const accounts = await web3.eth.getAccounts();
           const address = accounts[0];
-          if (web3.currentProvider.disconnect) {
-            const userData = {
-              address,
-            };
-            axios
-              .delete("/api/signIn")
-              .then((res) => {
-                console.log(res);
-                setAuthedProfile(res.data.user);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-            web3.currentProvider.disconnect();
-            setAddress("");
-          }
+          // console.log(window.ethereum, window.ethereum.disconnect);
+
+          // if (window.ethereum && window.ethereum.disconnect) {
+          // window.ethereum
+          //   .disconnect()
+          //   .then(() => {
+          //     console.log("Disconnected from Ethereum.");
+          //   })
+          //   .catch((error: any) => {
+          //     console.error("Error while disconnecting:", error);
+          //   });
+          // } else {
+          //   console.warn(
+          //     "No web3 provider found or disconnect method not supported."
+          //   );
+
+          axios
+            .delete("/api/signIn")
+            .then((res) => {
+              console.log(res);
+              setAuthedProfile(res.data.user);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          // web3.currentProvider.disconnect();
+          setAddress("");
+          // } else {
+          //   console.log("not passing");
+          // }
         }
+        // }
       }
     }
     setAuthedProfile(null);
   };
-
-  useEffect(() => {
-    checkIfConnected();
-  }, []);
 
   return (
     <Menu as="div" className="relative inline-block">

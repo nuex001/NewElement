@@ -4,7 +4,10 @@ export let artistNameOrAddress: any;
 export let artistProfilePic: any;
 export let owner: any;
 export const getArtist = (users: any, listing: any) => {
-  owner = users.find((user: any) => user.address === listing.seller);
+  owner = users.find(
+    (user: any) => user.address === listing.seller || listing.creator
+  );
+  // console.log(owner);
 
   artistNameOrAddress = owner
     ? owner?.username

@@ -1,19 +1,14 @@
-import { useEffect, useState, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import Router from "next/router";
 import Image from "next/image";
-import { Interface } from "ethers/lib/utils";
-import Link from "next/link";
-import profile from "../../assets/PROFILE.png";
+import avatar from "../../assets/avatar.gif";
 import ribbon from "../../assets/ribbon.png";
 import send from "../../assets/send.png";
 
 type Props = {
   listing: any;
 };
-const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
-  const [isListed, setIsListed] = useState(false);
-  const [price, setPrice] = useState(0);
-
+const CollectionCard: FunctionComponent<Props> = ({ listing, users }: any) => {
   // useEffect(() => {
   //   const listing = listings.find(
   //     (listing: any) => listing.asset.id === nftItem.id
@@ -23,7 +18,17 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
   //     setPrice(listing.buyoutCurrencyValuePerToken.displayValue);
   //   }
   // }, [listings, nftItem]);
+  const owner = users.find((user: any) => user.address === listing.creator);
+  const artistNameOrAddress = owner
+    ? owner?.username
+    : listing?.seller
+        ?.slice(0, 3)
+        .concat("...")
+        .concat(listing.seller.slice(-4));
 
+  const artistProfilePic = owner?.profilePicture
+    ? owner.profilePicture
+    : avatar;
   return (
     <>
       {listing ? (
@@ -49,9 +54,7 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
 
             <div className="flex flex-col font-ibmPlex mb-16 uppercase text-xs text-[#e4e8eb] ">
               <div className=" flex ">
-                <div className="">
-                  {/* <p>{listing?.description}</p> */}
-                </div>
+                <div className="">{/* <p>{listing?.description}</p> */}</div>
                 <div className="flex grow"></div>
                 <div className=" flex text-left">
                   {" "}
@@ -68,22 +71,17 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
                 <div
                   onClick={() => {
                     Router.push({
-                      pathname: `/user/1`,
+                      pathname: `/user/${owner._id}`,
                     });
                   }}
                   className="font-bold flex cursor-pointer"
                 >
-                  <p>BY @
-                  {listing.creator
-                      .slice(0, 3)
-                      .concat("...")
-                      .concat(listing.creator.slice(-4))}
-                  </p>
+                  <p>BY @{artistNameOrAddress}</p>
                   <Image
-                    className="ml-3 h-5"
-                    src={profile}
+                    className="ml-3 -mt-1 h-6  object-cover rounded-full"
+                    src={artistProfilePic}
                     height={10}
-                    width={20}
+                    width={25}
                     alt={""}
                   />
                 </div>
@@ -92,11 +90,9 @@ const CollectionCard: FunctionComponent<Props> = ({ listing }) => {
                 <div className=" flex text-left">
                   {" "}
                   <p className="pr-[1.25rem]">
-                  Token <br /> symbol
+                    Token <br /> symbol
                   </p>
-                  <p className="font-bold text-green">
-                  {listing?.Tokensymbol}
-                  </p>
+                  <p className="font-bold text-green">{listing?.Tokensymbol}</p>
                 </div>
               </div>
               <div className=" flex mt-3">

@@ -83,6 +83,9 @@ const handler = async (req: NextApiRequest, res: any) => {
     return res.status(200).json({
       success: "Successfully logged out",
     });
+  } else if (req.method === "GET") {
+    const auth = req.cookies.auth;
+    return res.status(200).json({ auth });
   }
 };
 

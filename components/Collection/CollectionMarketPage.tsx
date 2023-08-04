@@ -1,33 +1,34 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CollectionCard from "./CollectionCard";
 import { collectionContractAddress } from "../../addresses";
-import {ethers} from "ethers"
+import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchcontractListings } from "../utils/utils";
 type Props = {};
 
-
-const CollectionMarketPage = (props: Props) => {
-  const [listings,setListings] = useState<any>([]);
+const CollectionMarketPage = ({ users }: any) => {
+  const [listings, setListings] = useState<any>([]);
   // const { contract } = useContract(collectionContractAddress);
-  const fetchlisting = async ( ) =>{
+  const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
-       (window as CustomWindow).ethereum as any
+      (window as CustomWindow).ethereum as any
     );
 
-    await  (window as CustomWindow)?.ethereum?.request({ method: "eth_requestAccounts" });
+    await (window as CustomWindow)?.ethereum?.request({
+      method: "eth_requestAccounts",
+    });
     const signer = provider.getSigner();
 
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
-      
+
     const collectionTx = await contract.fetchMyCollections();
-    console.log(collectionTx)
-   const res = await fetchcontractListings(collectionTx);
-   setListings(res);
-  }
+    console.log(collectionTx);
+    const res = await fetchcontractListings(collectionTx);
+    setListings(res);
+  };
   useEffect(() => {
-    if(typeof window !== "undefined"){
+    if (typeof window !== "undefined") {
       fetchlisting();
     }
   }, []);
@@ -54,7 +55,7 @@ const CollectionMarketPage = (props: Props) => {
   return (
     <AnimatePresence>
       <div className="grid grid-cols-1   sm:grid-cols-2 md:grid-cols-3 gap-10 md:mx-4 lg:mx-8 mb-10">
-        {listings?.map((listing : any, index : any) => (
+        {listings?.map((listing: any, index: any) => (
           <motion.div
             key={index}
             initial={{ y: 80, opacity: 0 }}
@@ -70,7 +71,7 @@ const CollectionMarketPage = (props: Props) => {
             }}
           >
             <>
-              <CollectionCard key={index} listing={listing} />
+              <CollectionCard key={index} listing={listing} users={users} />
             </>
           </motion.div>
         ))}

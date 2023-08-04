@@ -15,7 +15,10 @@ const CollectionListingCard = ({
   isModalOpen,
   isModalOpenEnlargeNFT,
   setBidListing,
-}: Props) => {
+  artistNameOrAddress,
+  artistProfilePic,
+  owner,
+}: any) => {
   return (
     <div className="flex flex-col h-full px-4 md:px-0 overflow-hidden justify-between">
       <div className="flex flex-col h-full">
@@ -54,23 +57,17 @@ const CollectionListingCard = ({
             <div
               onClick={() => {
                 Router.push({
-                  pathname: `/user/1`,
+                  pathname: `/user/${owner._id}`,
                 });
               }}
               className="font-bold flex cursor-pointer"
             >
-              <p>
-                BY @{" "}
-                {listing.seller
-                  .slice(0, 3)
-                  .concat("...")
-                  .concat(listing.seller.slice(-4))}
-              </p>
+              <p>By @{artistNameOrAddress}</p>
               <Image
-                className="ml-3 h-5"
-                src={profile}
-                height={10}
-                width={20}
+                className="ml-3 -mt-1 h-6  object-cover rounded-full"
+                src={artistProfilePic}
+                height={0}
+                width={25}
                 alt={""}
               />
             </div>

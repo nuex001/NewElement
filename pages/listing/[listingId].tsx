@@ -60,8 +60,6 @@ export const getServerSideProps = async ({ req, res, query }: any) => {
   };
 
   let { listing, bids } = await nftFetch();
-  // let bids = await getBids();
-  console.log(bids);
 
   if (!auth) {
     return {

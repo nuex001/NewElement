@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import Header from "../components/Header/Header";
 import { IBM_Plex_Mono } from "next/font/google";
 import { AuthedProfileProvider } from "../context/UserContext";
+import { getCookie } from "cookies-next";
 
 // Fonts
 const ibmPlexMono = IBM_Plex_Mono({

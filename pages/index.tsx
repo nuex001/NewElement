@@ -26,8 +26,8 @@ const Home: NextPage = ({ user, users, listings }: any) => {
     // if (typeof window !== "undefined") {
     //   fetchlisting();
     // }
-  }, [user]);
-  console.log(authedProfile);
+  }, []);
+  // console.log(authedProfile);
 
   return (
     <>
@@ -101,7 +101,7 @@ const Home: NextPage = ({ user, users, listings }: any) => {
                       ))}
                     </div>
                   ) : (
-                    <CollectionMarketPage />
+                    <CollectionMarketPage users={users} />
                   )}
                 </>
               )
@@ -115,7 +115,7 @@ const Home: NextPage = ({ user, users, listings }: any) => {
 
 export const getServerSideProps = async ({ req, res }: any) => {
   let auth = getCookie("auth", { req, res });
-
+  // console.log(auth);
   await connectDB();
   const json = await Users.findOne({ address: auth });
   let user = JSON.parse(JSON.stringify(json));

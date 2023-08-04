@@ -10,6 +10,28 @@ import { fetchListings } from "../components/utils/utils";
 import useSWR from "swr";
 import { set } from "mongoose";
 
+const fetchAllNfts = async (userAddress: any) => {
+  if (typeof window !== "undefined") {
+    const provider = new ethers.providers.Web3Provider(
+      (window as CustomWindow).ethereum as any
+    );
+    await (window as CustomWindow)?.ethereum?.request({
+      method: "eth_requestAccounts",
+    });
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+
+    try {
+      const listingTx = await contract.fetchListingItem();
+      const listings = await fetchListings({ contract, listingTx });
+
+      return listings;
+    } catch (error) {
+      console.error("Error fetching NFT data:", error);
+      return null;
+    }
+  }
+};
 const nftFetch = async (userAddress: any) => {
   if (typeof window !== "undefined") {
     const provider = new ethers.providers.Web3Provider(
@@ -25,9 +47,7 @@ const nftFetch = async (userAddress: any) => {
       const listingTx = await contract.filterNftByAddress(userAddress);
       const res = await fetchListings({ contract, listingTx });
 
-      const listingsTx = await contract.fetchListingItem();
-      const listings = await fetchListings({ contract, listingsTx });
-      console.log(listings);
+      const listings = await fetchAllNfts(userAddress);
 
       const collectedNfts = [] as any;
       const listedNfts = [] as any;

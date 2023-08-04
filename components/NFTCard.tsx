@@ -28,6 +28,7 @@ const NFTCard: FunctionComponent<Props> = ({
   user,
 }) => {
   getArtist(users, listing);
+  // console.log(listing);
 
   const handleSaveToProfile = () => {
     setLoading(true);
