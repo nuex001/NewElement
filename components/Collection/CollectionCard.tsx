@@ -7,6 +7,8 @@ import send from "../../assets/send.png";
 
 type Props = {
   listing: any;
+  users: any;
+  key: any;
 };
 const CollectionCard: FunctionComponent<Props> = ({ listing, users }: any) => {
   // useEffect(() => {
