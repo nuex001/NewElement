@@ -15,7 +15,10 @@ const EnlargeCollectedNft: FunctionComponent<Props> = ({
   collectedNfts,
   nftModalIndex,
 }) => {
-  let listing = collectedNfts[nftModalIndex];
+  let listing = null;
+  if (collectedNfts) {
+    listing = collectedNfts[nftModalIndex];
+  }
   const customStyles = {
     overlay: {
       backgroundColor: "rgb(25, 25, 25, 0.85)",
