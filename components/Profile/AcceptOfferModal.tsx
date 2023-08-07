@@ -35,7 +35,7 @@ const AcceptOfferModal = ({
   let highestOffer = 0;
   let bidder = "";
   // Call the function and get the array with nftId equals 1
-  const offer = findArrayWithNftId(offers, listing.id);
+  const offer = findArrayWithNftId(offers, listing?.id);
   // Function to find the highest amount in the object
   function findHighestAmount(offer: any) {
     if (!offer) {

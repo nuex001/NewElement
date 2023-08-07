@@ -18,6 +18,7 @@ import {
   artistProfilePic,
   owner,
 } from "../../lib/functions";
+import Countdown from "react-countdown";
 const { BigNumber } = require("ethers");
 
 const ListingComponent: any = ({ users, listing, bids }: any) => {
@@ -284,13 +285,28 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
     setSuccessfulBidModal(false);
   };
   console.log(listing);
+  const renderer = ({ hours, minutes, seconds, completed }: any) => {
+    if (completed) {
+      // Render a complete state
+      return null;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          Ends In <span className="mr-4" /> {hours < 10 ? "0" + hours : hours}H{" "}
+          {minutes < 10 ? "0" + minutes : minutes}M{" "}
+          {seconds < 10 ? "0" + seconds : seconds}S
+        </span>
+      );
+    }
+  };
 
   if (listing) {
     return (
       <>
         <div className="flex flex-col realtive h-full items-center container lg:w-[98dvw]  mt-[6.5rem]  overflow-x-hidden justify-between">
           <div className="flex justify-center realtive w-3/4">
-            <div className="absolute translate-x-[100%] lg:translate-x-1 lg:right-[70%] xl:translate-x-0 xl:right-1/2  left-0 hidden md:block ">
+            <div className="absolute translate-x-[100%] lg:translate-x-1 lg:right-[70%] xl:translate-x-0 xl:right-1/2  left-0 hidden md:block -z-0">
               <button
                 onClick={() => router.back()}
                 className="font-ibmPlex cursor-pointer uppercase font-bold text-green text-xs -z-10"
@@ -362,13 +378,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
                       <div className=" flex font-bold w-full text-green">
-                        {listing.timeElapse ? (
-                          listing.sold ? (
-                            <p className="pr-5">ENDED</p>
-                          ) : (
-                            <p className="pr-5">ENDED</p>
-                          )
-                        ) : (
+                        {listing.timeElapse ? null : (
                           <button
                             onClick={isModalOpen}
                             className=" text-green font-xCompressed  w-full border border-green uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
@@ -391,11 +401,29 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                       {listing.timeElapse
                         ? listing.sold
                           ? "ENDED"
-                          : "END NOW"
+                          : "claim eth NOW"
                         : "place bid"}
                     </button>
                   </div>
                 ) : null}
+                <div className=" flex font-bold text-green font-ibmPlex justify-center uppercase">
+                  {listing.timeElapse ? (
+                    <>
+                      <p className="pr-5 mt-2">Auction ended</p>
+                    </>
+                  ) : (
+                    <>
+                      {listing.endTime != 0 || listing.endTime != "" ? (
+                        <Countdown
+                          date={Date.now() + listing.endTime * 1000}
+                          renderer={renderer}
+                        />
+                      ) : (
+                        <p className="pr-5"> place bid</p>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
               <div className="font-ibmPlex bold text-center w-full   mt-10 pb-10 border-b leading-5 text-xs">
                 <p className="md:w-[50vw]">{listing?.description}</p>

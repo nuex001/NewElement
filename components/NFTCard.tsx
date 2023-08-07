@@ -142,7 +142,7 @@ const NFTCard: FunctionComponent<Props> = ({
                   </p>
                 </div>
               </div>
-              <div className=" flex mt-3">
+              <div className=" flex mt-3 -z-10">
                 <button
                   onClick={handleSaveToProfile}
                   className=" text-white outline-none  shadow-lg transform active:scale-y-75 transition-transform flex"

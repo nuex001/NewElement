@@ -20,6 +20,8 @@ import SavedNfts from "./SavedNfts";
 import ProfileImage from "./ProfileImage";
 import NFTCardSkeleton from "../LoadingSkeletons/NFTCardSkeleton";
 import { list } from "@material-tailwind/react";
+import Countdown from "react-countdown";
+import EnlargeCollectedNft from "./EnlargeCollectedNft";
 
 type Props = {
   cropperOpen: boolean;
@@ -43,6 +45,7 @@ const ProfileComponent = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalNftIndex, setModalNftIndex] = useState<number>(0);
   const [authedProfile, setAuthedProfile] = useState<any>(user);
+  const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] = useState(false);
   // const { setAuthedProfile } = useAuthedProfile();
 
   let { isArtist } = authedProfile;
@@ -188,14 +191,6 @@ const ProfileComponent = ({
     }
   };
 
-  const isModalClosed = () => {
-    setModalOpen(false);
-  };
-  const isModalOpen = (index: number) => {
-    setModalNftIndex(index);
-    setModalOpen(true);
-  };
-
   const accept = async (nftId: number, highestBidder: any) => {
     setLoadingOffer(true);
     try {
@@ -237,6 +232,39 @@ const ProfileComponent = ({
       });
     });
     return hasOffer;
+  };
+  console.log(collectedNfts);
+  const renderer = ({ hours, minutes, seconds, completed }: any) => {
+    if (completed) {
+      // Render a complete state
+      return null;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          Ends In <span className="mr-4" /> {hours < 10 ? "0" + hours : hours}H{" "}
+          {minutes < 10 ? "0" + minutes : minutes}M{" "}
+          {seconds < 10 ? "0" + seconds : seconds}S
+        </span>
+      );
+    }
+  };
+
+  const isModalClosed = () => {
+    setModalOpen(false);
+  };
+  const isModalOpen = (index: number) => {
+    setModalNftIndex(index);
+    setModalOpen(true);
+  };
+
+  // Modal Enlarge NFT
+  const isModalOpenEnlargeNFT = (index: number) => {
+    setModalOpenEnlargeNFT(true);
+    setModalNftIndex(index);
+  };
+  const isModalClosedEnlargeNFT = () => {
+    setModalOpenEnlargeNFT(false);
   };
 
   return (
@@ -415,14 +443,27 @@ const ProfileComponent = ({
                             </div>
                             <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
                               <div className=" flex ">
-                                <div className=" flex w-full">
-                                  {" "}
-                                  <p className="pr-6 ">
-                                    Reserve NOt
-                                    <br /> met
-                                  </p>
-                                  <div className="flex grow"></div>
-                                </div>
+                                <div className=" flex font-bold text-green font-ibmPlex justify-center uppercase">
+                                  {nft.timeElapse ? (
+                                    <>
+                                      <p>Auction ended claim your eth</p>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {nft.endTime != 0 || nft.endTime != "" ? (
+                                        <Countdown
+                                          date={Date.now() + nft.endTime * 1000}
+                                          renderer={renderer}
+                                        />
+                                      ) : nft.bid ? (
+                                        <p>Auction in progress</p>
+                                      ) : (
+                                        <p>Reserve NOt met</p>
+                                      )}
+                                    </>
+                                  )}
+                                </div>{" "}
+                                <div className=" flex w-full"> </div>
                               </div>
                             </div>
                           </div>
@@ -489,69 +530,67 @@ const ProfileComponent = ({
                       )}
                     </div>
                   </div>
-                  {/* COLLECTION */}
-                  <div className="flex flex-col">
-                    <h3 className="font-bold">COLLECTION</h3>
-
-                    <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                      {/* nft 1 */}
-                      {collectedNfts.length ? (
-                        collectedNfts.map((nft: any, index: number) => (
-                          <div
-                            className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
-                            key={index}
-                          >
-                            <div className="flex  flex-col h-full items-start w-auto ">
-                              <div
-                                className="cursor-pointer"
-                                // onClick={() => {
-                                //   Router.push({
-                                //     pathname: `/user/${router.query.slug}/${nft.id}`,
-                                //   });
-                                // }}
-                              >
-                                <Image
-                                  src={nft.image}
-                                  alt="nft7"
-                                  width={150}
-                                  height={200}
-                                  className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
-                                />{" "}
-                              </div>
-                              <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                                <div className=" flex ">
-                                  <div className=" flex w-full">
-                                    {" "}
-                                    <p className="pr-6 ">
-                                      Bought <br /> For
-                                    </p>
-                                    <div className="flex grow"></div>
-                                    <p className="font-bold text-green">
-                                      {nft.price} <br /> ETH
-                                    </p>
-                                  </div>
-                                </div>
-                                {hasOfferForNft(nft.id) ? (
-                                  <button
-                                    className="text-green font-compressed uppercase  tracking-[4px] w-[100%] my-2 bg-white bg-opacity-0 hover:bg-opacity-20 font-semibold text-xl"
-                                    onClick={() => isModalOpen(index)}
-                                  >
-                                    New offer
-                                  </button>
-                                ) : null}
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-red-600 text-xs">
-                          You currently have no collected items
-                        </p>
-                      )}
-                    </div>
-                  </div>
                 </>
               ) : null}
+              {/* COLLECTION */}
+              <div className="flex flex-col">
+                <h3 className="font-bold">COLLECTION</h3>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
+                  {collectedNfts.length ? (
+                    collectedNfts.map((nft: any, index: number) => (
+                      <div key={nft.id}>
+                        <div
+                          className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4"
+                          key={index}
+                        >
+                          <div className="flex  flex-col h-full items-start w-auto ">
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => isModalOpenEnlargeNFT(index)}
+                            >
+                              <Image
+                                src={nft.image}
+                                alt="nft7"
+                                width={150}
+                                height={200}
+                                className="max-h-[220px] md:max-h-[300px] w-[41vw] md:w-full md:min-w-[230px] mb-2 object-cover"
+                              />{" "}
+                            </div>
+                            <div className="flex flex-col w-full md:min-w-[230px] font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
+                              <div className=" flex ">
+                                <div className=" flex w-full">
+                                  {" "}
+                                  <p className="pr-6 ">
+                                    Bought <br /> For
+                                  </p>
+                                  <div className="flex grow"></div>
+                                  <p className="font-bold text-green">
+                                    {nft.price} <br /> ETH
+                                  </p>
+                                </div>
+                              </div>
+                              {hasOfferForNft(nft.id) ? (
+                                <button
+                                  className="text-green font-compressed uppercase  tracking-[4px] w-[100%] my-2 bg-white bg-opacity-0 hover:bg-opacity-20 font-semibold text-xl"
+                                  onClick={() => isModalOpen(index)}
+                                >
+                                  New offer
+                                </button>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-red-600 text-xs">
+                      You currently have no collected items
+                    </p>
+                  )}
+                </div>
+              </div>
+
               {/* SAVED */}
 
               <div className="flex flex-col">
@@ -593,6 +632,12 @@ const ProfileComponent = ({
           loadingOffer={loadingOffer}
         />
       )}
+      <EnlargeCollectedNft
+        isModalClosedEnlargeNFT={isModalClosedEnlargeNFT}
+        modalOpenEnlargeNFT={modalOpenEnlargeNFT}
+        collectedNfts={collectedNfts}
+        nftModalIndex={modalNftIndex}
+      />
     </>
   );
 };

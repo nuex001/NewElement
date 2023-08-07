@@ -117,9 +117,6 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                 )}
 
                 <div className="flex flex-col w-full font-ibmPlex mb-4 uppercase text-xs text-[#e4e8eb] ">
-                  <h1 className="fontCompress tracking-wider font-compressed text-3xl mb-8">
-                    END NOW
-                  </h1>
                   <div className=" grid grid-cols-2 md:grid-cols-3 w-full mt-3">
                     <div className=" lg:flex text-left">
                       {" "}
@@ -184,7 +181,7 @@ const PlaceBidModal: FunctionComponent<Props> = ({
                           onClick={endBid}
                           className="fontCompress text-green mt-6 border border-green font-xxCompressed w-[100%] uppercase tracking-[8px] py-1 bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold text-xl  "
                         >
-                          END
+                          claim
                         </button>
                       )}
                     </>
