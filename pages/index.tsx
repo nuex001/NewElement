@@ -117,7 +117,6 @@ const Home: NextPage = ({ user, users, auth }: any) => {
                                 users={users}
                                 index={index}
                                 user={user}
-                                auth={auth}
                               />
                             </>
                           </motion.div>

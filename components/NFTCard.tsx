@@ -19,7 +19,6 @@ type Props = {
   users: object | any;
   index: number;
   user: any;
-  auth: any;
 };
 const NFTCard: FunctionComponent<Props> = ({
   listing,
