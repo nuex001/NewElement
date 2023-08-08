@@ -27,7 +27,6 @@ const NFTCard: FunctionComponent<Props> = ({
   users,
   index,
   user,
-  auth,
 }) => {
   getArtist(users, listing);
   const { authedProfile, setAuthedProfile } = useAuthedProfile();

@@ -168,7 +168,7 @@ export const getServerSideProps = async ({ req, res }: any) => {
   // };
   // let listings = await nftFetch();
 
-  return { props: { user, users, auth } };
+  return { props: { user, users } };
 };
 
 export default Home;
