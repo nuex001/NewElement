@@ -15,8 +15,10 @@ const AcceptOfferModal = ({
   offers,
   loadingOffer,
 }: any) => {
-  let listing = collectedNfts[nftModalIndex];
-
+  let listing: any = null;
+  if (collectedNfts) {
+    collectedNfts[nftModalIndex];
+  }
   // Function to find the array with nftId equal to 1
   function findArrayWithNftId(offers: any, targetNftId: number) {
     let resultArray = null;

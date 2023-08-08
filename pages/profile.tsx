@@ -135,11 +135,6 @@ type Props = {
 
 const Profile = ({ user, users }: Props) => {
   const { setAuthedProfile, authedProfile } = useAuthedProfile();
-  // React.useEffect(() => {
-  //   if (user) {
-  //     setAuthedProfile(user);
-  //   }
-  // }, [user]);
 
   const { data, error, isLoading } = useSWR("fetcher", () =>
     nftFetch(user.address)

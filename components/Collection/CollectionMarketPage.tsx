@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CollectionCard from "./CollectionCard";
-import { collectionContractAddress } from "../../addresses";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import { fetchcontractListings } from "../utils/utils";
@@ -9,7 +8,7 @@ type Props = {};
 
 const CollectionMarketPage = ({ users }: any) => {
   const [listings, setListings] = useState<any>([]);
-  // const { contract } = useContract(collectionContractAddress);
+
   const fetchlisting = async () => {
     const provider = new ethers.providers.Web3Provider(
       (window as CustomWindow).ethereum as any
@@ -22,7 +21,7 @@ const CollectionMarketPage = ({ users }: any) => {
 
     const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
 
-    const collectionTx = await contract.fetchMyCollections();
+    const collectionTx = await contract.fetchCollections();
     console.log(collectionTx);
     const res = await fetchcontractListings(collectionTx);
     setListings(res);
@@ -32,25 +31,6 @@ const CollectionMarketPage = ({ users }: any) => {
       fetchlisting();
     }
   }, []);
-  // const listings = [
-  //   {
-  //     metadata: {
-  //       name: "Summer",
-  //       description: "Summer",
-  //       image:
-  //         "https://ipfs-2.thirdwebcdn.com/ipfs/QmUa1iYsovhEPscsx79zWNK9bH7GBH61H2rbhpv9zKeHNC/collection1.png",
-  //       external_url: "",
-  //       background_color: "",
-  //     },
-  //     assetContractAddress: "0x8a4b29d9921C5Da3C737e63a6B334C4867BfF31E",
-  //     currencyContractAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-  //     id: "0",
-
-  //     sellerAddress: "0x2E1b9630fB5b099625d45d8f7f4B382e49393394",
-
-  //     type: 0,
-  //   },
-  // ];
 
   return (
     <AnimatePresence>

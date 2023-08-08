@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useAuthedProfile } from "../../context/UserContext";
 import Web3 from "web3";
+import router from "next/router";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -54,6 +55,7 @@ export default function ProfileMenu() {
 
       if (auth) {
         connectWallet();
+        refreshData();
       } else {
         console.log("not authed");
       }
@@ -62,7 +64,10 @@ export default function ProfileMenu() {
   useEffect(() => {
     checkIfConnected();
   }, []);
-
+  // Rehydrate data from server
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
   const disconnectWalletAndUser = async () => {
     if (typeof window !== "undefined") {
       if (address) {
@@ -94,6 +99,7 @@ export default function ProfileMenu() {
             .then((res) => {
               console.log(res);
               setAuthedProfile(res.data.user);
+              refreshData();
             })
             .catch((err) => {
               console.log(err);

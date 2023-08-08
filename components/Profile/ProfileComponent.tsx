@@ -76,7 +76,7 @@ const ProfileComponent = ({
 
       return objectsNotInArr2;
     }
-    if (isLoading) {
+    if (isLoading || !savedNfts || !listings) {
       return;
     } else {
       const objectsNotInBoth: any = findObjectsNotInBoth(savedNfts, listings);
@@ -233,7 +233,6 @@ const ProfileComponent = ({
     });
     return hasOffer;
   };
-  console.log(collectedNfts);
   const renderer = ({ hours, minutes, seconds, completed }: any) => {
     if (completed) {
       // Render a complete state
@@ -403,7 +402,7 @@ const ProfileComponent = ({
               </div>
             )
           ) : null}
-          {isLoading ? (
+          {isLoading || !listings ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:mx-5 mb-10">
               <NFTCardSkeleton />
 
@@ -418,7 +417,7 @@ const ProfileComponent = ({
                   <h3 className="font-bold">LISTED</h3>
                   <div className="grid grid-cols-2 lg:grid-cols-4  items-stretch gap-10 md:gap-4 mb-10 mt-4">
                     {/* Listed  */}
-                    {listedNfts.length ? (
+                    {listedNfts?.length ? (
                       listedNfts.map(
                         (nft: any, index: React.Key | null | undefined) => (
                           <div
@@ -481,7 +480,7 @@ const ProfileComponent = ({
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
                       {/* nft 1 */}
-                      {soldNfts.length ? (
+                      {soldNfts?.length ? (
                         soldNfts?.map(
                           (nft: any, index: React.Key | null | undefined) => (
                             <div
@@ -537,7 +536,7 @@ const ProfileComponent = ({
                 <h3 className="font-bold">COLLECTION</h3>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 items-stretch gap-4 mb-10 mt-4">
-                  {collectedNfts.length ? (
+                  {collectedNfts?.length ? (
                     collectedNfts.map((nft: any, index: number) => (
                       <div key={nft.id}>
                         <div

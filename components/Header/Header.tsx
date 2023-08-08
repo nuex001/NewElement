@@ -29,7 +29,7 @@ export default function Header() {
   const pathname = usePathname();
   const bg = pathname === "/apply" ? "bg-transparent" : "bg-black";
   return (
-    <Popover className="relative z-9">
+    <Popover className="relative z-20">
       {({ open }) => (
         <>
           <div className="px-2 sm:px-6 uppercase text-green">

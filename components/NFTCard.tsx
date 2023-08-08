@@ -5,7 +5,7 @@ import Countdown from "react-countdown";
 import ribbon from "../public/ribbon.png";
 import send from "../public/send.png";
 import axios from "axios";
-
+import { useAuthedProfile } from "../context/UserContext";
 import {
   getArtist,
   artistNameOrAddress,
@@ -19,6 +19,7 @@ type Props = {
   users: object | any;
   index: number;
   user: any;
+  auth: any;
 };
 const NFTCard: FunctionComponent<Props> = ({
   listing,
@@ -26,9 +27,11 @@ const NFTCard: FunctionComponent<Props> = ({
   users,
   index,
   user,
+  auth,
 }) => {
   getArtist(users, listing);
-  // console.log(listing);
+  const { authedProfile, setAuthedProfile } = useAuthedProfile();
+  console.log(authedProfile);
 
   const handleSaveToProfile = () => {
     setLoading(true);
@@ -142,10 +145,14 @@ const NFTCard: FunctionComponent<Props> = ({
                   </p>
                 </div>
               </div>
-              <div className=" flex mt-3 -z-10">
+              <div className=" flex mt-3 -z-0">
                 <button
-                  onClick={handleSaveToProfile}
-                  className=" text-white outline-none  shadow-lg transform active:scale-y-75 transition-transform flex"
+                  onClick={
+                    authedProfile
+                      ? () => handleSaveToProfile()
+                      : () => alert("Please Connect Wallet")
+                  }
+                  className="outline-none   transform active:scale-y-75 transition-transform flex"
                 >
                   <Image
                     className=" h-5"
