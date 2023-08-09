@@ -143,6 +143,7 @@ const Profile = ({ user, users }: Props) => {
   return (
     <ProfileComponent
       user={user}
+      data={data}
       collectedNfts={data?.collectedNfts}
       listedNfts={data?.listedNfts}
       soldNfts={data?.soldNfts}

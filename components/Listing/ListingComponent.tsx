@@ -377,6 +377,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                     </div>
                     <div className=" flex mt-3">
                       <div className="flex grow"></div>
+
                       <div className=" flex font-bold w-full text-green">
                         {listing.timeElapse ? null : (
                           <button
@@ -413,7 +414,7 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
                     </>
                   ) : (
                     <>
-                      {listing.endTime != 0 || listing.endTime != "" ? (
+                      {listing.endTime != 0 ? (
                         <Countdown
                           date={Date.now() + listing.endTime * 1000}
                           renderer={renderer}

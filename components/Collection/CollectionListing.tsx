@@ -154,21 +154,14 @@ const CollectionListing = ({ user, users }: any) => {
         signer
       );
       const id = Number(collectionId);
-      // const listingTx = await contract.fetchNFT(id);
-      // console.log(listingTx)
       const collectionTx = await contract.fetchCollection(id);
       const listingTx = await contract.fetchCollectionNFTs(collectionTx.id);
       // console.log(collectionTx, listingTx);
       const listings = await fetchListings({ contract, listingTx });
       const collection = await fetCollection(collectionTx);
-      // console.log(collection, listings);
 
-      // console.log(collection,listings,listingTx);
       setListing(collection);
       setListings(listings);
-      // making a function to get both the collection data and nfts
-      //  console.log(res);
-      //  setMenuItems(res);
     }
   };
   useEffect(() => {

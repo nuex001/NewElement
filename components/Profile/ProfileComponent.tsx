@@ -38,6 +38,7 @@ const ProfileComponent = ({
   users,
   listings,
   isLoading,
+  data,
 }: any) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [loadingOffer, setLoadingOffer] = React.useState<boolean>(false);
@@ -265,6 +266,7 @@ const ProfileComponent = ({
   const isModalClosedEnlargeNFT = () => {
     setModalOpenEnlargeNFT(false);
   };
+  console.log(listedNfts, isLoading);
 
   return (
     <>
@@ -312,7 +314,7 @@ const ProfileComponent = ({
             <AdminLoginButton authedProfile={authedProfile} />
           ) : null}
           {isArtist ? ( // if artist
-            isLoading ? (
+            isLoading || !listedNfts ? (
               <>
                 <div className="flex  flex-col-reverse md:flex-col">
                   <div className="flex md:mt-5 h-full flex-wrap">
