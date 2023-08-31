@@ -138,20 +138,13 @@ const CollectionListing = ({ user, users }: any) => {
   };
 
   const fetchlisting = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as CustomWindow).ethereum as any
-    );
-
     if (collectionId) {
-      await (window as CustomWindow)?.ethereum?.request({
-        method: "eth_requestAccounts",
-      });
-      const signer = provider.getSigner();
-
+    
+      const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
       const contract = new ethers.Contract(
         ContractAddress,
         ContractAbi,
-        signer
+        provider
       );
       const id = Number(collectionId);
       const collectionTx = await contract.fetchCollection(id);

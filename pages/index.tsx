@@ -19,6 +19,7 @@ const Home: NextPage = ({ user, users, auth }: any) => {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const fetchlisting = async () => {
+<<<<<<< HEAD
     // const provider = new ethers.providers.Web3Provider(
     //   (window as CustomWindow).ethereum as any
     // );
@@ -37,6 +38,12 @@ const Home: NextPage = ({ user, users, auth }: any) => {
       ContractAbi,
       provider
     );
+=======
+    
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
+
+    const contract = new ethers.Contract(ContractAddress, ContractAbi, provider);
+>>>>>>> dd375b14025f13065664e25f604f08ad9cc1e0fd
 
     const listingTx = await contract.fetchListingItem();
 
@@ -62,9 +69,8 @@ const Home: NextPage = ({ user, users, auth }: any) => {
     <>
       {/* Content */}
       <div
-        className={`flex w-screen overflow-hidden mt-24 max-w-[1600px] flex-col items-center content-center ${
-          loading && `cursor-progress`
-        }`}
+        className={`flex w-screen overflow-hidden mt-24 max-w-[1600px] flex-col items-center content-center ${loading && `cursor-progress`
+          }`}
       >
         <AnimatePresence>
           <div className="mb-5 w-full px-1 lg:px-0">
@@ -85,17 +91,15 @@ const Home: NextPage = ({ user, users, auth }: any) => {
                     <div className="flex font-ibmPlex text-xs mx-4 lg:mx-8 mb-5">
                       <button
                         onClick={() => setIsCollection(false)}
-                        className={`${
-                          !isCollection ? "border-b-white" : ""
-                        }  mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
+                        className={`${!isCollection ? "border-b-white" : ""
+                          }  mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
                       >
                         ALL
                       </button>
                       <button
                         onClick={() => setIsCollection(true)}
-                        className={`${
-                          isCollection ? "border-b-white" : ""
-                        } mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
+                        className={`${isCollection ? "border-b-white" : ""
+                          } mr-10 hover:border-b-white focus:border-b-white border-b border-b-transparent transition-all duration-200`}
                       >
                         COLLECTIONS{" "}
                       </button>
