@@ -1,9 +1,7 @@
 import { Router, useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import styles from "../../styles/Home.module.css";
-import profile from "../../assets/PROFILE.png";
 import Image from "next/image";
-import Link from "next/link";
 import PlaceBidModal from "./PlaceBidModal";
 import EnlargeNFTModal from "./EnlargeNFTModal";
 import { ethers } from "ethers";
@@ -19,14 +17,13 @@ import {
   owner,
 } from "../../lib/functions";
 import Countdown from "react-countdown";
+import { useEthersSigner } from "../utils/getSigner";
 const { BigNumber } = require("ethers");
 
 const ListingComponent: any = ({ users, listing, bids }: any) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  // const [listing, setListing] = useState<any>(null);
   const [loadingListing, setloadingListing] = useState<boolean>(true);
   const [loadingBid, setLoadingBid] = useState<boolean>(false);
-  // const [bids, setBids] = useState<any>([]);
   const [modalOpenEnlargeNFT, setModalOpenEnlargeNFT] =
     useState<boolean>(false);
   const [modalEndOpen, setModalEndOpen] = useState<boolean>(false);
@@ -34,12 +31,9 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
     useState<boolean>(false);
   const { authedProfile } = useAuthedProfile();
 
-  // Next JS Router hook to redirect to other pages and to grab the query from the URL (listingId)
   const router = useRouter();
 
   // De-construct listingId out of the router.query.
-  // This means that if the user visits /listing/0 then the listingId will be 0.
-  // If the user visits /listing/1 then the listingId will be 1.
   const { listingId } = router.query as { listingId: string };
   console.log(listing);
 
@@ -116,36 +110,28 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
       </div>
     );
   }
+  const signer = useEthersSigner();
 
   async function createBidOrOffer() {
     setLoadingBid(true);
     try {
       // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
+
+      if (listingId) {
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
         );
+        const id = Number(listingId);
+        const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
-
-          // Call the contract method with value
-          const listingTx = await contract.bid(id, { value: valueToSend });
-          await listingTx.wait();
-          isModalClosed();
-          setLoadingBid(false);
-          isSuccessfulBidModalOpen();
-        }
+        // Call the contract method with value
+        const listingTx = await contract.bid(id, { value: valueToSend });
+        await listingTx.wait();
+        isModalClosed();
+        setLoadingBid(false);
+        isSuccessfulBidModalOpen();
       }
     } catch (error) {
       console.error(error);
@@ -159,29 +145,20 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
     setLoadingBid(true);
     try {
       // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
+
+      if (listingId) {
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
         );
+        const id = Number(listingId);
+        // const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
+        console.log(id);
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          // const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
-          console.log(id);
-
-          // Call the contract method with value
-          const listingTx = await contract.end(id);
-          await listingTx.wait();
-        }
+        // Call the contract method with value
+        const listingTx = await contract.end(id);
+        await listingTx.wait();
       }
     } catch (error) {
       console.error(error);
@@ -195,28 +172,19 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
   async function withBid() {
     try {
       // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
+
+      if (listingId) {
+        const contract = new ethers.Contract(
+          ContractAddress,
+          ContractAbi,
+          signer
         );
+        const id = Number(listingId);
+        const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          const valueToSend = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
-
-          // Call the contract method with value
-          const listingTx = await contract.withdrawBids(id);
-          isModalClosed();
-        }
+        // Call the contract method with value
+        const listingTx = await contract.withdrawBids(id);
+        isModalClosed();
       }
     } catch (error) {
       console.error(error);
@@ -225,31 +193,18 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
   }
   async function resale() {
     try {
-      // bidAmount // The offer amount the user entered
-      if (typeof window !== "undefined") {
-        const provider = new ethers.providers.Web3Provider(
-          (window as CustomWindow).ethereum as any
-        );
+      const contract = new ethers.Contract(
+        ContractAddress,
+        ContractAbi,
+        signer
+      );
+      const id = Number(listingId);
+      // const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
 
-        if (listingId) {
-          await (window as CustomWindow)?.ethereum?.request({
-            method: "eth_requestAccounts",
-          });
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(
-            ContractAddress,
-            ContractAbi,
-            signer
-          );
-          const id = Number(listingId);
-          // const price = ethers.utils.parseEther(bidAmount); // Example: sending 1 Ether
-
-          // Call the contract method with value
-          const resellTx = await contract.reSellToken(id, bidAmount);
-          resellTx.wait();
-          isModalClosed();
-        }
-      }
+      // Call the contract method with value
+      const resellTx = await contract.reSellToken(id, bidAmount);
+      resellTx.wait();
+      isModalClosed();
     } catch (error) {
       console.error(error);
       alert(error);
@@ -284,7 +239,6 @@ const ListingComponent: any = ({ users, listing, bids }: any) => {
   const isSuccessfulBidModalClosed = () => {
     setSuccessfulBidModal(false);
   };
-  console.log(listing);
   const renderer = ({ hours, minutes, seconds, completed }: any) => {
     if (completed) {
       // Render a complete state

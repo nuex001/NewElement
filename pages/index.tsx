@@ -19,16 +19,24 @@ const Home: NextPage = ({ user, users, auth }: any) => {
   const { authedProfile, setAuthedProfile } = useAuthedProfile();
 
   const fetchlisting = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as CustomWindow).ethereum as any
+    // const provider = new ethers.providers.Web3Provider(
+    //   (window as CustomWindow).ethereum as any
+    // );
+
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_RPC_URL
     );
 
-    await (window as CustomWindow)?.ethereum?.request({
-      method: "eth_requestAccounts",
-    });
-    const signer = provider.getSigner();
+    // await (window as CustomWindow)?.ethereum?.request({
+    //   method: "eth_requestAccounts",
+    // });
+    // const signer = provider.getSigner();
 
-    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+    const contract = new ethers.Contract(
+      ContractAddress,
+      ContractAbi,
+      provider
+    );
 
     const listingTx = await contract.fetchListingItem();
 

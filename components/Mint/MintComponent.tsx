@@ -12,7 +12,7 @@ import router from "next/router";
 import { submitToIpfs } from "../utils/utils";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import Web3 from "web3";
-
+import { useEthersSigner } from "../utils/getSigner";
 type Props = {
   user: any;
 };
@@ -84,6 +84,7 @@ const MintComponent = ({ user }: Props) => {
   };
 
   // Minting NFT
+  const signer = useEthersSigner();
 
   const mint = async () => {
     setLoading(true);
@@ -108,16 +109,6 @@ const MintComponent = ({ user }: Props) => {
     // Deploy Collection Contract
     if (isCollection) {
       const tokenUrl = await submitToIpfs(collectionData);
-      const provider = new ethers.providers.Web3Provider(
-        (window as CustomWindow).ethereum as any
-      );
-
-      await (window as CustomWindow)?.ethereum?.request({
-        method: "eth_requestAccounts",
-      });
-      const signer = provider.getSigner();
-
-      const address = await signer.getAddress();
 
       try {
         setLoadingToDeploy(true);
@@ -149,16 +140,7 @@ const MintComponent = ({ user }: Props) => {
     } else {
       // Mint Single NFT Contract
       const tokenUrl = await submitToIpfs(singleNFTData);
-      const provider = new ethers.providers.Web3Provider(
-        (window as CustomWindow).ethereum as any
-      );
 
-      await (window as CustomWindow)?.ethereum?.request({
-        method: "eth_requestAccounts",
-      });
-      const signer = provider.getSigner();
-
-      const address = await signer.getAddress();
       try {
         setLoadingToDeploy(true);
         // console.log(tokenUrl);

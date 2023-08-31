@@ -8,6 +8,7 @@ import React, {
 import axios from "axios";
 import { ethers } from "ethers";
 import { set } from "mongoose";
+import { useWalletClient } from "wagmi";
 interface CurrentUserContextType {
   username: string;
 }
@@ -23,26 +24,42 @@ export const AuthedProfileProvider = ({ children }: Props) => {
     setAuthedProfile,
   };
 
-  const [address, setAddress] = useState<number>(0);
-  const getAdrress = async () => {
-    if (typeof window !== "undefined") {
-      const provider = new ethers.providers.Web3Provider(
-        (window as CustomWindow).ethereum as any
-      );
-      // Request access to the user's Ethereum accounts (MetaMask, etc.)
-      const accounts = await (window as CustomWindow).ethereum.request({
-        method: "eth_requestAccounts",
-      });
+  const [address, setAddress] = useState<any>(0);
 
-      // Return the first account address
-      const address = accounts[0];
-      setAddress(address);
-    }
+  const { data: walletClient } = useWalletClient();
+
+  const reg = (userData: any) => {
+    axios
+      .post("/api/signIn", userData)
+      .then((res) => {
+        console.log(res);
+        setAuthedProfile(res.data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
+  const getAdrress = async () => {
+    const accounts = await walletClient?.getAddresses();
+
+    // Return the first account address]
+    if (accounts) {
+      const address = accounts[0];
+      setAddress(address);
+      const userData = {
+        address: address,
+      };
+      reg(userData);
+    }
+  };
   useEffect(() => {
-    getAdrress();
-  }, []);
+    if (walletClient) {
+      getAdrress();
+    }
+  }, [walletClient]);
+  console.log(address);
+
   return (
     <AuthedProfileContext.Provider value={value}>
       {children}

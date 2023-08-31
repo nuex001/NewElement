@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ethers } from "ethers";
 import { ContractAbi, ContractAddress } from "../utils/constants";
 import ButtonSpinner from "../LoadingSkeletons/ButtonSpinner";
+import { useBalance } from "wagmi";
 
 type Props = {
   modalOpen: boolean;
@@ -49,15 +50,8 @@ const MakeOfferModal: FunctionComponent<Props> = ({
   const [offerAmount, setOfferAmount] = useState<string>("");
 
   const getBalance = async () => {
-    if ((window as CustomWindow).ethereum) {
-      const provider = new ethers.providers.Web3Provider(
-        (window as CustomWindow).ethereum as any
-      );
-      // Request access to the user's Ethereum accounts (MetaMask, etc.)
-      const accounts = await (window as CustomWindow).ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
+  
+    
       // Return the first account address
       const address = accounts[0];
       setAddress(address);
@@ -77,7 +71,7 @@ const MakeOfferModal: FunctionComponent<Props> = ({
       const balanceInEther = parseFloat(Number(bal).toFixed(3));
 
       setBalance(balanceInEther);
-    }
+    
   };
 
   useEffect(() => {

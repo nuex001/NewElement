@@ -10,19 +10,27 @@ const CollectionMarketPage = ({ users }: any) => {
   const [listings, setListings] = useState<any>([]);
 
   const fetchlisting = async () => {
-    const provider = new ethers.providers.Web3Provider(
-      (window as CustomWindow).ethereum as any
+    // const provider = new ethers.providers.Web3Provider(
+    //   (window as CustomWindow).ethereum as any
+    // );
+
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_RPC_URL
     );
 
-    await (window as CustomWindow)?.ethereum?.request({
-      method: "eth_requestAccounts",
-    });
+    // await (window as CustomWindow)?.ethereum?.request({
+    //   method: "eth_requestAccounts",
+    // });
     const signer = provider.getSigner();
 
-    const contract = new ethers.Contract(ContractAddress, ContractAbi, signer);
+    const contract = new ethers.Contract(
+      ContractAddress,
+      ContractAbi,
+      provider
+    );
 
     const collectionTx = await contract.fetchCollections();
-    console.log(collectionTx);
+    // console.log(collectionTx);
     const res = await fetchcontractListings(collectionTx);
     setListings(res);
   };

@@ -11,15 +11,6 @@ type Props = {
   key: any;
 };
 const CollectionCard: FunctionComponent<Props> = ({ listing, users }: any) => {
-  // useEffect(() => {
-  //   const listing = listings.find(
-  //     (listing: any) => listing.asset.id === nftItem.id
-  //   );
-  //   if (Boolean(listing)) {
-  //     setIsListed(true);
-  //     setPrice(listing.buyoutCurrencyValuePerToken.displayValue);
-  //   }
-  // }, [listings, nftItem]);
   const owner = users.find((user: any) => user.address === listing.creator);
   const artistNameOrAddress = owner
     ? owner?.username
